@@ -2845,6 +2845,94 @@
       box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;
       transform: translateY(-1px);
     }
+
+    /* Mobile Centering for Counting Boxes & Compact Login/Register Forms */
+    @media (max-width: 768px) {
+      .hero-layout .stat-card,
+      .stat-card {
+        text-align: center !important;
+      }
+      .hero-layout .stat-label,
+      .stat-label,
+      .hero-layout .stat-value,
+      .stat-value {
+        text-align: center !important;
+      }
+    }
+    @media (max-width: 600px) {
+      #loginPageContainer .login-split,
+      #registerPageContainer .login-split {
+        gap: 14px !important;
+      }
+      #loginPageContainer .hero-logo-3d-wrap,
+      #registerPageContainer .hero-logo-3d-wrap {
+        max-width: 190px !important;
+        margin: 2px auto 8px !important;
+      }
+      #loginPageContainer .hero-subtitle,
+      #registerPageContainer .hero-subtitle {
+        font-size: 0.72rem !important;
+        margin-bottom: 6px !important;
+      }
+      #loginPageContainer .login-split p,
+      #registerPageContainer .login-split p {
+        font-size: 0.76rem !important;
+        line-height: 1.45 !important;
+      }
+      #loginPageContainer .login-card,
+      #registerPageContainer .login-card {
+        padding: 16px 14px !important;
+        border-radius: 20px !important;
+      }
+      #loginPageContainer .login-card h3,
+      #registerPageContainer .login-card h3 {
+        font-size: 1.15rem !important;
+        margin-bottom: 2px !important;
+      }
+      #loginPageContainer .auth-tabs {
+        margin-bottom: 12px !important;
+        padding: 3px !important;
+      }
+      #loginPageContainer .auth-tab {
+        padding: 7px 10px !important;
+        font-size: 0.76rem !important;
+      }
+      #loginPageContainer .form-group,
+      #registerPageContainer .form-group {
+        margin-bottom: 9px !important;
+      }
+      #loginPageContainer .form-label,
+      #registerPageContainer .form-label {
+        font-size: 0.62rem !important;
+        margin-bottom: 4px !important;
+      }
+      #loginPageContainer .form-input,
+      #loginPageContainer .form-select,
+      #registerPageContainer .form-input,
+      #registerPageContainer .form-select {
+        padding: 7px 11px !important;
+        font-size: 0.78rem !important;
+        border-radius: 11px !important;
+        height: 36px !important;
+      }
+      #registerPageContainer .cards-grid-2 {
+        gap: 6px !important;
+      }
+      #loginPageContainer .btn-submit-full,
+      #registerPageContainer .btn-submit-full {
+        padding: 9px 14px !important;
+        font-size: 0.8rem !important;
+      }
+      #loginPageContainer .demo-hint {
+        padding: 8px 10px !important;
+        font-size: 0.68rem !important;
+        margin-top: 10px !important;
+      }
+      #loginPageContainer .demo-fill-btn {
+        padding: 4px 10px !important;
+        font-size: 0.66rem !important;
+      }
+    }
   </style>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
