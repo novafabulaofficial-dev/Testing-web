@@ -1,0 +1,3394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Portal — Kuppayam 3.0 | WIRAS, Markaz Knowledge City</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Malayalam:wght@500;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --forest: #013F32;
+      --lime: #E7FE25;
+      --white: #FDFDFD;
+      --charcoal: #161616;
+
+      --forest-10: rgba(1, 63, 50, 0.10);
+      --forest-16: rgba(1, 63, 50, 0.16);
+      --forest-25: rgba(1, 63, 50, 0.25);
+      --lime-22: rgba(231, 254, 37, 0.22);
+      --lime-35: rgba(231, 254, 37, 0.35);
+      --charcoal-06: rgba(22, 22, 22, 0.06);
+      --charcoal-12: rgba(22, 22, 22, 0.12);
+      --charcoal-22: rgba(22, 22, 22, 0.22);
+      --charcoal-65: rgba(22, 22, 22, 0.65);
+      --charcoal-70: rgb(36, 36, 36);
+      --white-52: rgba(253, 253, 253, 0.52);
+      --white-78: rgba(253, 253, 253, 0.78);
+      --white-85: rgba(253, 253, 253, 0.85);
+      --white-92: rgba(253, 253, 253, 0.92);
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      font-size: 16px;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--white);
+      color: var(--charcoal);
+      line-height: 1.55;
+      overflow-x: hidden;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .ml-font {
+      font-family: 'Noto Sans Malayalam', 'Plus Jakarta Sans', sans-serif;
+    }
+
+    .ambient-bg {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: -1;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 12% 14%, var(--lime-22) 0%, transparent 42%),
+        radial-gradient(circle at 88% 18%, var(--forest-10) 0%, transparent 44%),
+        radial-gradient(circle at 75% 82%, var(--lime-22) 0%, transparent 40%),
+        var(--white);
+    }
+
+    .ambient-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(to right, var(--charcoal-06) 1px, transparent 1px),
+        linear-gradient(to bottom, var(--charcoal-06) 1px, transparent 1px);
+      background-size: 56px 56px;
+      mask-image: radial-gradient(ellipse at center, rgba(22, 22, 22, 0.5) 0%, transparent 75%);
+      -webkit-mask-image: radial-gradient(ellipse at center, rgba(22, 22, 22, 0.5) 0%, transparent 75%);
+    }
+
+    /* Glassy Floating Pill Navbar (Edit #7) */
+    .nav-wrapper {
+      position: sticky;
+      top: 14px;
+      z-index: 50;
+      padding: 0 clamp(12px, 3vw, 32px);
+      width: 100%;
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+
+    .navbar-pill {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      background: var(--white-52);
+      backdrop-filter: blur(26px) saturate(185%);
+      -webkit-backdrop-filter: blur(26px) saturate(185%);
+      border: 1.5px solid var(--white-92);
+      border-radius: 9999px;
+      padding: 8px 10px 8px 20px;
+      box-shadow:
+        0 18px 40px -14px var(--charcoal-12),
+        0 2px 10px -2px var(--forest-10),
+        inset 0 1.5px 0 var(--white);
+    }
+
+    .brand-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      color: var(--charcoal);
+      font-weight: 800;
+      font-size: 1.05rem;
+      letter-spacing: -0.02em;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px 0;
+      transition: transform 0.25s ease;
+    }
+
+    .brand-link:hover { transform: scale(1.02); }
+    .brand-accent { color: var(--forest); }
+
+    .brand-sup {
+      font-size: 0.7rem;
+      font-weight: 800;
+      background: var(--lime);
+      color: var(--charcoal);
+      padding: 2px 7px;
+      border-radius: 9999px;
+      border: 1px solid var(--charcoal-12);
+    }
+
+    .brand-dots {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      margin-left: 4px;
+    }
+
+    .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+    .dot-charcoal { background: var(--charcoal); }
+    .dot-forest { background: var(--forest); }
+    .dot-lime { background: var(--lime); border: 1px solid var(--charcoal); }
+
+    .nav-track {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      background: rgba(253, 253, 253, 0.45);
+      border: 1px solid var(--charcoal-06);
+      padding: 4px;
+      border-radius: 9999px;
+      backdrop-filter: blur(12px);
+    }
+
+    /* Animated Button Hover System (Edit #6) */
+    .nav-btn,
+    .login-avatar-btn,
+    .btn-primary,
+    .btn-secondary,
+    .filter-chip,
+    .btn-submit-full,
+    .demo-fill-btn,
+    .carousel-arrow-btn {
+      position: relative;
+      overflow: hidden;
+      isolation: isolate;
+      transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+                  color 0.28s ease,
+                  background-color 0.28s ease,
+                  border-color 0.28s ease,
+                  box-shadow 0.28s ease;
+    }
+
+    .nav-btn {
+      border: none;
+      background: transparent;
+      color: var(--charcoal-65);
+      font-family: inherit;
+      font-size: 0.875rem;
+      font-weight: 700;
+      padding: 8px 16px;
+      border-radius: 9999px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .nav-btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--lime);
+      border-radius: 9999px;
+      transform: scale(0.75);
+      opacity: 0;
+      z-index: -1;
+      transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.25s ease;
+    }
+
+    .nav-btn:hover {
+      color: var(--charcoal);
+      transform: translateY(-1px);
+    }
+
+    .nav-btn:hover::before {
+      transform: scale(1);
+      opacity: 1;
+    }
+
+    .nav-btn.active {
+      background: var(--forest);
+      color: var(--lime);
+      box-shadow: 0 8px 18px -4px var(--forest-25);
+    }
+
+    .nav-btn.active::before {
+      display: none;
+    }
+
+    .nav-actions-group {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    .register-nav-btn {
+      position: relative;
+      overflow: hidden;
+      isolation: isolate;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      height: 40px;
+      padding: 0 16px;
+      border-radius: 9999px;
+      border: 1.5px solid var(--charcoal);
+      background: var(--lime);
+      color: var(--charcoal);
+      font-family: inherit;
+      font-size: 0.82rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1), color 0.28s ease, border-color 0.28s ease, box-shadow 0.28s ease;
+    }
+
+    .register-nav-btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--forest);
+      transform: translateY(101%);
+      z-index: -1;
+      transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .register-nav-btn:hover,
+    .register-nav-btn.active {
+      color: var(--lime);
+      border-color: var(--forest);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 22px -6px var(--forest-25);
+    }
+
+    .register-nav-btn:hover::before,
+    .register-nav-btn.active::before {
+      transform: translateY(0);
+    }
+
+    @media (max-width: 520px) {
+      .register-nav-btn, .login-avatar-btn {
+        padding: 0 12px;
+        height: 36px;
+        font-size: 0.76rem;
+      }
+      .navbar-pill {
+        padding: 6px 8px 6px 14px;
+      }
+      .brand-dots { display: none; }
+    }
+
+    .login-avatar-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      height: 40px;
+      padding: 0 16px;
+      border-radius: 9999px;
+      border: 1.5px solid var(--forest);
+      background: var(--white-78);
+      color: var(--forest);
+      font-family: inherit;
+      font-size: 0.82rem;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .login-avatar-btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--forest);
+      transform: translateX(-101%);
+      z-index: -1;
+      transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .login-avatar-btn:hover,
+    .login-avatar-btn.active {
+      color: var(--lime);
+      background: var(--forest);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 22px -6px var(--forest-25);
+    }
+
+    .login-avatar-btn:hover::before {
+      transform: translateX(0);
+    }
+
+    /* Mobile Bottom Glassy Menu Bar */
+    .mobile-bottom-nav {
+      display: none;
+    }
+
+    @media (max-width: 960px) {
+      .nav-track { display: none; }
+
+      .mobile-bottom-nav {
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        gap: 4px;
+        position: fixed;
+        bottom: 14px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: calc(100% - 24px);
+        max-width: 460px;
+        z-index: 80;
+        padding: 7px 10px;
+        border-radius: 9999px;
+        background: var(--white-52);
+        backdrop-filter: blur(26px) saturate(185%);
+        -webkit-backdrop-filter: blur(26px) saturate(185%);
+        border: 1.5px solid var(--white-92);
+        box-shadow:
+          0 16px 40px -10px var(--charcoal-22),
+          inset 0 1.5px 0 var(--white);
+      }
+
+      .mobile-nav-item {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 3px;
+        border: none;
+        background: transparent;
+        color: var(--charcoal-65);
+        font-family: inherit;
+        font-size: 0.7rem;
+        font-weight: 700;
+        padding: 7px 6px;
+        border-radius: 9999px;
+        cursor: pointer;
+        transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+      }
+
+      .mobile-nav-item:hover {
+        background: var(--lime-35);
+        color: var(--charcoal);
+      }
+
+      .mobile-nav-item.active {
+        background: var(--forest);
+        color: var(--lime);
+        box-shadow: 0 6px 14px -4px var(--forest-25);
+      }
+
+      .site-footer {
+        padding-bottom: 98px !important;
+      }
+    }
+
+    main {
+      flex: 1;
+      width: 100%;
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: clamp(20px, 4vw, 44px) clamp(16px, 3vw, 32px) 64px;
+    }
+
+    .home-section {
+      padding: 36px 0;
+      scroll-margin-top: 90px;
+    }
+
+    .home-section:first-child { padding-top: 16px; }
+    .page-hidden { display: none !important; }
+
+    /* Hero Section with Responsive Video Background */
+    #sec-home {
+      position: relative;
+      overflow: hidden;
+      border-radius: 32px;
+      padding: clamp(24px, 4vw, 48px) clamp(18px, 4vw, 42px) clamp(24px, 3.5vw, 36px);
+      background: linear-gradient(135deg, rgba(231, 254, 37, 0.16), rgba(1, 63, 50, 0.08));
+    }
+
+    .hero-bg-video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center top;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .hero-bg-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(253, 253, 253, 0.72) 0%, rgba(253, 253, 253, 0.45) 100%);
+      z-index: 1;
+      pointer-events: none;
+    }
+
+.hero-bg-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(to right, var(--charcoal-06) .1px, transparent 1px),
+        linear-gradient(to bottom, var(--charcoal-06) .1px, transparent 1px);
+      background-size: 56px 56px;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    #sec-home .hero-single,
+    #sec-home .stats-grid {
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-single {
+      padding: 8px 0 24px;
+      max-width: 820px;
+    }
+
+    .kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--forest);
+      margin-bottom: 14px;
+    }
+
+    .hero-title-wrap {
+      position: relative;
+      margin-bottom: 14px;
+    }
+
+    .hero-logo-3d-wrap {
+      perspective: 900px;
+      display: inline-block;
+      width: 100%;
+      max-width: clamp(240px, 44vw, 460px);
+      margin: 4px 0 18px;
+      cursor: pointer;
+    }
+
+    .hero-logo-img {
+      display: block;
+      width: 100%;
+      height: auto;
+      object-fit: contain;
+      transform-style: preserve-3d;
+      will-change: transform;
+      transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1), filter 0.28s ease;
+      filter: drop-shadow(0 16px 28px var(--forest-16));
+      user-select: none;
+      -webkit-user-drag: none;
+    }
+
+    @media (max-width: 600px) {
+      .hero-logo-3d-wrap {
+        max-width: clamp(210px, 72vw, 320px);
+        margin: 2px 0 14px;
+      }
+    }
+
+    .hero-title-top {
+      display: block;
+      font-size: clamp(3rem, 7vw, 5.6rem);
+      font-weight: 800;
+      line-height: 0.96;
+      letter-spacing: -0.04em;
+      color: var(--forest);
+      text-shadow:
+        0 4px 0 var(--lime),
+        0 10px 24px var(--forest-16);
+    }
+
+    .hero-title-bottom {
+      display: inline-flex;
+      align-items: flex-start;
+      gap: 12px;
+      font-size: clamp(3.3rem, 7.6vw, 6.1rem);
+      font-weight: 800;
+      line-height: 0.96;
+      letter-spacing: -0.04em;
+      color: var(--charcoal);
+      text-shadow: 0 8px 22px var(--charcoal-12);
+    }
+
+    .hero-version-badge {
+      font-size: clamp(1.1rem, 2.2vw, 1.8rem);
+      font-weight: 800;
+      background: var(--lime);
+      color: var(--charcoal);
+      padding: 6px 14px;
+      border-radius: 16px;
+      border: 2px solid var(--charcoal);
+      box-shadow: 4px 4px 0 var(--forest);
+      transform: translateY(6px);
+    }
+
+    .hero-subtitle {
+      font-size: clamp(0.84rem, 1.4vw, 1.02rem);
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--charcoal-65);
+      margin-bottom: 22px;
+    }
+
+    .hero-subtitle strong { color: var(--forest); }
+
+    .hero-meta-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 28px;
+    }
+
+    .meta-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--white);
+      border: 1px solid var(--charcoal-12);
+      border-radius: 9999px;
+      padding: 10px 18px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--charcoal);
+      box-shadow: 0 8px 20px -10px var(--charcoal-12);
+    }
+
+    .meta-pill .accent-date { color: var(--forest); }
+
+    .hero-ctas {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: var(--lime);
+      color: var(--charcoal);
+      border: 2px solid var(--charcoal);
+      border-radius: 9999px;
+      padding: 13px 28px;
+      font-family: inherit;
+      font-size: 0.95rem;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 10px 24px -8px var(--lime-35);
+    }
+
+    .btn-primary::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--forest);
+      transform: translateY(102%);
+      z-index: -1;
+      transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .btn-primary:hover {
+      color: var(--lime);
+      border-color: var(--forest);
+      transform: translateY(-3px);
+      box-shadow: 0 14px 28px -8px var(--forest-25);
+    }
+
+    .btn-primary:hover::before {
+      transform: translateY(0);
+    }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: var(--white);
+      color: var(--forest);
+      border: 1.5px solid var(--forest);
+      border-radius: 9999px;
+      padding: 13px 26px;
+      font-family: inherit;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .btn-secondary::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--forest);
+      transform: translateX(-102%);
+      z-index: -1;
+      transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .btn-secondary:hover {
+      color: var(--lime);
+      transform: translateY(-3px);
+      box-shadow: 0 12px 24px -8px var(--forest-25);
+    }
+
+    .btn-secondary:hover::before {
+      transform: translateX(0);
+    }
+
+    /* 3-Card Stats Row with Count-Up, '+', and Rich Color Hover (Edit #2) */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+      margin: 18px 0 12px;
+    }
+
+    @media (max-width: 720px) {
+      .stats-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+        margin: 14px 0 8px;
+      }
+      .stat-card {
+        padding: 14px 10px;
+        border-radius: 18px;
+      }
+      .stat-card::after {
+        width: 56px;
+        height: 56px;
+        top: -14px;
+        right: -14px;
+      }
+      .stat-label {
+        font-size: 0.62rem;
+        letter-spacing: 0.08em;
+        margin-bottom: 4px;
+      }
+      .stat-value {
+        font-size: 1.45rem;
+      }
+    }
+
+    .stat-card {
+      position: relative;
+      background: var(--white);
+      border: 1.5px solid var(--charcoal-12);
+      border-radius: 26px;
+      padding: 26px 24px 24px;
+      overflow: hidden;
+      box-shadow: 0 12px 30px -16px var(--charcoal-12);
+      transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+                  background-color 0.35s ease,
+                  border-color 0.35s ease,
+                  box-shadow 0.35s ease;
+      cursor: default;
+    }
+
+    .stat-card::after {
+      content: '';
+      position: absolute;
+      top: -28px;
+      right: -28px;
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      pointer-events: none;
+      transition: transform 0.4s ease, opacity 0.4s ease;
+    }
+
+    .stat-card.glow-lime::after { background: radial-gradient(circle, var(--lime-35) 0%, transparent 72%); }
+    .stat-card.glow-forest::after { background: radial-gradient(circle, var(--forest-16) 0%, transparent 72%); }
+
+    .stat-card:hover {
+      transform: translateY(-6px) scale(1.015);
+      background: var(--forest);
+      border-color: var(--lime);
+      box-shadow: 0 22px 40px -14px var(--forest-25), 0 0 0 2px var(--lime);
+    }
+
+    .stat-card:hover::after {
+      transform: scale(1.7);
+      background: radial-gradient(circle, var(--lime-35) 0%, transparent 70%);
+    }
+
+    .stat-label {
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--charcoal-65);
+      margin-bottom: 8px;
+      transition: color 0.3s ease;
+    }
+
+    .stat-value {
+      font-size: clamp(2.1rem, 3.6vw, 2.9rem);
+      font-weight: 800;
+      color: var(--charcoal);
+      letter-spacing: -0.03em;
+      line-height: 1.05;
+      transition: color 0.3s ease;
+    }
+
+    .stat-card:hover .stat-label { color: var(--white-85); }
+    .stat-card:hover .stat-value { color: var(--lime); }
+
+    /* Section Header */
+    .section-header { margin-bottom: 24px; }
+
+    .section-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.76rem;
+      font-weight: 800;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--forest);
+      margin-bottom: 8px;
+    }
+
+    .section-kicker::before {
+      content: '';
+      width: 22px;
+      height: 2px;
+      background: var(--forest);
+    }
+
+    .section-title {
+      font-size: clamp(1.9rem, 3.6vw, 2.8rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: var(--charcoal);
+      line-height: 1.1;
+    }
+
+    /* Cards & Grids */
+    .cards-grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .cards-grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 18px;
+    }
+
+    @media (max-width: 920px) {
+      .cards-grid-3 { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 620px) {
+      .cards-grid-3, .cards-grid-2 { grid-template-columns: 1fr; }
+    }
+
+    .panel-card {
+      background: var(--white);
+      border: 1px solid var(--charcoal-12);
+      border-radius: 24px;
+      padding: 24px;
+      box-shadow: 0 12px 28px -16px var(--charcoal-12);
+      transition: transform 0.25s ease, border-color 0.25s ease;
+    }
+
+    .panel-card:hover {
+      border-color: var(--forest);
+      transform: translateY(-2px);
+    }
+
+    .panel-card.dark-card {
+      background: var(--forest);
+      color: var(--white);
+      border-color: var(--charcoal);
+    }
+
+    .chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 22px;
+    }
+
+    .filter-chip {
+      border: 1.5px solid var(--charcoal-12);
+      background: var(--white);
+      color: var(--charcoal);
+      padding: 9px 18px;
+      border-radius: 9999px;
+      font-family: inherit;
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .filter-chip::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--lime);
+      transform: scale(0.8);
+      opacity: 0;
+      z-index: -1;
+      transition: transform 0.25s ease, opacity 0.25s ease;
+    }
+
+    .filter-chip:hover {
+      border-color: var(--charcoal);
+      transform: translateY(-2px);
+    }
+
+    .filter-chip:hover::before {
+      transform: scale(1);
+      opacity: 1;
+    }
+
+    .filter-chip.active {
+      background: var(--forest);
+      color: var(--lime);
+      border-color: var(--forest);
+    }
+
+    .filter-chip.active::before { display: none; }
+
+    /* Stories Carousel Showcase (Edit #5 — matching image_4da564.png) */
+    .stories-showcase {
+      display: grid;
+      grid-template-columns: minmax(0, 520px) 1fr;
+      gap: clamp(28px, 4.5vw, 56px);
+      align-items: center;
+      padding: 12px 0 24px;
+    }
+
+    @media (max-width: 960px) {
+      .stories-showcase { grid-template-columns: 1fr; }
+    }
+
+    .stories-carousel-stage {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+      max-width: 520px;
+      min-width: 0;
+      margin: 0 auto;
+      padding: 12px 0 34px;
+    }
+
+    .carousel-arrow-btn {
+      flex-shrink: 0;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 2px solid var(--charcoal);
+      background: var(--white);
+      color: var(--charcoal);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 3;
+      box-shadow: 0 8px 20px -8px var(--charcoal-22);
+    }
+
+    @media (max-width: 600px) {
+      .stories-carousel-stage {
+        gap: 6px;
+        padding: 8px 0 24px;
+      }
+      .carousel-arrow-btn {
+        width: 32px;
+        height: 32px;
+      }
+    }
+
+    .carousel-arrow-btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--lime);
+      transform: scale(0);
+      border-radius: 50%;
+      z-index: -1;
+      transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .carousel-arrow-btn:hover {
+      transform: scale(1.08);
+      border-color: var(--forest);
+    }
+
+    .carousel-arrow-btn:hover::before {
+      transform: scale(1);
+    }
+
+    .stories-viewport {
+      position: relative;
+      overflow: hidden;
+      flex: 1;
+      min-width: 0;
+      z-index: 2;
+      border-radius: 22px;
+    }
+
+    .stories-track {
+      display: flex;
+      gap: 14px;
+      transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+      will-change: transform;
+    }
+
+    .story-slide-card {
+      flex: 0 0 calc(50% - 7px);
+      height: 320px;
+      border-radius: 22px;
+      padding: 20px 18px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      cursor: pointer;
+      border: 2px solid var(--charcoal);
+      background: linear-gradient(175deg, var(--forest) 0%, var(--charcoal) 92%);
+      color: var(--white);
+      box-shadow: 0 18px 36px -14px var(--charcoal-65);
+      transition: transform 0.3s ease, border-color 0.3s ease;
+    }
+
+    .story-slide-card:nth-child(even) {
+      background: linear-gradient(175deg, var(--charcoal) 0%, var(--forest) 92%);
+    }
+
+    .story-slide-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--lime);
+    }
+
+    @media (max-width: 600px) {
+      .stories-track { gap: 10px; }
+      .story-slide-card {
+        flex: 0 0 calc(50% - 5px);
+        height: 200px;
+        padding: 14px 12px;
+        border-radius: 16px;
+      }
+      .story-slide-date { font-size: 0.6rem; }
+      .story-slide-num { font-size: 1.5rem; }
+      .story-slide-title { font-size: 0.85rem; }
+    }
+
+    .story-slide-art {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      width: 96px;
+      height: 96px;
+      opacity: 0.25;
+      pointer-events: none;
+    }
+
+    .story-slide-num {
+      font-size: 2.3rem;
+      font-weight: 800;
+      line-height: 1;
+      color: var(--lime);
+      letter-spacing: -0.04em;
+    }
+
+    .story-slide-title {
+      font-size: 1.25rem;
+      font-weight: 800;
+      line-height: 1.2;
+      text-transform: uppercase;
+      letter-spacing: -0.01em;
+      margin-top: 8px;
+      color: var(--white);
+    }
+
+    .story-slide-date {
+      font-size: 0.74rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      color: var(--lime);
+      text-transform: uppercase;
+    }
+
+    .stories-copy-col p {
+      font-size: 1rem;
+      line-height: 1.7;
+      color: var(--charcoal-65);
+      margin-bottom: 22px;
+    }
+
+    /* Standalone Login Page */
+    .login-split {
+      display: grid;
+      grid-template-columns: 1fr 440px;
+      gap: clamp(24px, 5vw, 64px);
+      align-items: center;
+      min-height: 490px;
+      padding: 12px 0;
+    }
+
+    @media (max-width: 900px) {
+      .login-split { grid-template-columns: 1fr; }
+    }
+
+    .login-card {
+      background: var(--white);
+      border: 1.5px solid var(--charcoal-12);
+      border-radius: 28px;
+      padding: 28px;
+      box-shadow: 0 24px 48px -18px var(--charcoal-12);
+    }
+
+    .auth-tabs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+      background: var(--charcoal-06);
+      padding: 5px;
+      border-radius: 9999px;
+      margin-bottom: 22px;
+    }
+
+    .auth-tab {
+      border: none;
+      background: transparent;
+      color: var(--charcoal-65);
+      font-family: inherit;
+      font-size: 0.86rem;
+      font-weight: 700;
+      padding: 10px 14px;
+      border-radius: 9999px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+
+    .auth-tab.active {
+      background: var(--forest);
+      color: var(--lime);
+    }
+
+    .form-group { margin-bottom: 16px; }
+
+    .form-label {
+      display: block;
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--charcoal-65);
+      margin-bottom: 6px;
+    }
+
+    .form-input, .form-select {
+      width: 100%;
+      padding: 12px 16px;
+      border-radius: 14px;
+      border: 1.5px solid var(--charcoal-12);
+      background: var(--white);
+      color: var(--charcoal);
+      font-family: inherit;
+      font-size: 0.95rem;
+      font-weight: 600;
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .form-input:focus, .form-select:focus {
+      border-color: var(--forest);
+      box-shadow: 0 0 0 3px var(--forest-10);
+    }
+
+    .btn-submit-full {
+      width: 100%;
+      padding: 14px 20px;
+      border-radius: 9999px;
+      border: 2px solid var(--charcoal);
+      background: var(--lime);
+      color: var(--charcoal);
+      font-family: inherit;
+      font-size: 0.96rem;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .btn-submit-full::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--forest);
+      transform: translateX(-101%);
+      z-index: -1;
+      transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .btn-submit-full:hover {
+      color: var(--lime);
+      border-color: var(--forest);
+      transform: translateY(-2px);
+    }
+
+    .btn-submit-full:hover::before { transform: translateX(0); }
+
+    .demo-hint {
+      margin-top: 14px;
+      padding: 10px 14px;
+      border-radius: 14px;
+      background: var(--forest-10);
+      font-size: 0.8rem;
+      color: var(--forest);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .demo-fill-btn {
+      background: var(--forest);
+      color: var(--lime);
+      border: 1px solid var(--forest);
+      border-radius: 9999px;
+      padding: 5px 12px;
+      font-family: inherit;
+      font-size: 0.75rem;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .demo-fill-btn:hover {
+      background: var(--lime);
+      color: var(--charcoal);
+      transform: translateY(-1px);
+    }
+
+    /* Dark Rounded Footer */
+    .site-footer {
+      position: relative;
+      background: var(--charcoal);
+      color: var(--white);
+      border-radius: 36px 36px 0 0;
+      padding: clamp(36px, 5vw, 56px) clamp(20px, 4vw, 48px) 28px;
+      margin-top: auto;
+      overflow: hidden;
+    }
+
+    .site-footer::after {
+      content: '';
+      position: absolute;
+      bottom: -80px;
+      right: -60px;
+      width: 280px;
+      height: 280px;
+      border-radius: 50%;
+      background: radial-gradient(circle, var(--forest) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .footer-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr 1fr;
+      gap: 32px;
+      padding-bottom: 32px;
+      border-bottom: 1px solid rgba(253, 253, 253, 0.14);
+    }
+
+    @media (max-width: 760px) {
+      .footer-grid { grid-template-columns: 1fr; gap: 24px; }
+    }
+
+    .footer-brand {
+      font-size: 2rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 8px;
+    }
+
+    .footer-brand span { color: var(--lime); }
+
+    .footer-col-title {
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--lime);
+      margin-bottom: 14px;
+    }
+
+    .footer-links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .footer-link-btn {
+      background: none;
+      border: none;
+      color: var(--white-85);
+      font-family: inherit;
+      font-size: 0.92rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-align: left;
+      padding: 2px 0;
+      transition: color 0.2s ease, transform 0.2s ease;
+    }
+
+    .footer-link-btn:hover {
+      color: var(--lime);
+      transform: translateX(4px);
+    }
+
+    .footer-bottom {
+      padding-top: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 0.8rem;
+      color: rgba(253, 253, 253, 0.6);
+    }
+
+    /* Modal & Toast */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(22, 22, 22, 0.55);
+      backdrop-filter: blur(6px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      z-index: 100;
+    }
+
+    .modal-backdrop.open { display: flex; }
+
+    .modal-box {
+      background: var(--white);
+      border: 2px solid var(--charcoal);
+      border-radius: 28px;
+      max-width: 520px;
+      width: 100%;
+      padding: 28px;
+      box-shadow: 0 24px 48px -12px var(--charcoal-65);
+      animation: fadeSlideUp 0.25s ease forwards;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 84px;
+      right: 24px;
+      background: var(--charcoal);
+      color: var(--lime);
+      border: 1.5px solid var(--lime);
+      padding: 12px 20px;
+      border-radius: 9999px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      z-index: 120;
+      opacity: 0;
+      transform: translateY(16px);
+      pointer-events: none;
+      transition: all 0.3s ease;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .badge-pill {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 9999px;
+      font-size: 0.74rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .badge-lime {
+      background: var(--lime);
+      color: var(--charcoal);
+      border: 1px solid var(--charcoal);
+    }
+
+    .badge-forest {
+      background: var(--forest);
+      color: var(--lime);
+    }
+
+
+    /* Admin Portal (Of-Arcrino Portal Style) */
+    .portal-shell {
+      display: grid;
+      grid-template-columns: 250px 1fr;
+      gap: 24px;
+      align-items: start;
+    }
+
+    @media (max-width: 900px) {
+      .portal-shell {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .portal-sidebar {
+      background: var(--white);
+      border: 1.5px solid var(--charcoal-12);
+      border-radius: 26px;
+      padding: 22px 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 24px;
+      box-shadow: 0 14px 32px -16px var(--charcoal-12);
+      position: sticky;
+      top: 86px;
+    }
+
+    @media (max-width: 900px) {
+      .portal-sidebar { position: static; }
+    }
+
+    .portal-nav-btn {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border: none;
+      background: transparent;
+      color: var(--charcoal-65);
+      font-family: inherit;
+      font-size: 0.9rem;
+      font-weight: 700;
+      padding: 11px 14px;
+      border-radius: 14px;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.22s ease;
+    }
+
+    .portal-nav-btn:hover {
+      background: var(--lime-35);
+      color: var(--charcoal);
+    }
+
+    .portal-nav-btn.active {
+      background: var(--forest);
+      color: var(--lime);
+    }
+
+    .portal-stats-4 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+
+    @media (max-width: 600px) {
+      .portal-stats-4 { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    }
+
+    .portal-stat-box {
+      background: var(--white);
+      border: 1px solid var(--charcoal-12);
+      border-radius: 20px;
+      padding: 16px;
+      box-shadow: 0 10px 24px -16px var(--charcoal-12);
+    }
+
+    .portal-filter-bar {
+      background: var(--white);
+      border: 1px solid var(--charcoal-12);
+      border-radius: 20px;
+      padding: 14px 16px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 18px;
+    }
+
+    .student-row-card {
+      position: relative;
+      background: var(--white);
+      border: 1.5px solid var(--charcoal-12);
+      border-radius: 20px;
+      padding: 16px 20px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      cursor: pointer;
+      transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .row-menu-wrap {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .dots-btn {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      border: 1px solid var(--charcoal-12);
+      background: var(--white);
+      color: var(--charcoal);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background-color 0.2s ease, border-color 0.2s ease;
+    }
+
+    .dots-btn:hover {
+      background: var(--lime);
+      border-color: var(--charcoal);
+    }
+
+    .row-dropdown {
+      position: absolute;
+      top: 40px;
+      right: 0;
+      min-width: 148px;
+      background: var(--white);
+      border: 1.5px solid var(--charcoal);
+      border-radius: 16px;
+      padding: 6px;
+      box-shadow: 0 16px 32px -10px var(--charcoal-22);
+      z-index: 40;
+      display: none;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .row-dropdown.open {
+      display: flex;
+    }
+
+    .row-dropdown-item {
+      width: 100%;
+      border: none;
+      background: transparent;
+      color: var(--charcoal);
+      font-family: inherit;
+      font-size: 0.85rem;
+      font-weight: 700;
+      padding: 9px 12px;
+      border-radius: 10px;
+      text-align: left;
+      cursor: pointer;
+      transition: background-color 0.18s ease, color 0.18s ease;
+    }
+
+    .row-dropdown-item:hover {
+      background: var(--lime);
+      color: var(--charcoal);
+    }
+
+    .row-dropdown-item.danger:hover {
+      background: var(--forest);
+      color: var(--lime);
+    }
+
+    .student-row-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--forest);
+      box-shadow: 0 12px 26px -14px var(--forest-25);
+    }
+
+    .student-row-card.menu-open {
+      z-index: 60;
+      transform: none;
+    }
+
+    .tick-box-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      padding: 16px 18px;
+      border-radius: 18px;
+      background: var(--forest-10);
+      border: 1.5px solid var(--forest);
+      margin-bottom: 20px;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .tick-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      font-size: 0.95rem;
+      color: var(--forest);
+      cursor: pointer;
+    }
+
+    .tick-label input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      accent-color: var(--forest);
+      cursor: pointer;
+    }
+
+    body.admin-mode .nav-track,
+    body.admin-mode .mobile-bottom-nav,
+    body.admin-mode .site-footer,
+    body.admin-mode #loginBackHomeBtn {
+      display: none !important;
+    }
+
+    @keyframes fadeSlideUp {
+      from { opacity: 0; transform: translateY(14px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Minimal Style & Squashing Shapes */
+    .ambient-squash {
+      position: absolute;
+      border-radius: 44% 56% 62% 38% / 48% 42% 58% 52%;
+      pointer-events: none;
+      filter: blur(2px);
+      animation: squashMorph 14s ease-in-out infinite alternate;
+    }
+
+    .ambient-squash-1 {
+      top: 6%;
+      right: -70px;
+      width: 340px;
+      height: 290px;
+      background: radial-gradient(circle at 35% 35%, var(--lime-22), transparent 72%);
+    }
+
+    .ambient-squash-2 {
+      bottom: 14%;
+      left: -80px;
+      width: 360px;
+      height: 300px;
+      background: radial-gradient(circle at 60% 50%, var(--forest-10), transparent 72%);
+      animation-delay: -6s;
+      animation-duration: 18s;
+    }
+
+    @keyframes squashMorph {
+      0% {
+        border-radius: 44% 56% 62% 38% / 48% 42% 58% 52%;
+        transform: translate(0, 0) scale(1, 1) rotate(0deg);
+      }
+      50% {
+        border-radius: 58% 42% 46% 54% / 38% 62% 44% 56%;
+        transform: translate(18px, -14px) scale(1.08, 0.92) rotate(8deg);
+      }
+      100% {
+        border-radius: 38% 62% 54% 46% / 58% 44% 56% 42%;
+        transform: translate(-12px, 16px) scale(0.94, 1.07) rotate(-6deg);
+      }
+    }
+
+    /* Remove heavy outlines across surfaces & buttons for minimal look */
+    .panel-card,
+    .stat-card,
+    .portal-sidebar,
+    .portal-stat-box,
+    .portal-filter-bar,
+    .student-row-card,
+    .login-card,
+    .meta-pill {
+      border: 1px solid rgba(22, 22, 22, 0.05);
+      box-shadow: 0 12px 32px -16px rgba(22, 22, 22, 0.10);
+    }
+
+    .panel-card.dark-card {
+      border: none;
+      box-shadow: 0 18px 36px -18px var(--forest-25);
+    }
+
+    .btn-primary,
+    .btn-secondary,
+    .btn-submit-full,
+    .register-nav-btn,
+    .login-avatar-btn,
+    .filter-chip,
+    .carousel-arrow-btn,
+    .dots-btn,
+    .badge-lime {
+      border: none;
+      box-shadow: 0 8px 20px -10px rgba(22, 22, 22, 0.16);
+    }
+
+    .btn-secondary,
+    .filter-chip,
+    .login-avatar-btn,
+    .carousel-arrow-btn,
+    .dots-btn {
+      background: var(--white);
+    }
+
+    .story-slide-card {
+      border: none;
+      box-shadow: 0 18px 36px -16px rgba(22, 22, 22, 0.26);
+    }
+
+    .tick-box-bar {
+      border: none;
+      background: var(--forest-10);
+    }
+
+    .modal-box {
+      border: none;
+      box-shadow: 0 28px 60px -16px rgba(22, 22, 22, 0.35);
+    }
+
+    .row-dropdown {
+      border: 1px solid rgba(22, 22, 22, 0.08);
+    }
+
+    /* Subtle squash-and-stretch tactile feedback on interactive elements */
+    .btn-primary:active,
+    .btn-secondary:active,
+    .btn-submit-full:active,
+    .register-nav-btn:active,
+    .login-avatar-btn:active,
+    .filter-chip:active,
+    .carousel-arrow-btn:active {
+      transform: scale(1.04, 0.94) !important;
+    }
+
+    .stat-card:hover {
+      box-shadow: 0 22px 40px -14px var(--forest-25);
+      transform: translateY(-4px) scale(1.02, 0.985);
+    }
+
+    /* Big Box Students List with Thick Black Row Dividers */
+    .students-big-box {
+      background: var(--white);
+      border: 0.5px solid rgba(22, 22, 22, 0.35);
+      border-radius: 24px;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 16px 36px -18px rgba(22, 22, 22, 0.14);
+    }
+
+    .students-big-box .student-row-card {
+      border: none;
+      border-bottom: 0.5px solid rgba(22, 22, 22, 0.35);
+      border-radius: 0;
+      box-shadow: none;
+      background: transparent;
+      padding: 18px 22px;
+      transition: background-color 0.22s ease;
+    }
+
+    .students-big-box .student-row-card:first-child {
+      border-top-left-radius: 20px;
+      border-top-right-radius: 20px;
+    }
+
+    .students-big-box .student-row-card:last-child {
+      border-bottom: none;
+      border-bottom-left-radius: 20px;
+      border-bottom-right-radius: 20px;
+    }
+
+    .students-big-box .student-row-card:hover {
+      transform: none;
+      background: rgba(231, 254, 37, 0.16);
+      box-shadow: none;
+    }
+
+    /* Of-Arcrino Video-Inspired Marquee Ticker */
+    .ticker-strip {
+      width: 100vw;
+      margin: 22px 0 6px;
+      margin-left: calc(50% - 50vw);
+      margin-right: calc(50% - 50vw);
+      overflow: hidden;
+      border-top: 1px solid rgba(22, 22, 22, 0.07);
+      border-bottom: 1px solid rgba(22, 22, 22, 0.07);
+      background: rgba(253, 253, 253, 0.65);
+      backdrop-filter: blur(12px);
+      padding: 12px 0;
+    }
+
+    .ticker-track {
+      display: flex;
+      width: max-content;
+      gap: 28px;
+      animation: tickerScroll 26s linear infinite;
+    }
+
+    .ticker-strip:hover .ticker-track {
+      animation-play-state: paused;
+    }
+
+    .ticker-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--charcoal-65);
+      white-space: nowrap;
+    }
+
+    .ticker-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--forest);
+      display: inline-block;
+    }
+
+    @keyframes tickerScroll {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    /* Video-Inspired Luminous Gradient Cards & Hover Glows */
+    .gradient-card {
+      position: relative;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 92% 10%, rgba(231, 254, 37, 0.28) 0%, transparent 52%),
+        radial-gradient(circle at 8% 92%, rgba(1, 63, 50, 0.09) 0%, transparent 55%),
+        var(--white);
+      transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+                  box-shadow 0.35s ease,
+                  background 0.35s ease;
+    }
+
+    .gradient-card:nth-child(even) {
+      background:
+        radial-gradient(circle at 92% 10%, rgba(1, 63, 50, 0.14) 0%, transparent 54%),
+        radial-gradient(circle at 8% 92%, rgba(231, 254, 37, 0.22) 0%, transparent 55%),
+        var(--white);
+    }
+
+    .gradient-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(231, 254, 37, 0.18), rgba(1, 63, 50, 0.08));
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.35s ease;
+    }
+
+    .gradient-card:hover {
+      transform: translateY(-6px) scale(1.015);
+      box-shadow: 0 24px 44px -16px rgba(1, 63, 50, 0.22);
+    }
+
+    .gradient-card:hover::after {
+      opacity: 1;
+    }
+
+    .gradient-card > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Scroll-Reveal Motion */
+    .reveal-on-scroll {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+                  transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .reveal-on-scroll.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+/* === Luminous Gradient Hovers (Before -> After Style) === */
+
+    /* 1. Stats Bubbles (TEAMS, PROGRAMMES, STUDENTS) */
+    .stat-card {
+      background:
+        radial-gradient(circle at 92% 12%, rgba(231, 254, 37, 0.24) 0%, transparent 55%),
+        var(--white);
+      border: 1px solid rgba(22, 22, 22, 0.06);
+      box-shadow: 0 12px 30px -16px rgba(22, 22, 22, 0.10);
+    }
+
+    .stat-card.glow-forest {
+      background:
+        radial-gradient(circle at 92% 12%, rgba(1, 63, 50, 0.14) 0%, transparent 55%),
+        var(--white);
+    }
+
+    .stat-card:hover {
+      transform: translateY(-5px) scale(1.015);
+      background:
+        radial-gradient(circle at 88% 12%, rgba(231, 254, 37, 0.42) 0%, transparent 62%),
+        radial-gradient(circle at 15% 90%, rgba(1, 63, 50, 0.16) 0%, transparent 65%),
+        var(--white);
+      border-color: rgba(1, 63, 50, 0.18);
+      box-shadow: 0 22px 44px -16px rgba(1, 63, 50, 0.20);
+    }
+
+    .stat-card:hover .stat-label {
+      color: var(--charcoal-65);
+    }
+
+    .stat-card:hover .stat-value {
+      color: var(--forest);
+    }
+
+    /* 2. About & Event Cards */
+    .gradient-card {
+      background:
+        radial-gradient(circle at 92% 10%, rgba(231, 254, 37, 0.20) 0%, transparent 52%),
+        var(--white);
+    }
+
+    .gradient-card:nth-child(even) {
+      background:
+        radial-gradient(circle at 92% 10%, rgba(1, 63, 50, 0.12) 0%, transparent 52%),
+        var(--white);
+    }
+
+    .gradient-card:hover {
+      transform: translateY(-6px) scale(1.015);
+      background:
+        radial-gradient(circle at 88% 12%, rgba(231, 254, 37, 0.38) 0%, transparent 64%),
+        radial-gradient(circle at 12% 88%, rgba(1, 63, 50, 0.16) 0%, transparent 64%),
+        var(--white);
+      box-shadow: 0 24px 46px -16px rgba(1, 63, 50, 0.22);
+    }
+
+    .gradient-card::after {
+      display: none;
+    }
+
+    /* 3. Buttons, Nav Pills & Filter Chips */
+    .btn-primary,
+    .btn-submit-full,
+    .register-nav-btn {
+      background: linear-gradient(135deg, var(--lime) 0%, rgba(231, 254, 37, 0.78) 65%, rgba(1, 63, 50, 0.18) 100%);
+      color: var(--charcoal);
+    }
+
+    .btn-primary::before,
+    .btn-submit-full::before,
+    .register-nav-btn::before {
+      background: linear-gradient(135deg, var(--forest) 0%, rgba(1, 63, 50, 0.85) 60%, rgba(231, 254, 37, 0.35) 100%);
+    }
+
+    .btn-secondary,
+    .login-avatar-btn,
+    .filter-chip,
+    .carousel-arrow-btn {
+      background:
+        radial-gradient(circle at 90% 15%, rgba(231, 254, 37, 0.20) 0%, transparent 65%),
+        var(--white);
+      color: var(--forest);
+    }
+
+    .btn-secondary::before,
+    .login-avatar-btn::before {
+      background: linear-gradient(135deg, var(--forest) 0%, rgba(1, 63, 50, 0.82) 65%, rgba(231, 254, 37, 0.30) 100%);
+    }
+
+    .filter-chip::before,
+    .carousel-arrow-btn::before,
+    .nav-btn::before {
+      background: linear-gradient(135deg, rgba(231, 254, 37, 0.85) 0%, rgba(1, 63, 50, 0.18) 100%);
+    }
+
+    .btn-primary:hover,
+    .btn-secondary:hover,
+    .btn-submit-full:hover,
+    .register-nav-btn:hover,
+    .login-avatar-btn:hover {
+      color: var(--lime);
+      transform: translateY(-2px);
+      box-shadow: 0 14px 28px -10px rgba(1, 63, 50, 0.30);
+    }
+
+/* Subtle 1px Hairline Outline for All Boxes */
+    .stat-card,
+    .panel-card,
+    .portal-sidebar,
+    .portal-stat-box,
+    .portal-filter-bar,
+    .login-card,
+    .meta-pill,
+    .student-row-card {
+      border: .2px solid var(--charcoal-70);
+    }
+
+    .stat-card:hover,
+    .panel-card:hover {
+      border-color: rgba(0, 0, 0, 0.904);
+    }
+/* === Solid Resting Buttons + Sleek Hover for All Buttons === */
+    .btn-primary,
+    .btn-submit-full,
+    .register-nav-btn {
+      background: var(--lime);
+      color: var(--charcoal);
+      border: 1px solid rgba(22, 22, 22, 0.12);
+    }
+
+    .btn-secondary,
+    .login-avatar-btn {
+      background: var(--white);
+      color: var(--forest);
+      border: 1px solid rgba(1, 63, 50, 0.16);
+    }
+
+    .btn-primary,
+    .btn-secondary,
+    .btn-submit-full,
+    .register-nav-btn,
+    .login-avatar-btn {
+      position: relative;
+      overflow: hidden;
+      isolation: isolate;
+      transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+                  box-shadow 0.28s ease,
+                  color 0.25s ease,
+                  border-color 0.25s ease,
+                  background 0.3s ease;
+    }
+
+    /* Smooth radial/pill fill on hover */
+    .btn-primary::before,
+    .btn-secondary::before,
+    .btn-submit-full::before,
+    .register-nav-btn::before,
+    .login-avatar-btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 9999px;
+      opacity: 0;
+      transform: scale(0.92);
+      z-index: -1;
+      transition: opacity 0.3s ease, transform 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    /* Glass shine sweep on ALL buttons including Register & Login */
+    .btn-primary::after,
+    .btn-secondary::after,
+    .btn-submit-full::after,
+    .register-nav-btn::after,
+    .login-avatar-btn::after {
+      content: '';
+      position: absolute;
+      top: -20%;
+      left: -60%;
+      width: 45%;
+      height: 140%;
+      background: linear-gradient(120deg, transparent 0%, rgba(253, 253, 253, 0.45) 50%, transparent 100%);
+      transform: skewX(-22deg);
+      transition: left 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+      pointer-events: none;
+    }
+
+    .btn-primary:hover::after,
+    .btn-secondary:hover::after,
+    .btn-submit-full:hover::after,
+    .register-nav-btn:hover::after,
+    .login-avatar-btn:hover::after {
+      left: 125%;
+    }
+
+    /* Primary, Submit & Register Hover */
+    .btn-primary::before,
+    .btn-submit-full::before,
+    .register-nav-btn::before {
+      background: linear-gradient(135deg, var(--forest) 0%, var(--charcoal) 100%);
+    }
+
+    .btn-primary:hover,
+    .btn-submit-full:hover,
+    .register-nav-btn:hover,
+    .register-nav-btn.active {
+      color: var(--lime);
+      border-color: var(--forest);
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 0 14px 28px -10px rgba(1, 63, 50, 0.38);
+    }
+
+    /* Secondary & Login Hover */
+    .btn-secondary::before,
+    .login-avatar-btn::before {
+      background: linear-gradient(135deg, var(--lime) 0%, rgba(231, 254, 37, 0.85) 100%);
+    }
+
+    .btn-secondary:hover,
+    .login-avatar-btn:hover,
+    .login-avatar-btn.active {
+      color: var(--charcoal);
+      border-color: rgba(22, 22, 22, 0.28);
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 0 14px 28px -10px rgba(231, 254, 37, 0.55);
+    }
+
+    .btn-primary:hover::before,
+    .btn-secondary:hover::before,
+    .btn-submit-full:hover::before,
+    .register-nav-btn:hover::before,
+    .register-nav-btn.active::before,
+    .login-avatar-btn:hover::before,
+    .login-avatar-btn.active::before {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .login-avatar-btn::before {
+      background: linear-gradient(135deg, var(--forest) 0%, var(--charcoal) 100%);
+    }
+
+    .login-avatar-btn:hover,
+    .login-avatar-btn.active {
+      color: var(--lime);
+      border-color: var(--forest);
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 0 14px 28px -10px rgba(1, 63, 50, 0.38);
+    }
+
+    /* Menu Bar Items (Home, About, Events, Stories) New Hover Style */
+    .nav-btn {
+      position: relative;
+      overflow: hidden;
+      isolation: isolate;
+      transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+                  color 0.25s ease,
+                  box-shadow 0.28s ease;
+    }
+
+    .nav-btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 9999px;
+      background: linear-gradient(135deg, var(--forest) 0%, var(--charcoal) 100%);
+      opacity: 0;
+      transform: scale(0.9);
+      z-index: -1;
+      transition: opacity 0.28s ease, transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .nav-btn::after {
+      content: '';
+      position: absolute;
+      top: -20%;
+      left: -60%;
+      width: 45%;
+      height: 140%;
+      background: linear-gradient(120deg, transparent 0%, rgba(253, 253, 253, 0.45) 50%, transparent 100%);
+      transform: skewX(-22deg);
+      transition: left 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+      pointer-events: none;
+    }
+
+    .nav-btn:hover {
+      color: var(--lime);
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 0 10px 22px -8px rgba(1, 63, 50, 0.35);
+    }
+
+    .nav-btn:hover::before {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .nav-btn:hover::after {
+      left: 125%;
+    }
+
+
+    .star-rating-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin: 8px 0 6px;
+    }
+    .star-box {
+      width: 46px;
+      height: 46px;
+      border-radius: 10px;
+      border: 1.5px solid rgba(253, 253, 253, 0.22);
+      background: rgba(255, 255, 255, 0.05);
+      color: rgba(253, 253, 253, 0.45);
+      font-size: 1.3rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.16s ease;
+    }
+    .star-box:hover {
+      border-color: var(--lime);
+      color: var(--lime);
+      transform: translateY(-1px);
+    }
+    .star-box.active {
+      border-color: var(--lime);
+      background: rgba(231, 254, 37, 0.16);
+      color: var(--lime);
+    }
+    .star-box.light {
+      border-color: var(--charcoal-12);
+      background: #f5f7f4;
+      color: #9ca3af;
+    }
+    .star-box.light:hover,
+    .star-box.light.active {
+      border-color: var(--forest);
+      background: rgba(231, 254, 37, 0.35);
+      color: var(--forest);
+    }
+  </style>
+  <script>
+    // Page file names. If you rename a file on GitHub, change it here (same line in all 3 files).
+    const PAGES = { home: 'index.html', student: 'student.html', admin: 'admin.html' };
+    // ---- Session (shared by index.html, student.html and admin.html) ----
+    // Login on the home page saves a small session in this browser tab, then opens the right page.
+    const SESSION_KEY = 'kuppayam_session_v1';
+    function getSession() {
+      try { return JSON.parse(sessionStorage.getItem(SESSION_KEY) || 'null'); } catch (err) { return null; }
+    }
+    function setSession(sess) {
+      try { sessionStorage.setItem(SESSION_KEY, JSON.stringify(sess)); } catch (err) {}
+    }
+    function clearSession() {
+      try { sessionStorage.removeItem(SESSION_KEY); } catch (err) {}
+    }
+    function setFlash(msg) {
+      try { sessionStorage.setItem('kuppayam_flash', msg); } catch (err) {}
+    }
+    function showFlash() {
+      try {
+        const msg = sessionStorage.getItem('kuppayam_flash');
+        if (msg) { sessionStorage.removeItem('kuppayam_flash'); showToast(msg); }
+      } catch (err) {}
+    }
+    // Only a signed-in admin may open this page; everyone else goes back to the home page.
+    (function () {
+      const sess = getSession();
+      if (!sess || sess.role !== 'admin') window.location.replace(PAGES.home);
+    })();
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="cloud.js"></script>
+</head>
+<body>
+  <div class="ambient-bg" aria-hidden="true">
+    <div class="ambient-grid"></div>
+    <div class="ambient-squash ambient-squash-1"></div>
+    <div class="ambient-squash ambient-squash-2"></div>
+  </div>
+
+  <header class="nav-wrapper">
+    <nav class="navbar-pill" aria-label="Primary Navigation">
+      <button type="button" class="brand-link" onclick="window.scrollTo({ top: 0, behavior: 'smooth' })">
+        <span class="brand-accent">Kuppayam</span>
+        <span>Fest</span>
+        <span class="brand-sup">3.0</span>
+        <span class="brand-dots" aria-hidden="true">
+          <span class="dot dot-charcoal"></span>
+          <span class="dot dot-forest"></span>
+          <span class="dot dot-lime"></span>
+        </span>
+      </button>
+
+      <div class="nav-actions-group">
+        <button type="button" class="register-nav-btn" id="navRegisterBtn" onclick="window.location.href='index.html#register'">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+            <circle cx="8.5" cy="7" r="4"></circle>
+            <line x1="20" y1="8" x2="20" y2="14"></line>
+            <line x1="23" y1="11" x2="17" y2="11"></line>
+          </svg>
+          <span>Register</span>
+        </button>
+
+        <button type="button" class="login-avatar-btn active" id="navAuthBtn" onclick="window.scrollTo({ top: 0, behavior: 'smooth' })">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+          <span id="navAuthLabel">Login</span>
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section id="loginPageContainer">
+      <div id="authContainer"></div>
+    </section>
+  </main>
+
+  <!-- Edit Student Modal -->
+  <div class="modal-backdrop" id="editStudentModal" role="dialog" aria-modal="true">
+    <div class="modal-box" style="max-width:520px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+        <span class="badge-pill badge-lime">EDIT STUDENT</span>
+        <button type="button" class="filter-chip" onclick="closeEditStudentModal()">Close</button>
+      </div>
+      <form onsubmit="saveEditedStudent(event)">
+        <input type="hidden" id="editStuId" />
+        <div class="form-group">
+          <label class="form-label" for="editStuName">NAME</label>
+          <input id="editStuName" class="form-input" type="text" required />
+        </div>
+        <div class="cards-grid-2" style="gap:12px;">
+          <div class="form-group">
+            <label class="form-label" for="editStuDob">DATE OF BIRTH</label>
+            <input id="editStuDob" class="form-input" type="date" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="editStuPlace">PLACE</label>
+            <input id="editStuPlace" class="form-input" type="text" required />
+          </div>
+        </div>
+        <div class="cards-grid-2" style="gap:12px;">
+          <div class="form-group">
+            <label class="form-label" for="editStuGender">GENDER</label>
+            <select id="editStuGender" class="form-select">
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="editStuClass">CLASS</label>
+            <select id="editStuClass" class="form-select">
+              <option value="Class 8">Class 8</option>
+              <option value="Class 9">Class 9</option>
+              <option value="Class 10">Class 10</option>
+            </select>
+          </div>
+        </div>
+        <div class="cards-grid-2" style="gap:12px;">
+          <div class="form-group">
+            <label class="form-label" for="editStuWhatsapp">WHATSAPP NUMBER</label>
+            <input id="editStuWhatsapp" class="form-input" type="tel" />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="editStuContact">CONTACT NUMBER</label>
+            <input id="editStuContact" class="form-input" type="tel" />
+          </div>
+        </div>
+        <button type="submit" class="btn-submit-full">Save Changes</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Student ID Card Poster Modal -->
+  <div class="modal-backdrop" id="idCardModal" role="dialog" aria-modal="true">
+    <div class="modal-box" style="max-width:460px; text-align:center;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+        <span class="badge-pill badge-lime">STUDENT ID CARD POSTER</span>
+        <button type="button" class="filter-chip" onclick="closeIdCardModal()">Close</button>
+      </div>
+      <img id="idCardPreviewImg" alt="Student ID Card Poster" style="width:100%; border-radius:14px; border:1px solid var(--charcoal-12); margin-bottom:14px;" />
+      <div style="display:flex; gap:10px; flex-wrap:wrap;">
+        <button type="button" class="btn-primary" style="flex:1; justify-content:center;" onclick="downloadCurrentIdCard()">Download ID Card PNG</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    const state = {
+      students: [],
+      isLoginView: false,
+      activeSection: 'sec-home',
+      authMode: 'student',
+      loggedInUser: null,
+      teamsList: ['Team Safa', 'Team Marwa', 'Team Hira', 'Team Noor'],
+      adminTab: 'students',
+      feedbackCategory: 'overall',
+      selectedFeedbackStuId: null,
+      certFilter: 'All',
+      reminderMessage: 'السلام عليكم ورحمة الله,\nYour camp registration payment is still pending. Please complete your payment at the earliest to confirm your seat and receive your Register Number.\n Payable Amount :  ₹2500 \n GPay No : +91 8943423485 \n©️  WIRAS • Markaz Knowledge City',
+      attendanceDay: 1,
+      selectedRegId: null,
+      nextRegSeq: 3001
+    };
+
+
+    // Coordinator WhatsApp number (update this with your exact country code + number)
+    const ADMIN_WHATSAPP_NUMBER = '918943423485';
+
+    const SITE_BASE_URL = ''; // Paste your live website URL here (e.g. 'https://your-site.com/register.html') if testing from a local file
+
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      clearTimeout(window.__toastTimer);
+      window.__toastTimer = setTimeout(() => t.classList.remove('show'), 2800);
+    }
+
+    function saveStudentsToStorage() {
+      try {
+        localStorage.setItem('kuppayam_students_v1', JSON.stringify({
+          students: state.students,
+          nextRegSeq: state.nextRegSeq
+        }));
+      } catch (err) {}
+      cloudPush();
+    }
+
+    function loadStudentsFromStorage() {
+      try {
+        const raw = localStorage.getItem('kuppayam_students_v1');
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (Array.isArray(parsed.students) && parsed.students.length) {
+            state.students = parsed.students;
+          }
+          if (typeof parsed.nextRegSeq === 'number') {
+            state.nextRegSeq = parsed.nextRegSeq;
+          }
+        }
+      } catch (err) {}
+    }
+
+    loadStudentsFromStorage();
+
+    // ---- Cloud sync (shared live data) ----
+    function cloudPush() {
+      if (window.Cloud) Cloud.sync(state.students, true);
+    }
+    (function startCloudListen() {
+      if (!window.Cloud) return;
+      let firstSnap = true;
+      Cloud.listen(function (list, isEmpty) {
+        if (firstSnap && isEmpty && true && state.students.length) {
+          // first run: upload old local data to cloud
+          firstSnap = false;
+          Cloud.sync(state.students, true);
+          return;
+        }
+        firstSnap = false;
+        state.students = list;
+        try {
+          localStorage.setItem('kuppayam_students_v1', JSON.stringify({
+            students: state.students, nextRegSeq: state.nextRegSeq }));
+        } catch (err) {}
+        // do not redraw while someone is typing
+        const a = document.activeElement;
+        if (a && /^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName)) return;
+        if (typeof renderAuth === 'function' && state.loggedInUser) renderAuth();
+        if (typeof updateStats === 'function') try { updateStats(false); } catch (err) {}
+      });
+    })();
+
+    // ---- Page guard: only the admin session may stay on this page ----
+    (function guardAdminPage() {
+      const sess = getSession();
+      if (!sess || sess.role !== 'admin') {
+        clearSession();
+        window.location.replace(PAGES.home);
+        return;
+      }
+      state.loggedInUser = { role: 'admin', data: { name: 'Camp Coordinator', org: 'WIRAS · Markaz Knowledge City' } };
+      const lbl = document.getElementById('navAuthLabel');
+      if (lbl) lbl.textContent = 'Admin';
+    })();
+
+    function setAdminTab(tab) {
+      state.adminTab = tab;
+      state.selectedRegId = null;
+      state.selectedFeedbackStuId = null;
+      renderAuth();
+    }
+
+    function setFeedbackCategory(cat) {
+      state.feedbackCategory = cat;
+      state.selectedFeedbackStuId = null;
+      renderAuth();
+    }
+
+    function selectFeedbackStudent(id) {
+      state.selectedFeedbackStuId = id;
+      renderAuth();
+    }
+
+    function selectAdminStudent(id) {
+      state.selectedRegId = id;
+      renderAuth();
+    }
+
+    function togglePaymentComplete(id, checked) {
+      const stu = state.students.find(item => item.id === id);
+      if (!stu) return;
+      stu.paymentCompleted = checked;
+      if (checked && !stu.regNo) {
+        let highest = 3000;
+        state.students.forEach(item => {
+          if (item.regNo && item.regNo.startsWith('K')) {
+            const num = parseInt(item.regNo.slice(1), 10);
+            if (!isNaN(num) && num > highest) highest = num;
+          }
+        });
+        stu.regNo = 'K' + (highest + 1);
+        state.nextRegSeq = highest + 2;
+        showToast('Payment completed! Register Number generated: ' + stu.regNo);
+      } else if (checked) {
+        showToast('Payment marked completed (' + stu.regNo + ').');
+      } else {
+        showToast('Payment marked pending.');
+      }
+      saveStudentsToStorage();
+      renderAuth();
+    }
+
+    function sendStudentWelcomeWhatsApp(id) {
+      const stu = state.students.find(item => item.id === id);
+      if (!stu) return;
+      const digits = (stu.whatsapp || '').replace(/\D/g, '');
+      if (!digits) {
+        showToast('No valid WhatsApp number found for this student.');
+        return;
+      }
+      const waNumber = digits.length === 10 ? '91' + digits : digits;
+      const welcomeMsg = 'Thank you for registering for the Kuppayam Residential Camp²⁵. We appreciate your interest and support. You will be added to the official WhatsApp group shortly, InshaAllah.';
+      const waUrl = 'https://wa.me/' + waNumber + '?text=' + encodeURIComponent(welcomeMsg);
+      stu.welcomeSent = true;
+      saveStudentsToStorage();
+      showToast('Opening WhatsApp for ' + stu.name + '...');
+      window.open(waUrl, '_blank', 'noopener');
+      renderAuth();
+    }
+
+    function toggleWelcomeSent(id, checked) {
+      const stu = state.students.find(item => item.id === id);
+      if (!stu) return;
+      stu.welcomeSent = checked;
+      saveStudentsToStorage();
+      showToast(checked ? 'Welcome message marked sent.' : 'Welcome message unmarked.');
+    }
+
+    function togglePaymentMsgSent(id, checked) {
+      const stu = state.students.find(item => item.id === id);
+      if (!stu) return;
+      stu.paymentMsgSent = checked;
+      saveStudentsToStorage();
+      showToast(checked ? 'Payment message marked sent.' : 'Payment message unmarked.');
+    }
+
+    function saveQrSiteUrl(val) {
+      localStorage.setItem('kuppayam_site_url', (val || '').trim());
+      showToast('QR Website URL saved!');
+    }
+
+    function getStudentAutoLoginUrl(stu) {
+      const savedUrl = (localStorage.getItem('kuppayam_site_url') || '').trim();
+      const rawHref = new URL(PAGES.home, window.location.href).href; // QR links open the home page, which signs the student in
+      const base = savedUrl
+        ? savedUrl
+        : ((typeof SITE_BASE_URL !== 'undefined' && SITE_BASE_URL.trim()) ? SITE_BASE_URL.trim() : rawHref);
+      const params = new URLSearchParams({
+        autologin: stu.regNo || '',
+        dob: stu.dob || '',
+        n: stu.name || '',
+        c: stu.studentClass || '',
+        p: stu.place || '',
+        g: stu.gender || 'Male'
+      });
+      const cleanBase = base.split('?')[0].split('#')[0].replace(/(student|admin)\.html$/i, 'index.html');
+      return cleanBase + '?' + params.toString();
+    }
+
+    function generateStudentIdCardDataUrl(stu) {
+      const canvas = document.createElement('canvas');
+      canvas.width = 800;
+      canvas.height = 1100;
+      const ctx = canvas.getContext('2d');
+
+      // Background
+      ctx.fillStyle = '#013F32';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // Outer lime border
+      ctx.strokeStyle = '#E7FE25';
+      ctx.lineWidth = 10;
+      ctx.strokeRect(28, 28, canvas.width - 56, canvas.height - 56);
+
+      // Top header
+      ctx.fillStyle = '#E7FE25';
+      ctx.font = 'bold 28px Plus Jakarta Sans, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('KUPPAYAM 3.0 · STUDENT ID CARD', canvas.width / 2, 105);
+
+      ctx.fillStyle = 'rgba(253,253,253,0.75)';
+      ctx.font = '20px Plus Jakarta Sans, sans-serif';
+      ctx.fillText('WINTER INTENSIVE CAMP · WIRAS, MARKAZ KNOWLEDGE CITY', canvas.width / 2, 142);
+
+      // Chest / Register Number Pill
+      const regText = stu.regNo || 'PENDING';
+      ctx.fillStyle = '#E7FE25';
+      ctx.beginPath();
+      ctx.roundRect(230, 185, 340, 74, 37);
+      ctx.fill();
+      ctx.fillStyle = '#161616';
+      ctx.font = 'bold 38px Plus Jakarta Sans, sans-serif';
+      ctx.fillText(regText, canvas.width / 2, 235);
+
+      // Student Details Card
+      ctx.fillStyle = 'rgba(255,255,255,0.08)';
+      ctx.beginPath();
+      ctx.roundRect(70, 295, 660, 240, 22);
+      ctx.fill();
+
+      ctx.textAlign = 'left';
+      ctx.fillStyle = '#E7FE25';
+      ctx.font = 'bold 18px Plus Jakarta Sans, sans-serif';
+      ctx.fillText('STUDENT NAME', 110, 350);
+      ctx.fillStyle = '#FDFDFD';
+      ctx.font = 'bold 38px Plus Jakarta Sans, sans-serif';
+      ctx.fillText((stu.name || '').toUpperCase(), 110, 398);
+
+      ctx.fillStyle = '#E7FE25';
+      ctx.font = 'bold 18px Plus Jakarta Sans, sans-serif';
+      ctx.fillText('DATE OF BIRTH', 110, 460);
+      ctx.fillStyle = '#FDFDFD';
+      ctx.font = 'bold 28px Plus Jakarta Sans, sans-serif';
+      ctx.fillText(stu.dob || '-', 110, 498);
+
+      ctx.fillStyle = '#E7FE25';
+      ctx.font = 'bold 18px Plus Jakarta Sans, sans-serif';
+      ctx.fillText('CLASS & PLACE', 420, 460);
+      ctx.fillStyle = '#FDFDFD';
+      ctx.font = 'bold 24px Plus Jakarta Sans, sans-serif';
+      ctx.fillText((stu.studentClass || '') + ' · ' + (stu.place || ''), 420, 498);
+
+      // QR Code Box
+      const loginUrl = getStudentAutoLoginUrl(stu);
+      ctx.fillStyle = '#FDFDFD';
+      ctx.beginPath();
+      ctx.roundRect(235, 580, 330, 330, 24);
+      ctx.fill();
+
+      if (typeof qrcode !== 'undefined') {
+        const qr = qrcode(0, 'L');
+        qr.addData(loginUrl);
+        qr.make();
+        const count = qr.getModuleCount();
+        const qrSize = 256;
+        const cell = Math.floor(qrSize / count);
+        const actualSize = cell * count;
+        const startX = 235 + Math.floor((330 - actualSize) / 2);
+        const startY = 580 + Math.floor((330 - actualSize) / 2);
+        ctx.fillStyle = '#000000';
+        for (let r = 0; r < count; r++) {
+          for (let c = 0; c < count; c++) {
+            if (qr.isDark(r, c)) {
+              ctx.fillRect(startX + c * cell, startY + r * cell, cell, cell);
+            }
+          }
+        }
+      } else {
+        ctx.fillStyle = '#161616';
+        ctx.textAlign = 'center';
+        ctx.font = 'bold 20px Plus Jakarta Sans, sans-serif';
+        ctx.fillText('QR: ' + regText, canvas.width / 2, 750);
+      }
+
+      ctx.textAlign = 'center';
+      ctx.fillStyle = '#E7FE25';
+      ctx.font = 'bold 22px Plus Jakarta Sans, sans-serif';
+      ctx.fillText('SCAN QR TO AUTO-LOGIN TO STUDENT PORTAL', canvas.width / 2, 960);
+
+      ctx.fillStyle = 'rgba(253,253,253,0.65)';
+      ctx.font = '18px Plus Jakarta Sans, sans-serif';
+      ctx.fillText('24 – 26 DECEMBER 2026 · WIRAS, MARKAZ KNOWLEDGE CITY', canvas.width / 2, 1015);
+
+      return canvas.toDataURL('image/png');
+    }
+
+    let _currentIdCardDataUrl = '';
+
+    let _currentIdCardFilename = 'Kuppayam_ID_Card.png';
+
+    function previewStudentIdCard(id) {
+      const stu = state.students.find(item => item.id === id);
+      if (!stu) return;
+      _currentIdCardDataUrl = generateStudentIdCardDataUrl(stu);
+      _currentIdCardFilename = 'Kuppayam_ID_Card_' + (stu.regNo || stu.name) + '.png';
+      document.getElementById('idCardPreviewImg').src = _currentIdCardDataUrl;
+      document.getElementById('idCardModal').classList.add('open');
+    }
+
+    function closeIdCardModal() {
+      document.getElementById('idCardModal').classList.remove('open');
+    }
+
+    function downloadCurrentIdCard() {
+      if (!_currentIdCardDataUrl) return;
+      const link = document.createElement('a');
+      link.download = _currentIdCardFilename;
+      link.href = _currentIdCardDataUrl;
+      link.click();
+      showToast('ID Card poster downloaded!');
+    }
+
+    function sendStudentPaymentWhatsApp(id) {
+      const stu = state.students.find(item => item.id === id);
+      if (!stu) return;
+      const digits = (stu.whatsapp || '').replace(/\D/g, '');
+      if (!digits) {
+        showToast('No valid WhatsApp number found for this student.');
+        return;
+      }
+      const waNumber = digits.length === 10 ? '91' + digits : digits;
+      const paymentMsg = [
+        '> കുപ്പായം ',
+        '> Winter Intensive Camp²⁶`',
+        '',
+        'Chest Number :: ' + (stu.regNo || 'Pending'),
+        'Name :: ' + stu.name,
+        'Date of Birth :: ' + stu.dob,
+        'Place :: ' + stu.place,
+        'Gender :: ' + stu.gender,
+        'Class :: ' + stu.studentClass,
+        'WhatsApp Number :: ' + stu.whatsapp,
+        'Contact Number :: ' + stu.contact,
+        'Paymant Status :: ' + (stu.paymentCompleted ? '\u2705' : 'Pending'),
+        '',
+        '\u00A9\uFE0F *WIRAS • Markaz Knowledge City*'
+      ].join('\n');
+      const idCardDataUrl = generateStudentIdCardDataUrl(stu);
+      const waUrl = 'https://wa.me/' + waNumber + '?text=' + encodeURIComponent(paymentMsg);
+
+      const finishOpenWhatsApp = (copied) => {
+        stu.paymentMsgSent = true;
+        saveStudentsToStorage();
+        showToast(copied
+          ? 'ID Card copied! Press Ctrl+V in WhatsApp to paste and send it.'
+          : 'Opening WhatsApp — use Preview ID Card to save/attach the image.');
+        window.open(waUrl, '_blank', 'noopener');
+        renderAuth();
+      };
+
+      if (navigator.clipboard && window.ClipboardItem) {
+        fetch(idCardDataUrl)
+          .then(r => r.blob())
+          .then(blob => navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })]))
+          .then(() => finishOpenWhatsApp(true))
+          .catch(() => finishOpenWhatsApp(false));
+      } else {
+        finishOpenWhatsApp(false);
+      }
+    }
+
+    function getReminderMessageText() {
+      const el = document.getElementById('reminderMsgTemplate');
+      const val = el ? el.value : state.reminderMessage;
+      return (val || '').trim();
+    }
+
+    function sendStudentReminderWhatsApp(id) {
+      const stu = state.students.find(item => item.id === id);
+      if (!stu) return;
+      const digits = (stu.whatsapp || '').replace(/\D/g, '');
+      if (!digits) {
+        showToast('No valid WhatsApp number found for ' + stu.name + '.');
+        return;
+      }
+      const msg = getReminderMessageText();
+      if (!msg) {
+        showToast('Please enter a reminder message first.');
+        return;
+      }
+      const waNumber = digits.length === 10 ? '91' + digits : digits;
+      const waUrl = 'https://wa.me/' + waNumber + '?text=' + encodeURIComponent(msg);
+      stu.reminderSent = true;
+      saveStudentsToStorage();
+      showToast('Opening WhatsApp reminder for ' + stu.name + '...');
+      window.open(waUrl, '_blank', 'noopener');
+      renderAuth();
+    }
+
+    function sendAllPaymentReminders() {
+      const pendingList = state.students.filter(stu => !stu.paymentCompleted);
+      if (!pendingList.length) {
+        showToast('No payment-pending students to remind.');
+        return;
+      }
+      const msg = getReminderMessageText();
+      if (!msg) {
+        showToast('Please enter a reminder message first.');
+        return;
+      }
+      let opened = 0;
+      let blocked = 0;
+      pendingList.forEach(stu => {
+        const digits = (stu.whatsapp || '').replace(/\D/g, '');
+        if (!digits) return;
+        const waNumber = digits.length === 10 ? '91' + digits : digits;
+        const waUrl = 'https://wa.me/' + waNumber + '?text=' + encodeURIComponent(msg);
+        const win = window.open(waUrl, '_blank', 'noopener');
+        if (win) {
+          opened++;
+        } else {
+          blocked++;
+        }
+        stu.reminderSent = true;
+      });
+      saveStudentsToStorage();
+      if (blocked > 0) {
+        showToast('Opened ' + opened + ' WhatsApp tabs (' + blocked + ' blocked by browser pop-up blocker — please allow pop-ups for this site).');
+      } else {
+        showToast('Opened WhatsApp reminder for all ' + opened + ' pending students.');
+      }
+      renderAuth();
+    }
+
+    function setAttendanceDay(day) {
+      state.attendanceDay = day;
+      renderAuth();
+    }
+
+    function toggleAttendance(id, isPresent) {
+      const stu = state.students.find(item => item.id === id);
+      if (!stu) return;
+      if (!stu.attendance) stu.attendance = { 1: false, 2: false, 3: false };
+      stu.attendance[state.attendanceDay] = isPresent;
+      saveStudentsToStorage();
+      showToast(stu.name + ' (' + (stu.regNo || 'No ID') + ') marked ' + (isPresent ? 'Present' : 'Absent') + ' for Day ' + state.attendanceDay);
+      renderAuth();
+    }
+
+    function exportAttendanceCSV() {
+      const paidStudents = state.students.filter(stu => stu.paymentCompleted);
+      if (!paidStudents.length) {
+        showToast('No payment-completed students to export yet.');
+        return;
+      }
+      const headers = ['Chest / Register No', 'Name', 'Class', 'Place', 'Gender', 'WhatsApp Number', 'Contact Number', 'Day 1 (24 Dec)', 'Day 2 (25 Dec)', 'Day 3 (26 Dec)', 'Total Days Present'];
+      const esc = (v) => '"' + String(v ?? '').replace(/"/g, '""') + '"';
+      const rows = paidStudents.map(stu => {
+        const att = stu.attendance || { 1: false, 2: false, 3: false };
+        const d1 = att[1] ? 'Present' : 'Absent';
+        const d2 = att[2] ? 'Present' : 'Absent';
+        const d3 = att[3] ? 'Present' : 'Absent';
+        const total = (att[1] ? 1 : 0) + (att[2] ? 1 : 0) + (att[3] ? 1 : 0);
+        return [
+          stu.regNo || '',
+          stu.name,
+          stu.studentClass,
+          stu.place,
+          stu.gender,
+          stu.whatsapp,
+          stu.contact,
+          d1,
+          d2,
+          d3,
+          total
+        ].map(esc).join(',');
+      });
+      const csv = [headers.map(esc).join(','), ...rows].join('\r\n');
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'kuppayam-3.0-attendance.csv';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      showToast('Exported attendance CSV (' + paidStudents.length + ' students)!');
+    }
+
+    function resetAdminFilters() {
+      const q = document.getElementById('admSearch');
+      const cls = document.getElementById('admClassFilter');
+      const pay = document.getElementById('admPayFilter');
+      if (q) q.value = '';
+      if (cls) cls.value = 'All';
+      if (pay) pay.value = 'All';
+      renderAdminStudentsList();
+    }
+
+    function renderAdminStudentsList() {
+      const listEl = document.getElementById('adminStudentsList');
+      if (!listEl) return;
+      const q = (document.getElementById('admSearch')?.value || '').toLowerCase();
+      const cls = document.getElementById('admClassFilter')?.value || 'All';
+      const pay = document.getElementById('admPayFilter')?.value || 'All';
+
+      const filtered = state.students.filter(stu => {
+        const matchQ = !q || stu.name.toLowerCase().includes(q) || (stu.place || '').toLowerCase().includes(q) || (stu.whatsapp || '').includes(q) || (stu.regNo || '').toLowerCase().includes(q);
+        const matchCls = cls === 'All' || stu.studentClass === cls;
+        const matchPay = pay === 'All' || (pay === 'Completed' ? stu.paymentCompleted : !stu.paymentCompleted);
+        return matchQ && matchCls && matchPay;
+      });
+
+      listEl.innerHTML = filtered.length ? filtered.map(stu => `
+        <div class="student-row-card" onclick="selectAdminStudent('${stu.id}')">
+          <div>
+            <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+              <strong style="font-size:1.05rem;">${stu.name}</strong>
+              ${stu.regNo ? `<span class="badge-pill badge-lime">${stu.regNo}</span>` : ''}
+            </div>
+            <p style="font-size:0.84rem; color:var(--charcoal-65); margin-top:4px;">
+              ${stu.studentClass} · ${stu.place} · WhatsApp: ${stu.whatsapp}
+            </p>
+          </div>
+          <div style="display:flex; align-items:center; gap:10px;">
+            <span class="badge-pill ${stu.paymentCompleted ? 'badge-lime' : 'badge-forest'}">
+              ${stu.paymentCompleted ? 'Payment Complete' : 'Pending Payment'}
+            </span>
+            <button type="button" class="btn-secondary" style="padding:7px 14px; font-size:0.8rem;">View Details</button>
+            <div class="row-menu-wrap" onclick="event.stopPropagation()">
+              <button type="button" class="dots-btn" aria-label="Student options" onclick="toggleStudentRowMenu(event, '${stu.id}')">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <circle cx="12" cy="5" r="2"></circle>
+                  <circle cx="12" cy="12" r="2"></circle>
+                  <circle cx="12" cy="19" r="2"></circle>
+                </svg>
+              </button>
+              <div class="row-dropdown" id="stuMenu_${stu.id}">
+                <button type="button" class="row-dropdown-item danger" onclick="deleteAdminStudent('${stu.id}')">Delete</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      `).join('') : '<div class="panel-card"><p style="color:var(--charcoal-65);">No students match your current filter.</p></div>';
+    }
+
+    function closeAllStudentMenus() {
+      document.querySelectorAll('.row-dropdown.open').forEach(el => el.classList.remove('open'));
+      document.querySelectorAll('.student-row-card.menu-open').forEach(el => el.classList.remove('menu-open'));
+    }
+
+    function toggleStudentRowMenu(e, id) {
+      e.stopPropagation();
+      const target = document.getElementById('stuMenu_' + id);
+      const wasOpen = target && target.classList.contains('open');
+      closeAllStudentMenus();
+      if (target && !wasOpen) {
+        target.classList.add('open');
+        const card = target.closest('.student-row-card');
+        if (card) card.classList.add('menu-open');
+      }
+    }
+
+    function openEditStudentModal(id) {
+      closeAllStudentMenus();
+      const stu = state.students.find(item => item.id === id);
+      if (!stu) return;
+      document.getElementById('editStuId').value = stu.id;
+      document.getElementById('editStuName').value = stu.name || '';
+      document.getElementById('editStuDob').value = stu.dob || '';
+      document.getElementById('editStuPlace').value = stu.place || '';
+      document.getElementById('editStuGender').value = stu.gender || 'Male';
+      document.getElementById('editStuClass').value = stu.studentClass || 'Class 8';
+      document.getElementById('editStuWhatsapp').value = stu.whatsapp || '';
+      document.getElementById('editStuContact').value = stu.contact || '';
+      document.getElementById('editStudentModal').classList.add('open');
+    }
+
+    function closeEditStudentModal() {
+      document.getElementById('editStudentModal').classList.remove('open');
+    }
+
+    function saveEditedStudent(e) {
+      e.preventDefault();
+      const id = document.getElementById('editStuId').value;
+      const stu = state.students.find(item => item.id === id);
+      if (!stu) return;
+      stu.name = document.getElementById('editStuName').value.trim();
+      stu.dob = document.getElementById('editStuDob').value.trim();
+      stu.place = document.getElementById('editStuPlace').value.trim();
+      stu.gender = document.getElementById('editStuGender').value;
+      stu.studentClass = document.getElementById('editStuClass').value;
+      stu.whatsapp = document.getElementById('editStuWhatsapp').value.trim();
+      stu.contact = document.getElementById('editStuContact').value.trim();
+      saveStudentsToStorage();
+      closeEditStudentModal();
+      showToast('Student details updated!');
+      renderAuth();
+    }
+
+    function deleteAdminStudent(id) {
+      closeAllStudentMenus();
+      const idx = state.students.findIndex(item => item.id === id);
+      if (idx === -1) return;
+      const name = state.students[idx].name;
+      state.students.splice(idx, 1);
+      if (state.selectedRegId === id) state.selectedRegId = null;
+      saveStudentsToStorage();
+      showToast('Deleted ' + name + ' from registrations.');
+      renderAuth();
+    }
+
+    document.addEventListener('click', closeAllStudentMenus);
+
+    function logoutUser() {
+      clearSession();
+      setFlash('Signed out.');
+      window.location.href = PAGES.home;
+    }
+
+    function setStudentCertStatus(id, status) {
+      const stu = state.students.find(x => x.id === id);
+      if (!stu) return;
+      stu.certStatus = status;
+      saveStudentsToStorage();
+      showToast(stu.name + ': E-Certificate ' + (status === 'allowed' ? 'Allowed' : 'Denied (Waiting for Approval)') + '.');
+      renderAuth();
+    }
+
+    function setCertFilter(f) {
+      state.certFilter = f;
+      renderAuth();
+    }
+
+    function renderAuth() {
+      document.body.classList.add('admin-mode');
+      const container = document.getElementById('authContainer');
+      if (state.loggedInUser && state.loggedInUser.role === 'admin') {
+        const total = state.students.length;
+        const paidCount = state.students.filter(x => x.paymentCompleted).length;
+        const pendingCount = total - paidCount;
+        const regCount = state.students.filter(x => x.regNo).length;
+        const selectedStu = state.selectedRegId ? state.students.find(x => x.id === state.selectedRegId) : null;
+
+        container.innerHTML = `
+          <div class="portal-shell">
+            <aside class="portal-sidebar">
+              <div>
+                <div style="padding: 4px 8px 16px; border-bottom: 1px solid var(--charcoal-12); margin-bottom: 14px;">
+                  <div style="font-size:1.1rem; font-weight:800; color:var(--forest);">Kuppayam <span style="color:var(--charcoal);">Portal</span></div>
+                </div>
+                <button type="button" class="portal-nav-btn ${state.adminTab === 'students' ? 'active' : ''}" onclick="setAdminTab('students')">
+                  Registered Students (${total})
+                </button>
+                <button type="button" class="portal-nav-btn ${state.adminTab === 'attendance' ? 'active' : ''}" onclick="setAdminTab('attendance')">
+                  3-Day Attendance (${paidCount})
+                </button>
+                <button type="button" class="portal-nav-btn ${state.adminTab === 'reminder' ? 'active' : ''}" onclick="setAdminTab('reminder')">
+                  Reminder (${pendingCount})
+                </button>
+                <button type="button" class="portal-nav-btn ${state.adminTab === 'feedback' ? 'active' : ''}" onclick="setAdminTab('feedback')">
+                  Feedback
+                </button>
+                <button type="button" class="portal-nav-btn ${state.adminTab === 'certificate' ? 'active' : ''}" onclick="setAdminTab('certificate')">
+                  E-Certificate (${state.students.filter(x => x.certStatus === 'pending').length})
+                </button>
+              </div>
+
+              <div style="border-top: 1px solid var(--charcoal-12); padding-top: 14px;">
+                <button type="button" class="btn-submit-full" style="padding:10px 14px; font-size:0.86rem;" onclick="logoutUser()">Log Out</button>
+              </div>
+            </aside>
+
+            <div>
+              ${state.adminTab === 'students' ? `
+                <div class="panel-card" style="margin-bottom: 18px;">
+                  <div class="section-kicker" style="margin-bottom:4px;">REGISTRATIONS</div>
+                  <h2 style="font-size:1.8rem; font-weight:800; line-height:1.15;">Kuppayam 3.0 Students</h2>
+                  <p style="font-size:0.88rem; color:var(--charcoal-65); margin-top:4px;">Select any student to inspect their details, verify payment, and generate their Register Number (e.g. K3001).</p>
+                  ${window.location.protocol === 'file:' ? `
+                  ` : ''}
+                </div>
+
+                <div class="portal-stats-4">
+                  <div class="portal-stat-box">
+                    <div class="stat-label">STUDENTS</div>
+                    <div style="font-size:1.7rem; font-weight:800;">${total}</div>
+                  </div>
+                  <div class="portal-stat-box">
+                    <div class="stat-label">PAID</div>
+                    <div style="font-size:1.7rem; font-weight:800; color:var(--forest);">${paidCount}</div>
+                  </div>
+                  <div class="portal-stat-box">
+                    <div class="stat-label">PENDING</div>
+                    <div style="font-size:1.7rem; font-weight:800;">${pendingCount}</div>
+                  </div>
+                </div>
+
+                ${selectedStu ? `
+                  <div class="panel-card" style="margin-bottom:18px; border:2px solid var(--forest);">
+                    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:16px;">
+                      <div>
+                        <span class="badge-pill badge-forest">STUDENT RECORD</span>
+                        <h3 style="font-size:1.5rem; font-weight:800; margin-top:6px;">${selectedStu.name}</h3>
+                      </div>
+                      <div style="display:flex; flex-wrap:wrap; gap:10px; align-items:center;">
+                        <button type="button" class="btn-primary" style="padding:8px 16px; font-size:0.84rem;" onclick="sendStudentWelcomeWhatsApp('${selectedStu.id}')">
+                          Send Welcome Message
+                        </button>
+                        <button type="button" class="btn-primary" style="padding:8px 16px; font-size:0.84rem;" onclick="sendStudentPaymentWhatsApp('${selectedStu.id}')">
+                          ${selectedStu.paymentMsgSent ? 'Resend Payment Message' : 'Send Payment Message'}
+                        </button>
+                        <button type="button" class="btn-secondary" style="padding:8px 16px; font-size:0.84rem;" onclick="previewStudentIdCard('${selectedStu.id}')">
+                          Preview ID Card
+                        </button>
+                        <button type="button" class="btn-secondary" style="padding:8px 16px; font-size:0.84rem;" onclick="selectAdminStudent(null)">&larr; All Students</button>
+                      </div>
+                    </div>
+
+                    <div class="tick-box-bar">
+                      <div style="display:flex; flex-wrap:wrap; gap:18px; align-items:center;">
+                        <label class="tick-label">
+                          <input type="checkbox" ${selectedStu.paymentCompleted ? 'checked' : ''} onchange="togglePaymentComplete('${selectedStu.id}', this.checked)" />
+                          <span>Complete Payment</span>
+                        </label>
+                        <label class="tick-label">
+                          <input type="checkbox" ${selectedStu.welcomeSent ? 'checked' : ''} onchange="toggleWelcomeSent('${selectedStu.id}', this.checked)" />
+                          <span>Send Welcome Message</span>
+                        </label>
+                        <label class="tick-label">
+                          <input type="checkbox" ${selectedStu.paymentMsgSent ? 'checked' : ''} onchange="togglePaymentMsgSent('${selectedStu.id}', this.checked)" />
+                          <span>Payment Message</span>
+                        </label>
+                      </div>
+                      <div>
+                        ${selectedStu.regNo
+                          ? `<span class="badge-pill badge-lime" style="font-size:0.9rem; padding:7px 16px;">REGISTER NO: ${selectedStu.regNo}</span>`
+                          : `<span style="font-size:0.82rem; font-weight:700; color:var(--charcoal-65);">Tick "Complete Payment" to generate Register No.</span>`
+                        }
+                      </div>
+                    </div>
+
+                    <div class="cards-grid-3" style="gap:14px;">
+                      <div class="panel-card" style="padding:14px;"><div class="stat-label">NAME</div><strong>${selectedStu.name}</strong></div>
+                      <div class="panel-card" style="padding:14px;"><div class="stat-label">DATE OF BIRTH</div><strong>${selectedStu.dob}</strong></div>
+                      <div class="panel-card" style="padding:14px;"><div class="stat-label">PLACE</div><strong>${selectedStu.place}</strong></div>
+                      <div class="panel-card" style="padding:14px;"><div class="stat-label">GENDER</div><strong>${selectedStu.gender}</strong></div>
+                      <div class="panel-card" style="padding:14px;"><div class="stat-label">CLASS</div><strong>${selectedStu.studentClass}</strong></div>
+                      <div class="panel-card" style="padding:14px;"><div class="stat-label">WHATSAPP NUMBER</div><strong>${selectedStu.whatsapp}</strong></div>
+                      <div class="panel-card" style="padding:14px;"><div class="stat-label">CONTACT NUMBER</div><strong>${selectedStu.contact}</strong></div>
+                      <div class="panel-card" style="padding:14px;"><div class="stat-label">REGISTER NUMBER</div><strong>${selectedStu.regNo || 'Pending Payment'}</strong></div>
+                    </div>
+                  </div>
+                ` : `
+                  <div class="portal-filter-bar">
+                    <input id="admSearch" class="form-input" style="flex:1; min-width:180px;" placeholder="Search name, place, WhatsApp, or Reg No..." oninput="renderAdminStudentsList()" />
+                    <select id="admClassFilter" class="form-select" style="width:auto;" onchange="renderAdminStudentsList()">
+                      <option value="All">All Classes</option>
+                      <option value="Class 8">Class 8</option>
+                      <option value="Class 9">Class 9</option>
+                      <option value="Class 10">Class 10</option>
+                    </select>
+                    <select id="admPayFilter" class="form-select" style="width:auto;" onchange="renderAdminStudentsList()">
+                      <option value="All">All Status</option>
+                      <option value="Completed">Payment Complete</option>
+                      <option value="Pending">Pending Payment</option>
+                    </select>
+                  </div>
+                  <div id="adminStudentsList" class="students-big-box"></div>
+                `}
+              ` : state.adminTab === 'reminder' ? `
+                ${(() => {
+                  const pendingList = state.students.filter(x => !x.paymentCompleted);
+                  return `
+                    <div class="panel-card" style="margin-bottom: 18px; display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:14px;">
+                      <div>
+                        <div class="section-kicker" style="margin-bottom:4px;">PAYMENT REMINDER</div>
+                        <h2 style="font-size:1.8rem; font-weight:800; line-height:1.15;">Pending Payment Students (${pendingList.length})</h2>
+                        <p style="font-size:0.88rem; color:var(--charcoal-65); margin-top:4px;">Send a WhatsApp payment reminder individually or to all pending students in one click.</p>
+                      </div>
+
+                    </div>
+
+                    <div class="panel-card" style="margin-bottom: 18px;">
+                      <label for="reminderMsgTemplate" class="stat-label" style="display:block; margin-bottom:8px;">WHATSAPP REMINDER MESSAGE (SENT TO ALL PENDING STUDENTS)</label>
+                      <textarea id="reminderMsgTemplate" class="form-input" rows="4" style="width:100%; resize:vertical; font-family:inherit;" oninput="state.reminderMessage = this.value">${state.reminderMessage}</textarea>
+                    </div>
+
+                    <div style="display:flex; flex-direction:column; gap:10px;">
+                      ${pendingList.length ? pendingList.map(stu => `
+                        <div class="student-row-card" style="cursor:default;">
+                          <div>
+                            <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+                              <strong style="font-size:1.05rem;">${stu.name}</strong>
+                              <span class="badge-pill badge-forest">Pending Payment</span>
+                              ${stu.reminderSent ? '<span class="badge-pill badge-lime">Reminder Sent</span>' : ''}
+                            </div>
+                            <p style="font-size:0.84rem; color:var(--charcoal-65); margin-top:4px;">
+                              ${stu.studentClass} · ${stu.place} · WhatsApp: ${stu.whatsapp}
+                            </p>
+                          </div>
+                          <button type="button" class="btn-primary" style="padding:9px 16px; font-size:0.84rem; white-space:nowrap;" onclick="sendStudentReminderWhatsApp('${stu.id}')">
+                            ${stu.reminderSent ? 'Resend Reminder' : 'Send Reminder'}
+                          </button>
+                        </div>
+                      `).join('') : '<div class="panel-card"><p style="color:var(--charcoal-65);">All registered students have completed their payment.</p></div>'}
+                    </div>
+                  `;
+                })()}
+              ` : state.adminTab === 'feedback' ? `
+                ${(() => {
+                  const cat = state.feedbackCategory || 'overall';
+                  const selStu = state.selectedFeedbackStuId ? state.students.find(x => x.id === state.selectedFeedbackStuId) : null;
+                  return `
+                    <div class="panel-card" style="margin-bottom: 18px;">
+                      <div class="section-kicker" style="margin-bottom:4px;">STUDENT FEEDBACK</div>
+                      <h2 style="font-size:1.8rem; font-weight:800; line-height:1.15;">Feedback Center</h2>
+                      <p style="font-size:0.88rem; color:var(--charcoal-65); margin-top:4px;">Choose a feedback category, then click any student name to read their rating and feedback.</p>
+                      <div class="chip-row" style="margin-top:14px; margin-bottom:0;">
+                        <button type="button" class="filter-chip ${cat === 'overall' ? 'active' : ''}" onclick="setFeedbackCategory('overall')">1. Overall Feedback</button>
+                        <button type="button" class="filter-chip ${cat === 'event' ? 'active' : ''}" onclick="setFeedbackCategory('event')">2. Each Event Feedback</button>
+                      </div>
+                    </div>
+
+                    ${selStu ? `
+                      <div class="panel-card" style="border:2px solid var(--forest);">
+                        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:16px;">
+                          <div>
+                            <span class="badge-pill badge-forest">${cat === 'overall' ? 'OVERALL FEEDBACK' : 'EVENT FEEDBACK'}</span>
+                            <h3 style="font-size:1.45rem; font-weight:800; margin-top:6px;">${selStu.name}</h3>
+                            <p style="font-size:0.84rem; color:var(--charcoal-65);">${selStu.regNo || 'Pending Payment'} · ${selStu.studentClass} · ${selStu.place}</p>
+                          </div>
+                          <button type="button" class="btn-secondary" style="padding:8px 16px; font-size:0.84rem;" onclick="selectFeedbackStudent(null)">&larr; All Students</button>
+                        </div>
+
+                        ${cat === 'overall' ? `
+                          ${selStu.overallFeedback ? `
+                            <div class="panel-card" style="background:#f8faf7;">
+                              <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:10px;">
+                                <span class="badge-pill badge-lime" style="font-size:0.9rem;">${'★'.repeat(selStu.overallFeedback.rating)}${'☆'.repeat(5 - selStu.overallFeedback.rating)} (${selStu.overallFeedback.rating}/5)</span>
+                                <span style="font-size:0.78rem; color:var(--charcoal-65);">${selStu.overallFeedback.updatedAt || ''}</span>
+                              </div>
+                              <p style="font-size:0.96rem; line-height:1.6; color:var(--charcoal); white-space:pre-wrap;">${selStu.overallFeedback.text}</p>
+                            </div>
+                          ` : '<p style="color:var(--charcoal-65);">This student has not submitted overall feedback yet.</p>'}
+                        ` : `
+                          ${(() => {
+                            const evMap = selStu.eventFeedbacks || {};
+                            const entries = Object.values(evMap);
+                            if (!entries.length) {
+                              return '<p style="color:var(--charcoal-65);">This student has not submitted any event feedback yet.</p>';
+                            }
+                            return `<div style="display:flex; flex-direction:column; gap:12px;">` + entries.map(ef => `
+                              <div class="panel-card" style="background:#f8faf7;">
+                                <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:8px;">
+                                  <strong style="font-size:1.05rem;">${ef.eventTitle}</strong>
+                                  <span class="badge-pill badge-lime">${'★'.repeat(ef.rating)}${'☆'.repeat(5 - ef.rating)} (${ef.rating}/5)</span>
+                                </div>
+                                <p style="font-size:0.94rem; line-height:1.6; color:var(--charcoal); white-space:pre-wrap;">${ef.text}</p>
+                                <div style="font-size:0.76rem; color:var(--charcoal-65); margin-top:6px;">${ef.updatedAt || ''}</div>
+                              </div>
+                            `).join('') + `</div>`;
+                          })()}
+                        `}
+                      </div>
+                    ` : `
+                      <div style="display:flex; flex-direction:column; gap:10px;">
+                        ${state.students.map(stu => {
+                          const hasOverall = !!stu.overallFeedback;
+                          const evCount = stu.eventFeedbacks ? Object.keys(stu.eventFeedbacks).length : 0;
+                          const statusBadge = cat === 'overall'
+                            ? (hasOverall ? `<span class="badge-pill badge-lime">★ ${stu.overallFeedback.rating}/5</span>` : `<span class="badge-pill badge-forest">No Feedback</span>`)
+                            : (evCount > 0 ? `<span class="badge-pill badge-lime">${evCount} Event${evCount > 1 ? 's' : ''} Rated</span>` : `<span class="badge-pill badge-forest">No Feedback</span>`);
+                          return `
+                            <div class="student-row-card" onclick="selectFeedbackStudent('${stu.id}')">
+                              <div>
+                                <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+                                  <strong style="font-size:1.05rem;">${stu.name}</strong>
+                                  ${stu.regNo ? `<span class="badge-pill badge-lime">${stu.regNo}</span>` : ''}
+                                </div>
+                                <p style="font-size:0.84rem; color:var(--charcoal-65); margin-top:4px;">
+                                  ${stu.studentClass} · ${stu.place}
+                                </p>
+                              </div>
+                              ${statusBadge}
+                            </div>
+                          `;
+                        }).join('')}
+                      </div>
+                    `}
+                  `;
+                })()}
+              ` : state.adminTab === 'certificate' ? `
+                ${(() => {
+                  const cf = state.certFilter || 'All';
+                  const appliedCount = state.students.filter(x => x.certStatus && x.certStatus !== 'none').length;
+                  const notAppliedCount = state.students.length - appliedCount;
+                  const allowedCount = state.students.filter(x => x.certStatus === 'allowed').length;
+                  const list = state.students.filter(stu => {
+                    const st = stu.certStatus || 'none';
+                    if (cf === 'Applied') return st !== 'none';
+                    if (cf === 'Not Applied') return st === 'none';
+                    if (cf === 'Allowed') return st === 'allowed';
+                    return true;
+                  });
+                  return `
+                    <div class="panel-card" style="margin-bottom: 18px;">
+                      <div class="section-kicker" style="margin-bottom:4px;">CERTIFICATES</div>
+                      <h2 style="font-size:1.8rem; font-weight:800; line-height:1.15;">E-Certificate Requests</h2>
+                      <p style="font-size:0.88rem; color:var(--charcoal-65); margin-top:4px;">Review students who applied or have not applied yet, and Allow or Deny their E-Certificate.</p>
+                      <div class="chip-row" style="margin-top:14px; margin-bottom:0;">
+                        <button type="button" class="filter-chip ${cf === 'All' ? 'active' : ''}" onclick="setCertFilter('All')">All (${state.students.length})</button>
+                        <button type="button" class="filter-chip ${cf === 'Applied' ? 'active' : ''}" onclick="setCertFilter('Applied')">Applied (${appliedCount})</button>
+                        <button type="button" class="filter-chip ${cf === 'Not Applied' ? 'active' : ''}" onclick="setCertFilter('Not Applied')">Not Applied (${notAppliedCount})</button>
+                        <button type="button" class="filter-chip ${cf === 'Allowed' ? 'active' : ''}" onclick="setCertFilter('Allowed')">Allowed (${allowedCount})</button>
+                      </div>
+                    </div>
+
+                    <div style="display:flex; flex-direction:column; gap:10px;">
+                      ${list.length ? list.map(stu => {
+                        const st = stu.certStatus || 'none';
+                        const badgeHtml = st === 'allowed'
+                          ? '<span class="badge-pill badge-lime">Allowed</span>'
+                          : st === 'denied'
+                            ? '<span class="badge-pill badge-forest">Denied (Waiting)</span>'
+                            : st === 'pending'
+                              ? '<span class="badge-pill badge-lime">Applied · Pending</span>'
+                              : '<span class="badge-pill badge-forest">Not Applied</span>';
+                        return `
+                          <div class="student-row-card" style="cursor:default; gap:12px; flex-wrap:wrap;">
+                            <div>
+                              <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+                                <strong style="font-size:1.05rem;">${stu.name}</strong>
+                                ${stu.regNo ? `<span class="badge-pill badge-lime">${stu.regNo}</span>` : ''}
+                                ${badgeHtml}
+                              </div>
+                              <p style="font-size:0.84rem; color:var(--charcoal-65); margin-top:4px;">
+                                ${stu.studentClass} · ${stu.place}${stu.certAppliedAt ? ' · Applied: ' + stu.certAppliedAt : ''}
+                              </p>
+                            </div>
+                            <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                              <button type="button" class="${st === 'allowed' ? 'btn-primary' : 'btn-secondary'}" style="padding:8px 16px; font-size:0.82rem;" onclick="setStudentCertStatus('${stu.id}', 'allowed')">
+                                Allow
+                              </button>
+                              <button type="button" class="btn-secondary" style="padding:8px 16px; font-size:0.82rem; ${st === 'denied' ? 'border-color:#b91c1c; color:#b91c1c;' : ''}" onclick="setStudentCertStatus('${stu.id}', 'denied')">
+                                Deny
+                              </button>
+                            </div>
+                          </div>
+                        `;
+                      }).join('') : '<div class="panel-card"><p style="color:var(--charcoal-65);">No students match this filter.</p></div>'}
+                    </div>
+                  `;
+                })()}
+              ` : `
+                ${(() => {
+                  const paidList = state.students.filter(x => x.paymentCompleted);
+                  const d = state.attendanceDay;
+                  const presentCount = paidList.filter(x => x.attendance && x.attendance[d]).length;
+                  const absentCount = paidList.length - presentCount;
+                  const dayLabels = { 1: 'Day 1 · 24 Dec 2026', 2: 'Day 2 · 25 Dec 2026', 3: 'Day 3 · 26 Dec 2026' };
+                  return `
+                    <div class="panel-card" style="margin-bottom: 18px; display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:14px;">
+                      <div>
+                        <div class="section-kicker" style="margin-bottom:4px;">3-DAY CAMP ATTENDANCE</div>
+                        <h2 style="font-size:1.8rem; font-weight:800; line-height:1.15;">${dayLabels[d]}</h2>
+                        <p style="font-size:0.88rem; color:var(--charcoal-65); margin-top:4px;">Showing all payment-completed students. Tick the box to mark Present.</p>
+                      </div>
+                      <button type="button" class="btn-primary" style="padding:11px 20px; font-size:0.86rem;" onclick="exportAttendanceCSV()">
+                        Export Attendance CSV
+                      </button>
+                    </div>
+
+                    <div class="chip-row" style="margin-bottom:16px;">
+                      <button type="button" class="filter-chip ${d === 1 ? 'active' : ''}" onclick="setAttendanceDay(1)">Day 1 · 24 Dec</button>
+                      <button type="button" class="filter-chip ${d === 2 ? 'active' : ''}" onclick="setAttendanceDay(2)">Day 2 · 25 Dec</button>
+                      <button type="button" class="filter-chip ${d === 3 ? 'active' : ''}" onclick="setAttendanceDay(3)">Day 3 · 26 Dec</button>
+                    </div>
+
+                    <div class="portal-stats-4" style="grid-template-columns: repeat(3, 1fr);">
+                      <div class="portal-stat-box">
+                        <div class="stat-label">PAID STUDENTS</div>
+                        <div style="font-size:1.7rem; font-weight:800;">${paidList.length}</div>
+                      </div>
+                      <div class="portal-stat-box">
+                        <div class="stat-label">PRESENT (DAY ${d})</div>
+                        <div style="font-size:1.7rem; font-weight:800; color:var(--forest);">${presentCount}</div>
+                      </div>
+                      <div class="portal-stat-box">
+                        <div class="stat-label">ABSENT (DAY ${d})</div>
+                        <div style="font-size:1.7rem; font-weight:800;">${absentCount}</div>
+                      </div>
+                    </div>
+
+                    <div style="display:flex; flex-direction:column; gap:10px;">
+                      ${paidList.length ? paidList.map(stu => {
+                        const isPres = !!(stu.attendance && stu.attendance[d]);
+                        return `
+                          <div class="student-row-card" style="cursor:default;">
+                            <div>
+                              <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+                                <span class="badge-pill badge-lime">${stu.regNo || 'NO ID'}</span>
+                                <strong style="font-size:1.05rem;">${stu.name}</strong>
+                              </div>
+                              <p style="font-size:0.84rem; color:var(--charcoal-65); margin-top:4px;">
+                                ${stu.studentClass} · ${stu.place}
+                              </p>
+                            </div>
+                            <label class="tick-label" style="padding:8px 14px; border-radius:9999px; border:1.5px solid var(--forest); background:${isPres ? 'var(--lime)' : 'var(--white)'}; color:var(--charcoal);">
+                              <input type="checkbox" ${isPres ? 'checked' : ''} onchange="toggleAttendance('${stu.id}', this.checked)" />
+                              <span>${isPres ? 'Present' : 'Mark Present'}</span>
+                            </label>
+                          </div>
+                        `;
+                      }).join('') : '<div class="panel-card"><p style="color:var(--charcoal-65);">No payment-completed students yet. Tick "Complete Payment" in Registered Students first.</p></div>'}
+                    </div>
+                  `;
+                })()}
+              `}
+            </div>
+          </div>
+        `;
+        if (state.adminTab === 'students' && !selectedStu) {
+          renderAdminStudentsList();
+        }
+        return;
+      }
+    }
+
+    renderAuth();
+    showFlash();
+  </script>
+</body>
+</html>
