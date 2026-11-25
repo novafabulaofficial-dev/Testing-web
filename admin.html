@@ -1731,6 +1731,11 @@
       border-bottom-right-radius: 20px;
     }
 
+    @media (max-width: 600px) {
+      .students-big-box .student-row-card {
+        flex-wrap: wrap !important;
+      }
+    }
     .students-big-box .student-row-card:hover {
       transform: none;
       background: rgba(231, 254, 37, 0.16);
@@ -2885,21 +2890,21 @@
       });
 
       listEl.innerHTML = filtered.length ? filtered.map(stu => `
-        <div class="student-row-card" onclick="selectAdminStudent('${stu.id}')">
-          <div>
+        <div class="student-row-card" style="flex-wrap:nowrap; align-items:center; justify-content:space-between; gap:14px;" onclick="selectAdminStudent('${stu.id}')">
+          <div style="flex:1; min-width:0;">
             <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
               <strong style="font-size:1.05rem;">${stu.name}</strong>
               ${stu.regNo ? `<span class="badge-pill badge-lime">${stu.regNo}</span>` : ''}
             </div>
-            <p style="font-size:0.84rem; color:var(--charcoal-65); margin-top:4px;">
+            <p style="font-size:0.84rem; color:var(--charcoal-65); margin-top:4px; word-break:break-word;">
               ${stu.studentClass} · ${stu.place} · WhatsApp: ${stu.whatsapp}
             </p>
           </div>
-          <div style="display:flex; align-items:center; gap:10px;">
-            <span class="badge-pill ${stu.paymentCompleted ? 'badge-lime' : 'badge-forest'}">
+          <div style="display:flex; align-items:center; gap:8px; flex-shrink:0; flex-wrap:nowrap;">
+            <span class="badge-pill ${stu.paymentCompleted ? 'badge-lime' : 'badge-forest'}" style="white-space:nowrap;">
               ${stu.paymentCompleted ? 'Payment Complete' : 'Pending Payment'}
             </span>
-            <button type="button" class="btn-secondary" style="padding:7px 14px; font-size:0.8rem;">View Details</button>
+            <button type="button" class="btn-secondary" style="padding:7px 14px; font-size:0.8rem; white-space:nowrap;">View Details</button>
             <div class="row-menu-wrap" onclick="event.stopPropagation()">
               <button type="button" class="dots-btn" aria-label="Student options" onclick="toggleStudentRowMenu(event, '${stu.id}')">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
@@ -3039,9 +3044,6 @@
                 </button>
               </div>
 
-              <div style="border-top: 1px solid var(--charcoal-12); padding-top: 14px;">
-                <button type="button" class="btn-submit-full" style="padding:10px 14px; font-size:0.86rem;" onclick="logoutUser()">Log Out</button>
-              </div>
             </aside>
 
             <div>
@@ -3391,6 +3393,9 @@
                 })()}
               `}
             </div>
+          </div>
+          <div style="margin-top:24px; display:flex; justify-content:center;">
+            <button type="button" class="btn-submit-full" style="width:auto; min-width:180px; padding:12px 32px; font-size:0.92rem;" onclick="logoutUser()">Log Out</button>
           </div>
         `;
         if (state.adminTab === 'students' && !selectedStu) {
