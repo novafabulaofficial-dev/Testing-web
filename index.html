@@ -2328,6 +2328,11 @@
 
 
 
+      <!-- 3. EVENTS (STUDENT ONLY, SHOWN BELOW HOME WHEN LOGGED IN) -->
+      <section id="sec-events" class="home-section reveal-on-scroll" style="display:none;">
+        <div id="studentEventsScheduleContainer"></div>
+      </section>
+
       <!-- 2. ABOUT -->
       <section id="sec-theme" class="home-section reveal-on-scroll">
         <div class="section-header">
@@ -2349,8 +2354,6 @@
         <div class="cards-grid-3" id="pillarsGrid"></div>
         
       </section>
-
-      <!-- 3. EVENTS (STUDENT ONLY) -->
 
       <!-- 4. AUTO-SLIDING STORIES CAROUSEL -->
       <section id="sec-stories" class="home-section reveal-on-scroll">
@@ -2534,6 +2537,30 @@
     </div>
   </div>
 
+  <!-- Event Feedback Modal (for logged-in students) -->
+  <div class="modal-backdrop" id="eventFeedbackModal" role="dialog" aria-modal="true">
+    <div class="modal-box">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+        <span class="badge-pill badge-lime">EVENT FEEDBACK</span>
+        <button type="button" class="filter-chip" onclick="closeEventFeedbackModal()">Close</button>
+      </div>
+      <div style="font-size:0.75rem; font-weight:800; letter-spacing:0.12em; color:var(--forest); margin-top:4px;">YOU'RE REVIEWING</div>
+      <h3 id="modalFeedbackEventTitle" style="font-size:1.45rem; font-weight:800; margin:4px 0 16px;"></h3>
+      <form onsubmit="submitEventFeedback(event)">
+        <div class="form-group">
+          <label class="form-label">How was it?</label>
+          <div class="star-rating-row" id="eventFeedbackStars"></div>
+          <div id="eventFeedbackStarCount" style="font-size:0.82rem; font-weight:700; color:var(--charcoal-65);">0 of 5 stars</div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="eventFeedbackText">Any other thoughts, ideas, or suggestions?</label>
+          <textarea id="eventFeedbackText" class="form-input" rows="4" placeholder="Tell us what stood out or what could be better..." required style="resize:vertical;"></textarea>
+        </div>
+        <button type="submit" class="btn-submit-full">Submit Feedback &rarr;</button>
+      </form>
+    </div>
+  </div>
+
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <script>
@@ -2551,6 +2578,58 @@
       eventFilter: 'All',
       storyIndex: 0,
       storyTimer: null,
+      loggedInUser: null,
+      studentScheduleDay: 1,
+      eventFeedbackModalEvId: null,
+      eventFeedbackModalTitle: '',
+      eventFeedbackDraftRating: 0,
+      boysSchedule: {
+        1: [
+          { time: '09:00 AM – 10:30 AM', title: 'Check-in & Grand Inauguration', venue: 'Main Auditorium, WIRAS' },
+          { time: '10:45 AM – 12:30 PM', title: 'Value-Based Living & Leadership', venue: 'Boys Hall A' },
+          { time: '02:00 PM – 04:00 PM', title: 'Tilawat & Qiraat Competition', venue: 'Main Stage' },
+          { time: '04:30 PM – 06:00 PM', title: 'Sports & Team Building Arena', venue: 'Knowledge City Turf' }
+        ],
+        2: [
+          { time: '09:00 AM – 11:00 AM', title: 'Technology & AI Lab Workshop', venue: 'Innovation Lab' },
+          { time: '11:15 AM – 01:00 PM', title: 'Career Exploration & Mentoring', venue: 'Boys Hall A' },
+          { time: '02:15 PM – 04:15 PM', title: 'Language Enrichment & Debate', venue: 'Seminar Hall' },
+          { time: '04:30 PM – 06:00 PM', title: 'Mindscape Quiz & Strategy Games', venue: 'Activity Zone' }
+        ],
+        3: [
+          { time: '09:00 AM – 12:30 PM', title: 'Knowledge City Educational Excursion', venue: 'Campus Tour' },
+          { time: '02:00 PM – 03:30 PM', title: 'Parenting Insights & Reflection', venue: 'Main Auditorium' },
+          { time: '03:45 PM – 05:00 PM', title: 'Valedictory & Awards Ceremony', venue: 'Main Auditorium' }
+        ]
+      },
+      girlsSchedule: {
+        1: [
+          { time: '09:00 AM – 10:30 AM', title: 'Check-in & Grand Inauguration', venue: 'Main Auditorium, WIRAS' },
+          { time: '10:45 AM – 12:30 PM', title: 'Value-Based Living & Character', venue: 'Girls Wing Hall' },
+          { time: '02:00 PM – 04:00 PM', title: 'Tilawat & Qiraat Session', venue: 'Girls Auditorium' },
+          { time: '04:30 PM – 06:00 PM', title: 'Creative Arts & Team Bonding', venue: 'Activity Studio' }
+        ],
+        2: [
+          { time: '09:00 AM – 11:00 AM', title: 'Technology & Digital Innovation Lab', venue: 'Girls Tech Studio' },
+          { time: '11:15 AM – 01:00 PM', title: 'Career Exploration & Future Pathways', venue: 'Girls Wing Hall' },
+          { time: '02:15 PM – 04:15 PM', title: 'Language Enrichment & Elocution', venue: 'Seminar Hall B' },
+          { time: '04:30 PM – 06:00 PM', title: 'Mindscape Logic & Problem Solving', venue: 'Activity Studio' }
+        ],
+        3: [
+          { time: '09:00 AM – 12:30 PM', title: 'Knowledge City Educational Excursion', venue: 'Guided Tour' },
+          { time: '02:00 PM – 03:30 PM', title: 'Parenting Insights & Reflection', venue: 'Main Auditorium' },
+          { time: '03:45 PM – 05:00 PM', title: 'Valedictory & Awards Ceremony', venue: 'Main Auditorium' }
+        ]
+      },
+      events: [
+        { id: 'ev1', title: 'Value-Based Living', category: 'Workshop', day: 'Day 1 · 24 Dec' },
+        { id: 'ev2', title: 'Career Exploration', category: 'Workshop', day: 'Day 2 · 25 Dec' },
+        { id: 'ev3', title: 'Tilawat & Qiraat', category: 'Competition', day: 'Day 1 · 24 Dec' },
+        { id: 'ev4', title: 'Technology & AI Lab', category: 'Workshop', day: 'Day 2 · 25 Dec' },
+        { id: 'ev5', title: 'Language Enrichment', category: 'Competition', day: 'Day 2 · 25 Dec' },
+        { id: 'ev6', title: 'Mindscape Activities', category: 'Competition', day: 'Day 2 · 25 Dec' },
+        { id: 'ev7', title: 'Educational Excursions', category: 'Excursion', day: 'Day 3 · 26 Dec' }
+      ],
       nextRegSeq: 3001,
       stories: [
         { num: '01', date: '24 DEC 2026', title: 'Grand Inauguration', desc: 'Opening assembly at WIRAS, Markaz Knowledge City welcoming Grades 8, 9 & 10 campers.' },
@@ -2719,6 +2798,8 @@
         // do not redraw while someone is typing
         const a = document.activeElement;
         if (a && /^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName)) return;
+        if (typeof syncStudentSessionFromList === 'function') syncStudentSessionFromList();
+        if (typeof renderStudentEventsSection === 'function') renderStudentEventsSection();
         if (typeof renderAuth === 'function' && state.loggedInUser) renderAuth();
         if (typeof updateStats === 'function') try { updateStats(false); } catch (err) {}
       });
@@ -2939,8 +3020,166 @@
       openLoginPage();
     }
 
-    // Show the signed-in user in the navbar (label + hide Register for students)
+    function syncStudentSessionFromList() {
+      const sess = getSession();
+      if (sess && sess.role === 'student' && sess.regNo) {
+        const found = state.students.find(s => s.regNo && s.regNo.toUpperCase() === String(sess.regNo).toUpperCase());
+        if (found) {
+          state.loggedInUser = { role: 'student', data: found };
+        }
+      } else {
+        state.loggedInUser = null;
+      }
+    }
+
+    function setStudentScheduleDay(day) {
+      state.studentScheduleDay = day;
+      renderStudentEventsSection();
+    }
+
+    function renderStudentEventsSection() {
+      const sec = document.getElementById('sec-events');
+      const container = document.getElementById('studentEventsScheduleContainer');
+      if (!sec || !container) return;
+      const isStudent = !!(state.loggedInUser && state.loggedInUser.role === 'student' && state.loggedInUser.data);
+      if (!isStudent) {
+        sec.style.display = 'none';
+        container.innerHTML = '';
+        return;
+      }
+      sec.style.display = 'block';
+      sec.classList.add('is-visible');
+      const s = state.loggedInUser.data;
+      const isGirl = (s.gender || '').toLowerCase() === 'female';
+      const schedMap = isGirl ? state.girlsSchedule : state.boysSchedule;
+      const d = state.studentScheduleDay || 1;
+      const dayItems = schedMap[d] || [];
+      const dayLabels = { 1: 'Day 1 · 24 Dec 2026', 2: 'Day 2 · 25 Dec 2026', 3: 'Day 3 · 26 Dec 2026' };
+
+      container.innerHTML = `
+        <div class="section-header">
+          <div class="section-kicker">KUPPAYAM 3.0</div>
+          <h2 class="section-title">Events &amp; Programme Schedule</h2>
+        </div>
+
+        <div class="panel-card">
+          <div style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:12px; margin-bottom:18px;">
+            <div>
+              <h3 style="font-size:1.45rem; font-weight:800;">Programme Schedule</h3>
+              <p style="font-size:0.86rem; color:var(--charcoal-65); margin-top:2px;">${dayLabels[d]}</p>
+            </div>
+            <div class="chip-row" style="margin-bottom:0;">
+              <button type="button" class="filter-chip ${d === 1 ? 'active' : ''}" onclick="setStudentScheduleDay(1)">Day 1 · 24 Dec</button>
+              <button type="button" class="filter-chip ${d === 2 ? 'active' : ''}" onclick="setStudentScheduleDay(2)">Day 2 · 25 Dec</button>
+              <button type="button" class="filter-chip ${d === 3 ? 'active' : ''}" onclick="setStudentScheduleDay(3)">Day 3 · 26 Dec</button>
+            </div>
+          </div>
+
+          <div style="display:flex; flex-direction:column; gap:12px;">
+            ${dayItems.map((item, idx) => {
+              const evKey = 'prog_d' + d + '_' + idx;
+              const savedFb = s.eventFeedbacks && s.eventFeedbacks[evKey];
+              return `
+                <div class="student-row-card" style="cursor:default; gap:12px; flex-wrap:wrap; align-items:center; justify-content:space-between;">
+                  <div style="flex:1; min-width:200px;">
+                    <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:6px;">
+                      <span class="badge-pill badge-forest">${item.time}</span>
+                      <span class="badge-pill badge-lime">${item.venue}</span>
+                    </div>
+                    <h4 style="font-size:1.05rem; font-weight:800;">${item.title}</h4>
+                  </div>
+                  <button type="button" class="filter-chip ${savedFb ? 'active' : ''}" style="flex-shrink:0; white-space:nowrap;" onclick="openProgramFeedback(${d}, ${idx})">${savedFb ? ('&#9733; ' + savedFb.rating + '/5 · Edit Feedback') : 'Write Feedback'}</button>
+                </div>
+              `;
+            }).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    function openProgramFeedback(d, idx) {
+      const s = state.loggedInUser && state.loggedInUser.data;
+      if (!s) return;
+      const isGirl = (s.gender || '').toLowerCase() === 'female';
+      const items = (isGirl ? state.girlsSchedule : state.boysSchedule)[d] || [];
+      const item = items[idx];
+      if (!item) return;
+      openEventFeedbackModal('prog_d' + d + '_' + idx, 'Day ' + d + ' · ' + item.title);
+    }
+
+    function openEventFeedbackModal(evKey, customTitle) {
+      if (!state.loggedInUser || state.loggedInUser.role !== 'student') {
+        showToast('Sign in as a student to write event feedback.');
+        return;
+      }
+      const ev = state.events.find(x => x.id === evKey);
+      const title = customTitle || (ev ? ev.title : evKey);
+      const stu = state.loggedInUser.data;
+      const existing = (stu.eventFeedbacks && stu.eventFeedbacks[evKey]) ? stu.eventFeedbacks[evKey] : null;
+      state.eventFeedbackModalEvId = evKey;
+      state.eventFeedbackModalTitle = title;
+      state.eventFeedbackDraftRating = existing ? existing.rating : 0;
+      document.getElementById('modalFeedbackEventTitle').textContent = title;
+      document.getElementById('eventFeedbackText').value = existing ? existing.text : '';
+      renderEventModalStars();
+      document.getElementById('eventFeedbackModal').classList.add('open');
+    }
+
+    function closeEventFeedbackModal() {
+      document.getElementById('eventFeedbackModal').classList.remove('open');
+    }
+
+    function renderEventModalStars() {
+      const r = state.eventFeedbackDraftRating || 0;
+      const row = document.getElementById('eventFeedbackStars');
+      row.innerHTML = [1, 2, 3, 4, 5].map(n =>
+        `<button type="button" class="star-box light ${n <= r ? 'active' : ''}" onclick="setEventDraftRating(${n})" aria-label="${n} stars">&#9733;</button>`
+      ).join('');
+      document.getElementById('eventFeedbackStarCount').textContent = r + ' of 5 stars';
+    }
+
+    function setEventDraftRating(r) {
+      state.eventFeedbackDraftRating = r;
+      renderEventModalStars();
+    }
+
+    function submitEventFeedback(e) {
+      e.preventDefault();
+      if (!state.loggedInUser || state.loggedInUser.role !== 'student') return;
+      const evId = state.eventFeedbackModalEvId;
+      const ev = state.events.find(x => x.id === evId);
+      const evTitle = state.eventFeedbackModalTitle || (ev ? ev.title : evId);
+      if (!evId) return;
+      const rating = state.eventFeedbackDraftRating || 0;
+      if (!rating) {
+        showToast('Please select a star rating (1 to 5 stars).');
+        return;
+      }
+      const text = document.getElementById('eventFeedbackText').value.trim();
+      if (!text) {
+        showToast('Please write your feedback before submitting.');
+        return;
+      }
+      const stu = state.loggedInUser.data;
+      if (!stu.eventFeedbacks) stu.eventFeedbacks = {};
+      stu.eventFeedbacks[evId] = {
+        eventId: evId,
+        eventTitle: evTitle,
+        rating,
+        text,
+        updatedAt: new Date().toLocaleString()
+      };
+      saveStudentsToStorage();
+      cloudUpsert(stu);
+      closeEventFeedbackModal();
+      showToast('Feedback for "' + evTitle + '" submitted!');
+      renderStudentEventsSection();
+    }
+
+    // Show the signed-in user in the navbar (label) & show student schedule below Home
     function applySessionToNav() {
+      syncStudentSessionFromList();
+      renderStudentEventsSection();
       const sess = getSession();
       if (!sess) return;
       const lbl = document.getElementById('navAuthLabel');
