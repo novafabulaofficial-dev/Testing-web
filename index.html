@@ -2953,35 +2953,46 @@
       }
     }
 
-    /* About Section Boxes: Single Contrasted Color Animated Fill on Hover */
+    /* Desktop-only: center WINTER INTENSIVE CAMP above hero logo */
+    @media (min-width: 601px) {
+      #sec-home .kicker {
+        width: 100%;
+        max-width: clamp(240px, 44vw, 460px);
+        justify-content: center;
+        text-align: center;
+      }
+    }
+
+    /* About Section Boxes: Distinct Single-Color Animated Background on Hover */
     #pillarsGrid .gradient-card,
     #pillarsGrid .gradient-card:nth-child(even) {
       background: var(--white) !important;
-      overflow: hidden;
+      transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease !important;
     }
-    #pillarsGrid .gradient-card::after {
-      background: #013F32 !important;
-      opacity: 1 !important;
-      clip-path: circle(0% at 50% 100%);
-      transition: clip-path 0.45s cubic-bezier(0.22, 1, 0.36, 1) !important;
+    #pillarsGrid .gradient-card::after,
+    #pillarsGrid .gradient-card::before {
+      display: none !important;
     }
-    #pillarsGrid .gradient-card:hover::after {
-      clip-path: circle(150% at 50% 100%);
-    }
+    #pillarsGrid .gradient-card:nth-child(1):hover { background: #013F32 !important; }
+    #pillarsGrid .gradient-card:nth-child(2):hover { background: #1e3a8a !important; }
+    #pillarsGrid .gradient-card:nth-child(3):hover { background: #0f766e !important; }
+    #pillarsGrid .gradient-card:nth-child(4):hover { background: #4c1d95 !important; }
+    #pillarsGrid .gradient-card:nth-child(5):hover { background: #065f46 !important; }
+    #pillarsGrid .gradient-card:nth-child(6):hover { background: #1f2937 !important; }
     #pillarsGrid .gradient-card h3,
     #pillarsGrid .gradient-card p,
     #pillarsGrid .gradient-card .badge-pill {
-      transition: color 0.3s ease, background-color 0.3s ease;
+      transition: color 0.28s ease, background-color 0.28s ease;
     }
     #pillarsGrid .gradient-card:hover {
-      border-color: #013F32 !important;
+      border-color: transparent !important;
       box-shadow: 0 20px 38px -14px rgba(1, 63, 50, 0.35) !important;
     }
     #pillarsGrid .gradient-card:hover h3 {
       color: #FDFDFD !important;
     }
     #pillarsGrid .gradient-card:hover p {
-      color: rgba(253, 253, 253, 0.88) !important;
+      color: rgba(253, 253, 253, 0.9) !important;
     }
     #pillarsGrid .gradient-card:hover .badge-pill {
       background: #E7FE25 !important;
