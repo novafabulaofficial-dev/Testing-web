@@ -2288,8 +2288,8 @@
           </div>
 
           <div class="hero-ctas">
-            <button type="button" class="btn-primary" onclick="scrollToSection('sec-theme')">About</button>
-            <button type="button" class="btn-secondary" onclick="scrollToSection('sec-stories')">Festival Stories</button>
+            <button type="button" class="btn-primary" onclick="openRegisterPage()">Register Now</button>
+            <button type="button" class="btn-secondary" onclick="scrollToSection('sec-theme')">About</button>
             <button type="button" class="btn-secondary" onclick="scrollToSection('sec-stories')">Festival Stories</button>
           </div>
         </div>
@@ -2325,9 +2325,7 @@
         </div>
       </div>
 
-      <!-- 2. ABOUT -->
-        <div class="hero-bg-grid" aria-hidden="true"></div>
-      </section>
+
 
       <!-- 2. ABOUT -->
       <section id="sec-theme" class="home-section reveal-on-scroll">
@@ -2643,6 +2641,8 @@
 
     function openRegisterPage() {
       state.isLoginView = true;
+      const box = document.getElementById('registerSuccessBox');
+      if (box) box.classList.add('page-hidden');
       document.getElementById('homePageContainer').classList.add('page-hidden');
       document.getElementById('loginPageContainer').classList.add('page-hidden');
       document.getElementById('registerPageContainer').classList.remove('page-hidden');
@@ -2722,9 +2722,14 @@
 
     function cloudUpsert(stu) {
       try {
-        if (!window.Cloud || !stu) return;
-        if (Cloud.upsert) Cloud.upsert(stu); else Cloud.sync([stu], false);
-      } catch (err) { console.error('cloudUpsert failed', err); }
+        if (!window.Cloud || !stu) return Promise.resolve(false);
+        if (Cloud.upsert) return Cloud.upsert(stu);
+        Cloud.sync([stu], false);
+        return Promise.resolve(true);
+      } catch (err) {
+        console.error('cloudUpsert failed', err);
+        return Promise.reject(err);
+      }
     }
 
     function handleStudentRegister(e) {
@@ -2752,10 +2757,16 @@
         contact,
         registeredEvents: []
       };
+      const submitBtn = document.querySelector('#registerForm button[type="submit"]');
+      if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'Submitting...'; }
+
       state.students.unshift(newStudent);
       saveStudentsToStorage();
-      cloudUpsert(newStudent);
       updateStats(false);
+
+      Promise.resolve(cloudUpsert(newStudent)).finally(function () {
+        if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Submit Registration'; }
+      });
 
       document.getElementById('registerForm').reset();
       const box = document.getElementById('registerSuccessBox');
@@ -2931,7 +2942,7 @@
       const lbl = document.getElementById('navAuthLabel');
       const regBtn = document.getElementById('navRegisterBtn');
       if (lbl) lbl.textContent = sess.role === 'admin' ? 'Admin' : (sess.regNo || 'Student');
-      if (regBtn && sess.role === 'student') regBtn.style.display = 'none';
+      if (regBtn) regBtn.style.display = '';
     }
 
     function renderAuth() {
