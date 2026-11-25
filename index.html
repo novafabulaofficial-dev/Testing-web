@@ -2933,6 +2933,60 @@
         font-size: 0.66rem !important;
       }
     }
+
+    /* Mobile-only 2-column Registration Form */
+    @media (max-width: 768px) {
+      #registerForm .cards-grid-2 {
+        display: grid !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 8px !important;
+      }
+      #registerForm .form-label {
+        font-size: 0.58rem !important;
+        letter-spacing: 0.06em !important;
+      }
+      #registerForm .form-input,
+      #registerForm .form-select {
+        font-size: 0.72rem !important;
+        padding: 6px 8px !important;
+        height: 34px !important;
+      }
+    }
+
+    /* About Section Boxes: Single Contrasted Color Animated Fill on Hover */
+    #pillarsGrid .gradient-card,
+    #pillarsGrid .gradient-card:nth-child(even) {
+      background: var(--white) !important;
+      overflow: hidden;
+    }
+    #pillarsGrid .gradient-card::after {
+      background: #013F32 !important;
+      opacity: 1 !important;
+      clip-path: circle(0% at 50% 100%);
+      transition: clip-path 0.45s cubic-bezier(0.22, 1, 0.36, 1) !important;
+    }
+    #pillarsGrid .gradient-card:hover::after {
+      clip-path: circle(150% at 50% 100%);
+    }
+    #pillarsGrid .gradient-card h3,
+    #pillarsGrid .gradient-card p,
+    #pillarsGrid .gradient-card .badge-pill {
+      transition: color 0.3s ease, background-color 0.3s ease;
+    }
+    #pillarsGrid .gradient-card:hover {
+      border-color: #013F32 !important;
+      box-shadow: 0 20px 38px -14px rgba(1, 63, 50, 0.35) !important;
+    }
+    #pillarsGrid .gradient-card:hover h3 {
+      color: #FDFDFD !important;
+    }
+    #pillarsGrid .gradient-card:hover p {
+      color: rgba(253, 253, 253, 0.88) !important;
+    }
+    #pillarsGrid .gradient-card:hover .badge-pill {
+      background: #E7FE25 !important;
+      color: #161616 !important;
+    }
   </style>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
