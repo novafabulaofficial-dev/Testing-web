@@ -6,7 +6,7 @@
   <title>Kuppayam 3.0 — Winter Intensive Camp | WIRAS, Markaz Knowledge City</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Malayalam:wght@500;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Malayalam:wght@500;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet" />
   <style>
     :root {
       --forest: #013F32;
@@ -657,37 +657,52 @@
       transform: translateX(0);
     }
 
-    /* Hero 2-column layout: content left, stats stacked right */
+    /* Hero 2-column layout: content left, long counting boxes stacked right */
     .hero-layout {
       position: relative;
       z-index: 2;
       display: grid;
-      grid-template-columns: minmax(0, 1fr) 250px;
+      grid-template-columns: minmax(0, 1.05fr) minmax(320px, 0.95fr);
       align-items: center;
       gap: 28px;
     }
 
-    /* 3-Card Stats Column on Desktop Right / Row on Mobile */
+    /* 3-Card Long Counting Boxes on Desktop Right / Row on Mobile */
     .stats-grid {
       display: grid;
       grid-template-columns: 1fr;
-      gap: 12px;
+      gap: 14px;
       margin: 0;
     }
 
     .hero-layout .stat-card {
-      padding: 16px 20px 14px;
-      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 20px 28px;
+      border-radius: 22px;
+      min-height: 82px;
+    }
+
+    .hero-layout .stat-label {
+      font-family: 'Space Grotesk', 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      margin-bottom: 0;
     }
 
     .hero-layout .stat-value {
-      font-size: clamp(1.65rem, 2.8vw, 2.25rem);
+      font-size: clamp(2.1rem, 3.6vw, 2.85rem);
+      font-weight: 800;
+      line-height: 1;
     }
 
     @media (max-width: 768px) {
       .hero-layout {
         grid-template-columns: 1fr;
-        gap: 14px;
+        gap: 12px;
       }
       .stats-grid {
         grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -696,6 +711,8 @@
       }
       .hero-layout .stat-card,
       .stat-card {
+        display: block;
+        min-height: 0;
         padding: 12px 8px;
         border-radius: 16px;
         min-width: 0;
@@ -706,27 +723,28 @@
         top: -12px;
         right: -12px;
       }
+      .hero-layout .stat-label,
       .stat-label {
+        font-family: 'Space Grotesk', 'Plus Jakarta Sans', sans-serif;
         font-size: 0.56rem;
-        letter-spacing: 0.05em;
-        margin-bottom: 3px;
+        font-weight: 700;
+        letter-spacing: 0.03em;
+        margin-bottom: 4px;
         white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
       }
       .hero-layout .stat-value,
       .stat-value {
-        font-size: 1.2rem;
+        font-size: 1.35rem;
       }
     }
 
     /* Compact Mobile Ratio Scaling (<= 600px) */
     @media (max-width: 600px) {
-      main { padding-top: 76px; padding-bottom: 84px; }
-      #sec-home { padding: 16px 14px; border-radius: 22px; }
-      .hero-single { padding: 4px 0 8px; }
-      .kicker { font-size: 0.64rem; letter-spacing: 0.1em; margin-bottom: 8px; }
-      .hero-logo-3d-wrap { max-width: 185px; margin: 2px 0 10px; }
+      main { padding-top: 60px; padding-left: 10px; padding-right: 10px; padding-bottom: 80px; }
+      #sec-home { padding: 14px 14px 16px; border-radius: 22px; }
+      .hero-single { padding: 2px 0 6px; }
+      .kicker { font-size: 0.64rem; letter-spacing: 0.1em; margin-bottom: 6px; }
+      .hero-logo-3d-wrap { max-width: 265px; width: 76vw; margin: 2px 0 12px; }
       .hero-meta-pills { gap: 6px; margin-bottom: 12px; }
       .meta-pill { font-size: 0.7rem; padding: 5px 10px; }
       .hero-ctas { gap: 7px; }
@@ -2351,7 +2369,7 @@
 
         <div class="stats-grid" aria-label="Camp Statistics">
           <div class="stat-card glow-lime">
-            <div class="stat-label">TEAMS</div>
+            <div class="stat-label">DAYS</div>
             <div class="stat-value" id="statTeams" data-target="4">0+</div>
           </div>
           <div class="stat-card glow-forest">
