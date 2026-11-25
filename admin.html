@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Admin Portal — Kuppayam 3.0 | WIRAS, Markaz Knowledge City</title>
+  <title>Student Portal — Kuppayam 3.0 | WIRAS, Markaz Knowledge City</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Malayalam:wght@500;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
@@ -2211,16 +2211,15 @@
         if (msg) { sessionStorage.removeItem('kuppayam_flash'); showToast(msg); }
       } catch (err) {}
     }
-    // Only a signed-in admin may open this page; everyone else goes back to the home page.
+    // Only a signed-in student may open this page; everyone else goes back to the home page.
     (function () {
       const sess = getSession();
-      if (!sess || sess.role !== 'admin') window.location.replace(PAGES.home);
+      if (!sess || sess.role !== 'student') window.location.replace(PAGES.home);
     })();
   </script>
-  <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-<script src="cloud.js"></script>
+<script src="cloud.js?v=3"></script>
 </head>
 <body>
   <div class="ambient-bg" aria-hidden="true">
@@ -2231,7 +2230,7 @@
 
   <header class="nav-wrapper">
     <nav class="navbar-pill" aria-label="Primary Navigation">
-      <button type="button" class="brand-link" onclick="window.scrollTo({ top: 0, behavior: 'smooth' })">
+      <button type="button" class="brand-link" onclick="goHome('sec-home')">
         <span class="brand-accent">Kuppayam</span>
         <span>Fest</span>
         <span class="brand-sup">3.0</span>
@@ -2242,8 +2241,14 @@
         </span>
       </button>
 
+      <div class="nav-track" role="tablist">
+        <button type="button" class="nav-btn" data-sec="sec-home" onclick="showStudentView('home')">Home</button>
+        <button type="button" class="nav-btn" data-sec="sec-theme" onclick="goHome('sec-theme')">About</button>
+        <button type="button" class="nav-btn" data-sec="sec-stories" onclick="goHome('sec-stories')">Stories</button>
+      </div>
+
       <div class="nav-actions-group">
-        <button type="button" class="register-nav-btn" id="navRegisterBtn" onclick="window.location.href='index.html#register'">
+        <button type="button" class="register-nav-btn" id="navRegisterBtn" onclick="goHome('register')">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
             <circle cx="8.5" cy="7" r="4"></circle>
@@ -2253,7 +2258,7 @@
           <span>Register</span>
         </button>
 
-        <button type="button" class="login-avatar-btn active" id="navAuthBtn" onclick="window.scrollTo({ top: 0, behavior: 'smooth' })">
+        <button type="button" class="login-avatar-btn active" id="navAuthBtn" onclick="showStudentView('account')">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
             <circle cx="12" cy="7" r="4"></circle>
@@ -2264,79 +2269,101 @@
     </nav>
   </header>
 
+  <!-- Mobile Bottom Glassy Menu Bar -->
+  <nav class="mobile-bottom-nav" aria-label="Mobile Bottom Navigation">
+    <button type="button" class="mobile-nav-item" data-sec="sec-home" onclick="showStudentView('home')">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
+      <span>Home</span>
+    </button>
+    <button type="button" class="mobile-nav-item" data-sec="sec-theme" onclick="goHome('sec-theme')">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><path d="M12 8h.01"></path></svg>
+      <span>About</span>
+    </button>
+    <button type="button" class="mobile-nav-item" data-sec="sec-stories" onclick="goHome('sec-stories')">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+      <span>Stories</span>
+    </button>
+  </nav>
+
   <main>
     <section id="loginPageContainer">
+      <div id="loginBackHomeBtn" style="margin-bottom: 18px;">
+        <button type="button" class="btn-secondary" style="padding: 9px 18px; font-size: 0.85rem;" onclick="showStudentView('home')">
+          &larr; Back to Home
+        </button>
+      </div>
       <div id="authContainer"></div>
     </section>
+
+    <div id="homePageContainer">
+      <section id="sec-events" class="home-section reveal-on-scroll" style="display:none;">
+        <div id="studentEventsScheduleContainer"></div>
+      </section>
+    </div>
   </main>
 
-  <!-- Edit Student Modal -->
-  <div class="modal-backdrop" id="editStudentModal" role="dialog" aria-modal="true">
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-grid">
+        <div>
+          <div class="footer-brand">Kuppayam<span>'3.0</span></div>
+          <p style="font-size:0.78rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--white-85); margin-bottom:8px;">
+            WINTER INTENSIVE CAMP · NEW SKIES, NEW WINGS
+          </p>
+          <p style="font-size:0.88rem; color:var(--white-85);">
+            24, 25, 26 Dec 2026 · WIRAS / Markaz Knowledge City
+          </p>
+        </div>
+
+        <div>
+          <div class="footer-col-title">QUICK LINKS</div>
+          <ul class="footer-links">
+            <li><button type="button" class="footer-link-btn" onclick="goHome('sec-home')">Home</button></li>
+            <li><button type="button" class="footer-link-btn" onclick="goHome('sec-theme')">About</button></li>
+            <li><button type="button" class="footer-link-btn" onclick="goHome('sec-stories')">Festival Stories</button></li>
+            <li><button type="button" class="footer-link-btn" onclick="goHome('register')">Student Registration</button></li>
+            <li><button type="button" class="footer-link-btn" onclick="logoutUser()">Log Out</button></li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="footer-col-title">CONTACT</div>
+          <ul class="footer-links">
+            <li style="font-size:0.92rem; font-weight:700;">www.wiras.in</li>
+            <li style="font-size:0.92rem; font-weight:700;">+91 8086881019</li>
+            <li style="font-size:0.84rem; color:var(--white-85);">WIRAS, Markaz Knowledge City</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <span>&copy; 2026 Kuppayam 3.0 · WIRAS, Markaz Knowledge City. All rights reserved.</span>
+        <span>Grades 8, 9 &amp; 10 · Winter Intensive Camp</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Event Feedback Modal -->
+  <div class="modal-backdrop" id="eventFeedbackModal" role="dialog" aria-modal="true">
     <div class="modal-box" style="max-width:520px;">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
-        <span class="badge-pill badge-lime">EDIT STUDENT</span>
-        <button type="button" class="filter-chip" onclick="closeEditStudentModal()">Close</button>
+        <span class="badge-pill badge-lime">EVENT FEEDBACK</span>
+        <button type="button" class="filter-chip" onclick="closeEventFeedbackModal()">Close</button>
       </div>
-      <form onsubmit="saveEditedStudent(event)">
-        <input type="hidden" id="editStuId" />
+      <div style="font-size:0.72rem; font-weight:800; letter-spacing:0.12em; color:var(--charcoal-65); text-transform:uppercase;">YOU'RE REVIEWING</div>
+      <h3 id="modalFeedbackEventTitle" style="font-size:1.45rem; font-weight:800; margin:4px 0 16px;"></h3>
+      <form onsubmit="submitEventFeedback(event)">
         <div class="form-group">
-          <label class="form-label" for="editStuName">NAME</label>
-          <input id="editStuName" class="form-input" type="text" required />
+          <label class="form-label">How was it?</label>
+          <div class="star-rating-row" id="eventFeedbackStars"></div>
+          <div id="eventFeedbackStarCount" style="font-size:0.82rem; font-weight:700; color:var(--charcoal-65);">0 of 5 stars</div>
         </div>
-        <div class="cards-grid-2" style="gap:12px;">
-          <div class="form-group">
-            <label class="form-label" for="editStuDob">DATE OF BIRTH</label>
-            <input id="editStuDob" class="form-input" type="date" required />
-          </div>
-          <div class="form-group">
-            <label class="form-label" for="editStuPlace">PLACE</label>
-            <input id="editStuPlace" class="form-input" type="text" required />
-          </div>
+        <div class="form-group">
+          <label class="form-label" for="eventFeedbackText">Any other thoughts, ideas, or suggestions?</label>
+          <textarea id="eventFeedbackText" class="form-input" rows="4" placeholder="Tell us what stood out or what could be better..." required style="resize:vertical;"></textarea>
         </div>
-        <div class="cards-grid-2" style="gap:12px;">
-          <div class="form-group">
-            <label class="form-label" for="editStuGender">GENDER</label>
-            <select id="editStuGender" class="form-select">
-              <option value="Male">Male</option>
-              <option value="Female">Female</option>
-              <option value="Other">Other</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label class="form-label" for="editStuClass">CLASS</label>
-            <select id="editStuClass" class="form-select">
-              <option value="Class 8">Class 8</option>
-              <option value="Class 9">Class 9</option>
-              <option value="Class 10">Class 10</option>
-            </select>
-          </div>
-        </div>
-        <div class="cards-grid-2" style="gap:12px;">
-          <div class="form-group">
-            <label class="form-label" for="editStuWhatsapp">WHATSAPP NUMBER</label>
-            <input id="editStuWhatsapp" class="form-input" type="tel" />
-          </div>
-          <div class="form-group">
-            <label class="form-label" for="editStuContact">CONTACT NUMBER</label>
-            <input id="editStuContact" class="form-input" type="tel" />
-          </div>
-        </div>
-        <button type="submit" class="btn-submit-full">Save Changes</button>
+        <button type="submit" class="btn-submit-full">Submit Feedback &rarr;</button>
       </form>
-    </div>
-  </div>
-
-  <!-- Student ID Card Poster Modal -->
-  <div class="modal-backdrop" id="idCardModal" role="dialog" aria-modal="true">
-    <div class="modal-box" style="max-width:460px; text-align:center;">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
-        <span class="badge-pill badge-lime">STUDENT ID CARD POSTER</span>
-        <button type="button" class="filter-chip" onclick="closeIdCardModal()">Close</button>
-      </div>
-      <img id="idCardPreviewImg" alt="Student ID Card Poster" style="width:100%; border-radius:14px; border:1px solid var(--charcoal-12); margin-bottom:14px;" />
-      <div style="display:flex; gap:10px; flex-wrap:wrap;">
-        <button type="button" class="btn-primary" style="flex:1; justify-content:center;" onclick="downloadCurrentIdCard()">Download ID Card PNG</button>
-      </div>
     </div>
   </div>
 
@@ -2349,22 +2376,61 @@
       activeSection: 'sec-home',
       authMode: 'student',
       loggedInUser: null,
-      teamsList: ['Team Safa', 'Team Marwa', 'Team Hira', 'Team Noor'],
-      adminTab: 'students',
-      feedbackCategory: 'overall',
-      selectedFeedbackStuId: null,
-      certFilter: 'All',
-      reminderMessage: 'السلام عليكم ورحمة الله,\nYour camp registration payment is still pending. Please complete your payment at the earliest to confirm your seat and receive your Register Number.\n Payable Amount :  ₹2500 \n GPay No : +91 8943423485 \n©️  WIRAS • Markaz Knowledge City',
-      attendanceDay: 1,
-      selectedRegId: null,
-      nextRegSeq: 3001
+      overallDraftRating: 0,
+      eventFeedbackModalEvId: null,
+      eventFeedbackDraftRating: 0,
+      publicScheduleGender: 'Boys',
+      studentScheduleDay: 1,
+      boysSchedule: {
+        1: [
+          { time: '09:00 AM – 10:30 AM', title: 'Check-in & Grand Inauguration', venue: 'Main Auditorium, WIRAS' },
+          { time: '10:45 AM – 12:30 PM', title: 'Value-Based Living & Leadership', venue: 'Boys Hall A' },
+          { time: '02:00 PM – 04:00 PM', title: 'Tilawat & Qiraat Competition', venue: 'Main Stage' },
+          { time: '04:30 PM – 06:00 PM', title: 'Sports & Team Building Arena', venue: 'Knowledge City Turf' }
+        ],
+        2: [
+          { time: '09:00 AM – 11:00 AM', title: 'Technology & AI Lab Workshop', venue: 'Innovation Lab' },
+          { time: '11:15 AM – 01:00 PM', title: 'Career Exploration & Mentoring', venue: 'Boys Hall A' },
+          { time: '02:15 PM – 04:15 PM', title: 'Language Enrichment & Debate', venue: 'Seminar Hall' },
+          { time: '04:30 PM – 06:00 PM', title: 'Mindscape Quiz & Strategy Games', venue: 'Activity Zone' }
+        ],
+        3: [
+          { time: '09:00 AM – 12:30 PM', title: 'Knowledge City Educational Excursion', venue: 'Campus Tour' },
+          { time: '02:00 PM – 03:30 PM', title: 'Parenting Insights & Reflection', venue: 'Main Auditorium' },
+          { time: '03:45 PM – 05:00 PM', title: 'Valedictory & Awards Ceremony', venue: 'Main Auditorium' }
+        ]
+      },
+      girlsSchedule: {
+        1: [
+          { time: '09:00 AM – 10:30 AM', title: 'Check-in & Grand Inauguration', venue: 'Main Auditorium, WIRAS' },
+          { time: '10:45 AM – 12:30 PM', title: 'Value-Based Living & Character', venue: 'Girls Wing Hall' },
+          { time: '02:00 PM – 04:00 PM', title: 'Tilawat & Qiraat Session', venue: 'Girls Auditorium' },
+          { time: '04:30 PM – 06:00 PM', title: 'Creative Arts & Team Bonding', venue: 'Activity Studio' }
+        ],
+        2: [
+          { time: '09:00 AM – 11:00 AM', title: 'Technology & Digital Innovation Lab', venue: 'Girls Tech Studio' },
+          { time: '11:15 AM – 01:00 PM', title: 'Career Exploration & Future Pathways', venue: 'Girls Wing Hall' },
+          { time: '02:15 PM – 04:15 PM', title: 'Language Enrichment & Elocution', venue: 'Seminar Hall B' },
+          { time: '04:30 PM – 06:00 PM', title: 'Mindscape Logic & Problem Solving', venue: 'Activity Studio' }
+        ],
+        3: [
+          { time: '09:00 AM – 12:30 PM', title: 'Knowledge City Educational Excursion', venue: 'Guided Tour' },
+          { time: '02:00 PM – 03:30 PM', title: 'Parenting Insights & Reflection', venue: 'Main Auditorium' },
+          { time: '03:45 PM – 05:00 PM', title: 'Valedictory & Awards Ceremony', venue: 'Main Auditorium' }
+        ]
+      },
+      nextRegSeq: 3001,
+      events: [
+        { id: 'ev1', title: 'Value-Based Living', category: 'Workshop', day: 'Day 1 · 24 Dec', desc: 'Building ethical clarity, empathy, and purposeful habits for student life.' },
+        { id: 'ev2', title: 'Career Exploration', category: 'Workshop', day: 'Day 2 · 25 Dec', desc: 'Discover emerging academic streams and future-ready career pathways.' },
+        { id: 'ev3', title: 'Tilawat & Qiraat', category: 'Competition', day: 'Day 1 · 24 Dec', desc: 'Inspiring Quranic recitation sessions and student stage competitions.' },
+        { id: 'ev4', title: 'Technology & AI Lab', category: 'Workshop', day: 'Day 2 · 25 Dec', desc: 'Interactive hands-on exposure to modern computing and digital tools.' },
+        { id: 'ev5', title: 'Language Enrichment', category: 'Competition', day: 'Day 2 · 25 Dec', desc: 'Fluency, public speaking, and creative writing mastery.' },
+        { id: 'ev6', title: 'Mindscape Activities', category: 'Competition', day: 'Day 2 · 25 Dec', desc: 'Team logic challenges, quizzes, and creative lateral-thinking games.' },
+        { id: 'ev7', title: 'Educational Excursions', category: 'Excursion', day: 'Day 3 · 26 Dec', desc: 'Curated guided tours across WIRAS and Markaz Knowledge City.' }
+      ]
     };
 
-
-    // Coordinator WhatsApp number (update this with your exact country code + number)
-    const ADMIN_WHATSAPP_NUMBER = '918943423485';
-
-    const SITE_BASE_URL = ''; // Paste your live website URL here (e.g. 'https://your-site.com/register.html') if testing from a local file
 
     function showToast(msg) {
       const t = document.getElementById('toast');
@@ -2372,6 +2438,40 @@
       t.classList.add('show');
       clearTimeout(window.__toastTimer);
       window.__toastTimer = setTimeout(() => t.classList.remove('show'), 2800);
+    }
+
+    function setActiveNavSection(secId) {
+      state.activeSection = secId;
+      document.querySelectorAll('[data-sec]').forEach(btn => {
+        btn.classList.toggle('active', !state.isLoginView && btn.getAttribute('data-sec') === secId);
+      });
+    }
+
+    // Student page has two views: Account (profile, feedback, certificate) and Home (programme schedule)
+    function showStudentView(v, noScroll) {
+      state.studentView = v;
+      const acc = document.getElementById('loginPageContainer');
+      const home = document.getElementById('homePageContainer');
+      if (acc) acc.style.display = (v === 'account') ? '' : 'none';
+      if (home) home.style.display = (v === 'home') ? '' : 'none';
+      document.querySelectorAll('[data-sec]').forEach(function (b) {
+        b.classList.toggle('active', v === 'home' && b.getAttribute('data-sec') === 'sec-home');
+      });
+      const av = document.getElementById('navAuthBtn');
+      if (av) av.classList.toggle('active', v === 'account');
+      try { history.replaceState(null, '', v === 'home' ? '#home' : '#account'); } catch (err) {}
+      if (!noScroll) window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function scrollToSection(secId) {
+      setActiveNavSection(secId);
+      const el = document.getElementById(secId);
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    // Home / About / Stories / Register live on the home page
+    function goHome(target) {
+      window.location.href = PAGES.home + (target ? '#' + target : '');
     }
 
     function saveStudentsToStorage() {
@@ -2402,14 +2502,20 @@
     loadStudentsFromStorage();
 
     // ---- Cloud sync (shared live data) ----
+    function cloudUpsert(stu) {
+      try {
+        if (!window.Cloud || !stu) return;
+        if (Cloud.upsert) Cloud.upsert(stu); else Cloud.sync([stu], false);
+      } catch (err) { console.error('cloudUpsert failed', err); }
+    }
     function cloudPush() {
-      if (window.Cloud) Cloud.sync(state.students, true);
+      if (state.loggedInUser && state.loggedInUser.role === 'student') cloudUpsert(state.loggedInUser.data);
     }
     (function startCloudListen() {
       if (!window.Cloud) return;
       let firstSnap = true;
       Cloud.listen(function (list, isEmpty) {
-        if (firstSnap && isEmpty && true && state.students.length) {
+        if (firstSnap && isEmpty && false && state.students.length) {
           // first run: upload old local data to cloud
           firstSnap = false;
           Cloud.sync(state.students, true);
@@ -2417,6 +2523,13 @@
         }
         firstSnap = false;
         state.students = list;
+        // keep the logged-in student's record pointing at the fresh cloud copy
+        if (state.loggedInUser && state.loggedInUser.role === 'student' && state.loggedInUser.data) {
+          const cur = state.loggedInUser.data;
+          const fresh = list.find(function (s) { return s.id === cur.id; }) ||
+                        list.find(function (s) { return s.regNo && cur.regNo && s.regNo === cur.regNo; });
+          if (fresh) state.loggedInUser.data = fresh;
+        }
         try {
           localStorage.setItem('kuppayam_students_v1', JSON.stringify({
             students: state.students, nextRegSeq: state.nextRegSeq }));
@@ -2429,548 +2542,215 @@
       });
     })();
 
-    // ---- Page guard: only the admin session may stay on this page ----
-    (function guardAdminPage() {
+    // ---- Page guard: load the signed-in student's record ----
+    (function guardStudentPage() {
       const sess = getSession();
-      if (!sess || sess.role !== 'admin') {
+      let found = null;
+      if (sess && sess.role === 'student' && sess.regNo) {
+        found = state.students.find(s => s.regNo && s.regNo.toUpperCase() === String(sess.regNo).toUpperCase()) || null;
+      }
+      if (!found) {
+        if (/[?&]autologin=/.test(window.location.search)) { window.location.replace(PAGES.home + window.location.search); return; }
         clearSession();
         window.location.replace(PAGES.home);
         return;
       }
-      state.loggedInUser = { role: 'admin', data: { name: 'Camp Coordinator', org: 'WIRAS · Markaz Knowledge City' } };
+      state.loggedInUser = { role: 'student', data: found };
+      state.overallDraftRating = found.overallFeedback ? found.overallFeedback.rating : 0;
       const lbl = document.getElementById('navAuthLabel');
-      if (lbl) lbl.textContent = 'Admin';
+      if (lbl) lbl.textContent = found.regNo;
     })();
 
-    function setAdminTab(tab) {
-      state.adminTab = tab;
-      state.selectedRegId = null;
-      state.selectedFeedbackStuId = null;
-      renderAuth();
+    function setStudentScheduleDay(day) {
+      state.studentScheduleDay = day;
+      renderStudentEventsSection();
     }
 
-    function setFeedbackCategory(cat) {
-      state.feedbackCategory = cat;
-      state.selectedFeedbackStuId = null;
-      renderAuth();
-    }
+    function renderStudentEventsSection() {
+      const sec = document.getElementById('sec-events');
+      const container = document.getElementById('studentEventsScheduleContainer');
+      const navBtn = document.getElementById('navEventsBtn');
+      const mobBtn = document.getElementById('mobileNavEventsBtn');
+      const isStudent = !!(state.loggedInUser && state.loggedInUser.role === 'student');
 
-    function selectFeedbackStudent(id) {
-      state.selectedFeedbackStuId = id;
-      renderAuth();
-    }
+      const regBtn = document.getElementById('navRegisterBtn');
+      if (navBtn) navBtn.style.display = isStudent ? '' : 'none';
+      if (mobBtn) mobBtn.style.display = isStudent ? '' : 'none';
+      if (regBtn) regBtn.style.display = isStudent ? 'none' : '';
+      if (!sec || !container) return;
 
-    function selectAdminStudent(id) {
-      state.selectedRegId = id;
-      renderAuth();
-    }
-
-    function togglePaymentComplete(id, checked) {
-      const stu = state.students.find(item => item.id === id);
-      if (!stu) return;
-      stu.paymentCompleted = checked;
-      if (checked && !stu.regNo) {
-        let highest = 3000;
-        state.students.forEach(item => {
-          if (item.regNo && item.regNo.startsWith('K')) {
-            const num = parseInt(item.regNo.slice(1), 10);
-            if (!isNaN(num) && num > highest) highest = num;
-          }
-        });
-        stu.regNo = 'K' + (highest + 1);
-        state.nextRegSeq = highest + 2;
-        showToast('Payment completed! Register Number generated: ' + stu.regNo);
-      } else if (checked) {
-        showToast('Payment marked completed (' + stu.regNo + ').');
-      } else {
-        showToast('Payment marked pending.');
-      }
-      saveStudentsToStorage();
-      renderAuth();
-    }
-
-    function sendStudentWelcomeWhatsApp(id) {
-      const stu = state.students.find(item => item.id === id);
-      if (!stu) return;
-      const digits = (stu.whatsapp || '').replace(/\D/g, '');
-      if (!digits) {
-        showToast('No valid WhatsApp number found for this student.');
+      if (!isStudent) {
+        sec.style.display = 'none';
+        container.innerHTML = '';
         return;
       }
-      const waNumber = digits.length === 10 ? '91' + digits : digits;
-      const welcomeMsg = 'Thank you for registering for the Kuppayam Residential Camp²⁵. We appreciate your interest and support. You will be added to the official WhatsApp group shortly, InshaAllah.';
-      const waUrl = 'https://wa.me/' + waNumber + '?text=' + encodeURIComponent(welcomeMsg);
-      stu.welcomeSent = true;
-      saveStudentsToStorage();
-      showToast('Opening WhatsApp for ' + stu.name + '...');
-      window.open(waUrl, '_blank', 'noopener');
-      renderAuth();
-    }
 
-    function toggleWelcomeSent(id, checked) {
-      const stu = state.students.find(item => item.id === id);
-      if (!stu) return;
-      stu.welcomeSent = checked;
-      saveStudentsToStorage();
-      showToast(checked ? 'Welcome message marked sent.' : 'Welcome message unmarked.');
-    }
+      sec.style.display = 'block';
+      sec.classList.add('is-visible');
+      const s = state.loggedInUser.data;
+      const isGirl = (s.gender || '').toLowerCase() === 'female';
+      const schedMap = isGirl ? state.girlsSchedule : state.boysSchedule;
+      const d = state.studentScheduleDay || 1;
+      const dayItems = schedMap[d] || [];
+      const dayLabels = { 1: 'Day 1 · 24 Dec 2026', 2: 'Day 2 · 25 Dec 2026', 3: 'Day 3 · 26 Dec 2026' };
 
-    function togglePaymentMsgSent(id, checked) {
-      const stu = state.students.find(item => item.id === id);
-      if (!stu) return;
-      stu.paymentMsgSent = checked;
-      saveStudentsToStorage();
-      showToast(checked ? 'Payment message marked sent.' : 'Payment message unmarked.');
-    }
+      container.innerHTML = `
+        <div class="section-header">
+          <div class="section-kicker">KUPPAYAM 3.0</div>
+          <h2 class="section-title">Events &amp; Programme Schedule</h2>
+        </div>
 
-    function saveQrSiteUrl(val) {
-      localStorage.setItem('kuppayam_site_url', (val || '').trim());
-      showToast('QR Website URL saved!');
-    }
-
-    function getStudentAutoLoginUrl(stu) {
-      const savedUrl = (localStorage.getItem('kuppayam_site_url') || '').trim();
-      const rawHref = new URL(PAGES.home, window.location.href).href; // QR links open the home page, which signs the student in
-      const base = savedUrl
-        ? savedUrl
-        : ((typeof SITE_BASE_URL !== 'undefined' && SITE_BASE_URL.trim()) ? SITE_BASE_URL.trim() : rawHref);
-      const params = new URLSearchParams({
-        autologin: stu.regNo || '',
-        dob: stu.dob || '',
-        n: stu.name || '',
-        c: stu.studentClass || '',
-        p: stu.place || '',
-        g: stu.gender || 'Male'
-      });
-      const cleanBase = base.split('?')[0].split('#')[0].replace(/(student|admin)\.html$/i, 'index.html');
-      return cleanBase + '?' + params.toString();
-    }
-
-    function generateStudentIdCardDataUrl(stu) {
-      const canvas = document.createElement('canvas');
-      canvas.width = 800;
-      canvas.height = 1100;
-      const ctx = canvas.getContext('2d');
-
-      // Background
-      ctx.fillStyle = '#013F32';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-      // Outer lime border
-      ctx.strokeStyle = '#E7FE25';
-      ctx.lineWidth = 10;
-      ctx.strokeRect(28, 28, canvas.width - 56, canvas.height - 56);
-
-      // Top header
-      ctx.fillStyle = '#E7FE25';
-      ctx.font = 'bold 28px Plus Jakarta Sans, sans-serif';
-      ctx.textAlign = 'center';
-      ctx.fillText('KUPPAYAM 3.0 · STUDENT ID CARD', canvas.width / 2, 105);
-
-      ctx.fillStyle = 'rgba(253,253,253,0.75)';
-      ctx.font = '20px Plus Jakarta Sans, sans-serif';
-      ctx.fillText('WINTER INTENSIVE CAMP · WIRAS, MARKAZ KNOWLEDGE CITY', canvas.width / 2, 142);
-
-      // Chest / Register Number Pill
-      const regText = stu.regNo || 'PENDING';
-      ctx.fillStyle = '#E7FE25';
-      ctx.beginPath();
-      ctx.roundRect(230, 185, 340, 74, 37);
-      ctx.fill();
-      ctx.fillStyle = '#161616';
-      ctx.font = 'bold 38px Plus Jakarta Sans, sans-serif';
-      ctx.fillText(regText, canvas.width / 2, 235);
-
-      // Student Details Card
-      ctx.fillStyle = 'rgba(255,255,255,0.08)';
-      ctx.beginPath();
-      ctx.roundRect(70, 295, 660, 240, 22);
-      ctx.fill();
-
-      ctx.textAlign = 'left';
-      ctx.fillStyle = '#E7FE25';
-      ctx.font = 'bold 18px Plus Jakarta Sans, sans-serif';
-      ctx.fillText('STUDENT NAME', 110, 350);
-      ctx.fillStyle = '#FDFDFD';
-      ctx.font = 'bold 38px Plus Jakarta Sans, sans-serif';
-      ctx.fillText((stu.name || '').toUpperCase(), 110, 398);
-
-      ctx.fillStyle = '#E7FE25';
-      ctx.font = 'bold 18px Plus Jakarta Sans, sans-serif';
-      ctx.fillText('DATE OF BIRTH', 110, 460);
-      ctx.fillStyle = '#FDFDFD';
-      ctx.font = 'bold 28px Plus Jakarta Sans, sans-serif';
-      ctx.fillText(stu.dob || '-', 110, 498);
-
-      ctx.fillStyle = '#E7FE25';
-      ctx.font = 'bold 18px Plus Jakarta Sans, sans-serif';
-      ctx.fillText('CLASS & PLACE', 420, 460);
-      ctx.fillStyle = '#FDFDFD';
-      ctx.font = 'bold 24px Plus Jakarta Sans, sans-serif';
-      ctx.fillText((stu.studentClass || '') + ' · ' + (stu.place || ''), 420, 498);
-
-      // QR Code Box
-      const loginUrl = getStudentAutoLoginUrl(stu);
-      ctx.fillStyle = '#FDFDFD';
-      ctx.beginPath();
-      ctx.roundRect(235, 580, 330, 330, 24);
-      ctx.fill();
-
-      if (typeof qrcode !== 'undefined') {
-        const qr = qrcode(0, 'L');
-        qr.addData(loginUrl);
-        qr.make();
-        const count = qr.getModuleCount();
-        const qrSize = 256;
-        const cell = Math.floor(qrSize / count);
-        const actualSize = cell * count;
-        const startX = 235 + Math.floor((330 - actualSize) / 2);
-        const startY = 580 + Math.floor((330 - actualSize) / 2);
-        ctx.fillStyle = '#000000';
-        for (let r = 0; r < count; r++) {
-          for (let c = 0; c < count; c++) {
-            if (qr.isDark(r, c)) {
-              ctx.fillRect(startX + c * cell, startY + r * cell, cell, cell);
-            }
-          }
-        }
-      } else {
-        ctx.fillStyle = '#161616';
-        ctx.textAlign = 'center';
-        ctx.font = 'bold 20px Plus Jakarta Sans, sans-serif';
-        ctx.fillText('QR: ' + regText, canvas.width / 2, 750);
-      }
-
-      ctx.textAlign = 'center';
-      ctx.fillStyle = '#E7FE25';
-      ctx.font = 'bold 22px Plus Jakarta Sans, sans-serif';
-      ctx.fillText('SCAN QR TO AUTO-LOGIN TO STUDENT PORTAL', canvas.width / 2, 960);
-
-      ctx.fillStyle = 'rgba(253,253,253,0.65)';
-      ctx.font = '18px Plus Jakarta Sans, sans-serif';
-      ctx.fillText('24 – 26 DECEMBER 2026 · WIRAS, MARKAZ KNOWLEDGE CITY', canvas.width / 2, 1015);
-
-      return canvas.toDataURL('image/png');
-    }
-
-    let _currentIdCardDataUrl = '';
-
-    let _currentIdCardFilename = 'Kuppayam_ID_Card.png';
-
-    function previewStudentIdCard(id) {
-      const stu = state.students.find(item => item.id === id);
-      if (!stu) return;
-      _currentIdCardDataUrl = generateStudentIdCardDataUrl(stu);
-      _currentIdCardFilename = 'Kuppayam_ID_Card_' + (stu.regNo || stu.name) + '.png';
-      document.getElementById('idCardPreviewImg').src = _currentIdCardDataUrl;
-      document.getElementById('idCardModal').classList.add('open');
-    }
-
-    function closeIdCardModal() {
-      document.getElementById('idCardModal').classList.remove('open');
-    }
-
-    function downloadCurrentIdCard() {
-      if (!_currentIdCardDataUrl) return;
-      const link = document.createElement('a');
-      link.download = _currentIdCardFilename;
-      link.href = _currentIdCardDataUrl;
-      link.click();
-      showToast('ID Card poster downloaded!');
-    }
-
-    function sendStudentPaymentWhatsApp(id) {
-      const stu = state.students.find(item => item.id === id);
-      if (!stu) return;
-      const digits = (stu.whatsapp || '').replace(/\D/g, '');
-      if (!digits) {
-        showToast('No valid WhatsApp number found for this student.');
-        return;
-      }
-      const waNumber = digits.length === 10 ? '91' + digits : digits;
-      const paymentMsg = [
-        '> കുപ്പായം ',
-        '> Winter Intensive Camp²⁶`',
-        '',
-        'Chest Number :: ' + (stu.regNo || 'Pending'),
-        'Name :: ' + stu.name,
-        'Date of Birth :: ' + stu.dob,
-        'Place :: ' + stu.place,
-        'Gender :: ' + stu.gender,
-        'Class :: ' + stu.studentClass,
-        'WhatsApp Number :: ' + stu.whatsapp,
-        'Contact Number :: ' + stu.contact,
-        'Paymant Status :: ' + (stu.paymentCompleted ? '\u2705' : 'Pending'),
-        '',
-        '\u00A9\uFE0F *WIRAS • Markaz Knowledge City*'
-      ].join('\n');
-      const idCardDataUrl = generateStudentIdCardDataUrl(stu);
-      const waUrl = 'https://wa.me/' + waNumber + '?text=' + encodeURIComponent(paymentMsg);
-
-      const finishOpenWhatsApp = (copied) => {
-        stu.paymentMsgSent = true;
-        saveStudentsToStorage();
-        showToast(copied
-          ? 'ID Card copied! Press Ctrl+V in WhatsApp to paste and send it.'
-          : 'Opening WhatsApp — use Preview ID Card to save/attach the image.');
-        window.open(waUrl, '_blank', 'noopener');
-        renderAuth();
-      };
-
-      if (navigator.clipboard && window.ClipboardItem) {
-        fetch(idCardDataUrl)
-          .then(r => r.blob())
-          .then(blob => navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })]))
-          .then(() => finishOpenWhatsApp(true))
-          .catch(() => finishOpenWhatsApp(false));
-      } else {
-        finishOpenWhatsApp(false);
-      }
-    }
-
-    function getReminderMessageText() {
-      const el = document.getElementById('reminderMsgTemplate');
-      const val = el ? el.value : state.reminderMessage;
-      return (val || '').trim();
-    }
-
-    function sendStudentReminderWhatsApp(id) {
-      const stu = state.students.find(item => item.id === id);
-      if (!stu) return;
-      const digits = (stu.whatsapp || '').replace(/\D/g, '');
-      if (!digits) {
-        showToast('No valid WhatsApp number found for ' + stu.name + '.');
-        return;
-      }
-      const msg = getReminderMessageText();
-      if (!msg) {
-        showToast('Please enter a reminder message first.');
-        return;
-      }
-      const waNumber = digits.length === 10 ? '91' + digits : digits;
-      const waUrl = 'https://wa.me/' + waNumber + '?text=' + encodeURIComponent(msg);
-      stu.reminderSent = true;
-      saveStudentsToStorage();
-      showToast('Opening WhatsApp reminder for ' + stu.name + '...');
-      window.open(waUrl, '_blank', 'noopener');
-      renderAuth();
-    }
-
-    function sendAllPaymentReminders() {
-      const pendingList = state.students.filter(stu => !stu.paymentCompleted);
-      if (!pendingList.length) {
-        showToast('No payment-pending students to remind.');
-        return;
-      }
-      const msg = getReminderMessageText();
-      if (!msg) {
-        showToast('Please enter a reminder message first.');
-        return;
-      }
-      let opened = 0;
-      let blocked = 0;
-      pendingList.forEach(stu => {
-        const digits = (stu.whatsapp || '').replace(/\D/g, '');
-        if (!digits) return;
-        const waNumber = digits.length === 10 ? '91' + digits : digits;
-        const waUrl = 'https://wa.me/' + waNumber + '?text=' + encodeURIComponent(msg);
-        const win = window.open(waUrl, '_blank', 'noopener');
-        if (win) {
-          opened++;
-        } else {
-          blocked++;
-        }
-        stu.reminderSent = true;
-      });
-      saveStudentsToStorage();
-      if (blocked > 0) {
-        showToast('Opened ' + opened + ' WhatsApp tabs (' + blocked + ' blocked by browser pop-up blocker — please allow pop-ups for this site).');
-      } else {
-        showToast('Opened WhatsApp reminder for all ' + opened + ' pending students.');
-      }
-      renderAuth();
-    }
-
-    function setAttendanceDay(day) {
-      state.attendanceDay = day;
-      renderAuth();
-    }
-
-    function toggleAttendance(id, isPresent) {
-      const stu = state.students.find(item => item.id === id);
-      if (!stu) return;
-      if (!stu.attendance) stu.attendance = { 1: false, 2: false, 3: false };
-      stu.attendance[state.attendanceDay] = isPresent;
-      saveStudentsToStorage();
-      showToast(stu.name + ' (' + (stu.regNo || 'No ID') + ') marked ' + (isPresent ? 'Present' : 'Absent') + ' for Day ' + state.attendanceDay);
-      renderAuth();
-    }
-
-    function exportAttendanceCSV() {
-      const paidStudents = state.students.filter(stu => stu.paymentCompleted);
-      if (!paidStudents.length) {
-        showToast('No payment-completed students to export yet.');
-        return;
-      }
-      const headers = ['Chest / Register No', 'Name', 'Class', 'Place', 'Gender', 'WhatsApp Number', 'Contact Number', 'Day 1 (24 Dec)', 'Day 2 (25 Dec)', 'Day 3 (26 Dec)', 'Total Days Present'];
-      const esc = (v) => '"' + String(v ?? '').replace(/"/g, '""') + '"';
-      const rows = paidStudents.map(stu => {
-        const att = stu.attendance || { 1: false, 2: false, 3: false };
-        const d1 = att[1] ? 'Present' : 'Absent';
-        const d2 = att[2] ? 'Present' : 'Absent';
-        const d3 = att[3] ? 'Present' : 'Absent';
-        const total = (att[1] ? 1 : 0) + (att[2] ? 1 : 0) + (att[3] ? 1 : 0);
-        return [
-          stu.regNo || '',
-          stu.name,
-          stu.studentClass,
-          stu.place,
-          stu.gender,
-          stu.whatsapp,
-          stu.contact,
-          d1,
-          d2,
-          d3,
-          total
-        ].map(esc).join(',');
-      });
-      const csv = [headers.map(esc).join(','), ...rows].join('\r\n');
-      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'kuppayam-3.0-attendance.csv';
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-      showToast('Exported attendance CSV (' + paidStudents.length + ' students)!');
-    }
-
-    function resetAdminFilters() {
-      const q = document.getElementById('admSearch');
-      const cls = document.getElementById('admClassFilter');
-      const pay = document.getElementById('admPayFilter');
-      if (q) q.value = '';
-      if (cls) cls.value = 'All';
-      if (pay) pay.value = 'All';
-      renderAdminStudentsList();
-    }
-
-    function renderAdminStudentsList() {
-      const listEl = document.getElementById('adminStudentsList');
-      if (!listEl) return;
-      const q = (document.getElementById('admSearch')?.value || '').toLowerCase();
-      const cls = document.getElementById('admClassFilter')?.value || 'All';
-      const pay = document.getElementById('admPayFilter')?.value || 'All';
-
-      const filtered = state.students.filter(stu => {
-        const matchQ = !q || stu.name.toLowerCase().includes(q) || (stu.place || '').toLowerCase().includes(q) || (stu.whatsapp || '').includes(q) || (stu.regNo || '').toLowerCase().includes(q);
-        const matchCls = cls === 'All' || stu.studentClass === cls;
-        const matchPay = pay === 'All' || (pay === 'Completed' ? stu.paymentCompleted : !stu.paymentCompleted);
-        return matchQ && matchCls && matchPay;
-      });
-
-      listEl.innerHTML = filtered.length ? filtered.map(stu => `
-        <div class="student-row-card" onclick="selectAdminStudent('${stu.id}')">
-          <div>
-            <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
-              <strong style="font-size:1.05rem;">${stu.name}</strong>
-              ${stu.regNo ? `<span class="badge-pill badge-lime">${stu.regNo}</span>` : ''}
+        <div class="panel-card">
+          <div style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:12px; margin-bottom:18px;">
+            <div>
+              <h3 style="font-size:1.45rem; font-weight:800;">Programme Schedule</h3>
+              <p style="font-size:0.86rem; color:var(--charcoal-65); margin-top:2px;">${dayLabels[d]}</p>
             </div>
-            <p style="font-size:0.84rem; color:var(--charcoal-65); margin-top:4px;">
-              ${stu.studentClass} · ${stu.place} · WhatsApp: ${stu.whatsapp}
-            </p>
+            <div class="chip-row" style="margin-bottom:0;">
+              <button type="button" class="filter-chip ${d === 1 ? 'active' : ''}" onclick="setStudentScheduleDay(1)">Day 1 · 24 Dec</button>
+              <button type="button" class="filter-chip ${d === 2 ? 'active' : ''}" onclick="setStudentScheduleDay(2)">Day 2 · 25 Dec</button>
+              <button type="button" class="filter-chip ${d === 3 ? 'active' : ''}" onclick="setStudentScheduleDay(3)">Day 3 · 26 Dec</button>
+            </div>
           </div>
-          <div style="display:flex; align-items:center; gap:10px;">
-            <span class="badge-pill ${stu.paymentCompleted ? 'badge-lime' : 'badge-forest'}">
-              ${stu.paymentCompleted ? 'Payment Complete' : 'Pending Payment'}
-            </span>
-            <button type="button" class="btn-secondary" style="padding:7px 14px; font-size:0.8rem;">View Details</button>
-            <div class="row-menu-wrap" onclick="event.stopPropagation()">
-              <button type="button" class="dots-btn" aria-label="Student options" onclick="toggleStudentRowMenu(event, '${stu.id}')">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                  <circle cx="12" cy="5" r="2"></circle>
-                  <circle cx="12" cy="12" r="2"></circle>
-                  <circle cx="12" cy="19" r="2"></circle>
-                </svg>
-              </button>
-              <div class="row-dropdown" id="stuMenu_${stu.id}">
-                <button type="button" class="row-dropdown-item danger" onclick="deleteAdminStudent('${stu.id}')">Delete</button>
-              </div>
-            </div>
+
+          <div style="display:flex; flex-direction:column; gap:12px;">
+            ${dayItems.map((item, idx) => {
+              const evKey = 'prog_d' + d + '_' + idx;
+              const savedFb = s.eventFeedbacks && s.eventFeedbacks[evKey];
+              const safeTitle = item.title.replace(/'/g, "\\'");
+              return `
+                <div class="student-row-card" style="cursor:default; gap:12px; flex-wrap:wrap;">
+                  <div>
+                    <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:6px;">
+                      <span class="badge-pill badge-forest">${item.time}</span>
+                      <span class="badge-pill badge-lime">${item.venue}</span>
+                    </div>
+                    <h4 style="font-size:1.05rem; font-weight:800;">${item.title}</h4>
+                  </div>
+                  <button type="button" class="filter-chip ${savedFb ? 'active' : ''}" style="margin-left:auto;" onclick="openProgramFeedback(${d}, ${idx})">${savedFb ? '&#9733; Edit Feedback' : 'Write Feedback'}</button>
+                </div>
+              `;
+            }).join('')}
           </div>
         </div>
-      `).join('') : '<div class="panel-card"><p style="color:var(--charcoal-65);">No students match your current filter.</p></div>';
+      `;
     }
 
-    function closeAllStudentMenus() {
-      document.querySelectorAll('.row-dropdown.open').forEach(el => el.classList.remove('open'));
-      document.querySelectorAll('.student-row-card.menu-open').forEach(el => el.classList.remove('menu-open'));
-    }
-
-    function toggleStudentRowMenu(e, id) {
-      e.stopPropagation();
-      const target = document.getElementById('stuMenu_' + id);
-      const wasOpen = target && target.classList.contains('open');
-      closeAllStudentMenus();
-      if (target && !wasOpen) {
-        target.classList.add('open');
-        const card = target.closest('.student-row-card');
-        if (card) card.classList.add('menu-open');
+    function setOverallDraftRating(r) {
+      state.overallDraftRating = r;
+      const box = document.getElementById('overallStarsRow');
+      if (box) {
+        box.querySelectorAll('.star-box').forEach((btn, i) => {
+          btn.classList.toggle('active', (i + 1) <= r);
+        });
       }
+      const lbl = document.getElementById('overallStarCount');
+      if (lbl) lbl.textContent = r + ' of 5 stars';
     }
 
-    function openEditStudentModal(id) {
-      closeAllStudentMenus();
-      const stu = state.students.find(item => item.id === id);
-      if (!stu) return;
-      document.getElementById('editStuId').value = stu.id;
-      document.getElementById('editStuName').value = stu.name || '';
-      document.getElementById('editStuDob').value = stu.dob || '';
-      document.getElementById('editStuPlace').value = stu.place || '';
-      document.getElementById('editStuGender').value = stu.gender || 'Male';
-      document.getElementById('editStuClass').value = stu.studentClass || 'Class 8';
-      document.getElementById('editStuWhatsapp').value = stu.whatsapp || '';
-      document.getElementById('editStuContact').value = stu.contact || '';
-      document.getElementById('editStudentModal').classList.add('open');
-    }
-
-    function closeEditStudentModal() {
-      document.getElementById('editStudentModal').classList.remove('open');
-    }
-
-    function saveEditedStudent(e) {
+    function submitOverallFeedback(e) {
       e.preventDefault();
-      const id = document.getElementById('editStuId').value;
-      const stu = state.students.find(item => item.id === id);
-      if (!stu) return;
-      stu.name = document.getElementById('editStuName').value.trim();
-      stu.dob = document.getElementById('editStuDob').value.trim();
-      stu.place = document.getElementById('editStuPlace').value.trim();
-      stu.gender = document.getElementById('editStuGender').value;
-      stu.studentClass = document.getElementById('editStuClass').value;
-      stu.whatsapp = document.getElementById('editStuWhatsapp').value.trim();
-      stu.contact = document.getElementById('editStuContact').value.trim();
+      if (!state.loggedInUser || state.loggedInUser.role !== 'student') return;
+      const stu = state.loggedInUser.data;
+      const rating = state.overallDraftRating || (stu.overallFeedback ? stu.overallFeedback.rating : 0);
+      if (!rating) {
+        showToast('Please select a star rating (1 to 5 stars).');
+        return;
+      }
+      const textEl = document.getElementById('overallFeedbackText');
+      const text = textEl ? textEl.value.trim() : '';
+      if (!text) {
+        showToast('Please write your overall feedback before submitting.');
+        return;
+      }
+      stu.overallFeedback = {
+        rating,
+        text,
+        updatedAt: new Date().toLocaleString()
+      };
       saveStudentsToStorage();
-      closeEditStudentModal();
-      showToast('Student details updated!');
+      showToast('Overall feedback submitted! Thank you.');
       renderAuth();
     }
 
-    function deleteAdminStudent(id) {
-      closeAllStudentMenus();
-      const idx = state.students.findIndex(item => item.id === id);
-      if (idx === -1) return;
-      const name = state.students[idx].name;
-      state.students.splice(idx, 1);
-      if (state.selectedRegId === id) state.selectedRegId = null;
-      saveStudentsToStorage();
-      showToast('Deleted ' + name + ' from registrations.');
-      renderAuth();
+    function openProgramFeedback(d, idx) {
+      const s = state.loggedInUser && state.loggedInUser.data;
+      if (!s) return;
+      const isGirl = (s.gender || '').toLowerCase() === 'female';
+      const items = (isGirl ? state.girlsSchedule : state.boysSchedule)[d] || [];
+      const item = items[idx];
+      if (!item) return;
+      openEventFeedbackModal('prog_d' + d + '_' + idx, 'Day ' + d + ' · ' + item.title);
     }
 
-    document.addEventListener('click', closeAllStudentMenus);
+    function openEventFeedbackModal(evKey, customTitle) {
+      if (!state.loggedInUser || state.loggedInUser.role !== 'student') {
+        showToast('Sign in as a student to write event feedback.');
+        goHome('sec-home');
+        return;
+      }
+      const ev = state.events.find(x => x.id === evKey);
+      const title = customTitle || (ev ? ev.title : evKey);
+      const stu = state.loggedInUser.data;
+      const existing = (stu.eventFeedbacks && stu.eventFeedbacks[evKey]) ? stu.eventFeedbacks[evKey] : null;
+      state.eventFeedbackModalEvId = evKey;
+      state.eventFeedbackModalTitle = title;
+      state.eventFeedbackDraftRating = existing ? existing.rating : 0;
+      document.getElementById('modalFeedbackEventTitle').textContent = title;
+      document.getElementById('eventFeedbackText').value = existing ? existing.text : '';
+      renderEventModalStars();
+      document.getElementById('eventFeedbackModal').classList.add('open');
+    }
+
+    function closeEventFeedbackModal() {
+      document.getElementById('eventFeedbackModal').classList.remove('open');
+    }
+
+    function renderEventModalStars() {
+      const r = state.eventFeedbackDraftRating || 0;
+      const row = document.getElementById('eventFeedbackStars');
+      row.innerHTML = [1, 2, 3, 4, 5].map(n =>
+        `<button type="button" class="star-box light ${n <= r ? 'active' : ''}" onclick="setEventDraftRating(${n})" aria-label="${n} stars">&#9733;</button>`
+      ).join('');
+      document.getElementById('eventFeedbackStarCount').textContent = r + ' of 5 stars';
+    }
+
+    function setEventDraftRating(r) {
+      state.eventFeedbackDraftRating = r;
+      renderEventModalStars();
+    }
+
+    function submitEventFeedback(e) {
+      e.preventDefault();
+      if (!state.loggedInUser || state.loggedInUser.role !== 'student') return;
+      const evId = state.eventFeedbackModalEvId;
+      const ev = state.events.find(x => x.id === evId);
+      const evTitle = state.eventFeedbackModalTitle || (ev ? ev.title : evId);
+      if (!evId) return;
+      const rating = state.eventFeedbackDraftRating || 0;
+      if (!rating) {
+        showToast('Please select a star rating (1 to 5 stars).');
+        return;
+      }
+      const text = document.getElementById('eventFeedbackText').value.trim();
+      if (!text) {
+        showToast('Please write your feedback before submitting.');
+        return;
+      }
+      const stu = state.loggedInUser.data;
+      if (!stu.eventFeedbacks) stu.eventFeedbacks = {};
+      stu.eventFeedbacks[evId] = {
+        eventId: evId,
+        eventTitle: evTitle,
+        rating,
+        text,
+        updatedAt: new Date().toLocaleString()
+      };
+      saveStudentsToStorage();
+      closeEventFeedbackModal();
+      showToast('Feedback for "' + evTitle + '" submitted!');
+      renderStudentEventsSection();
+    }
 
     function logoutUser() {
       clearSession();
@@ -2978,416 +2758,189 @@
       window.location.href = PAGES.home;
     }
 
-    function setStudentCertStatus(id, status) {
-      const stu = state.students.find(x => x.id === id);
-      if (!stu) return;
-      stu.certStatus = status;
+    function applyForECertificate() {
+      if (!state.loggedInUser || state.loggedInUser.role !== 'student') return;
+      const stu = state.loggedInUser.data;
+      stu.certStatus = 'pending';
+      stu.certAppliedAt = new Date().toLocaleString();
       saveStudentsToStorage();
-      showToast(stu.name + ': E-Certificate ' + (status === 'allowed' ? 'Allowed' : 'Denied (Waiting for Approval)') + '.');
+      showToast('E-Certificate application submitted!');
       renderAuth();
     }
 
-    function setCertFilter(f) {
-      state.certFilter = f;
-      renderAuth();
+    function downloadStudentCertificate() {
+      if (!state.loggedInUser || state.loggedInUser.role !== 'student') return;
+      const s = state.loggedInUser.data;
+      if (s.certStatus !== 'allowed') {
+        showToast('Your E-Certificate is waiting for admin approval.');
+        return;
+      }
+      const canvas = document.createElement('canvas');
+      canvas.width = 1400;
+      canvas.height = 990;
+      const ctx = canvas.getContext('2d');
+      ctx.fillStyle = '#013F32';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.strokeStyle = '#E7FE25';
+      ctx.lineWidth = 14;
+      ctx.strokeRect(36, 36, canvas.width - 72, canvas.height - 72);
+      ctx.fillStyle = '#E7FE25';
+      ctx.font = 'bold 34px Plus Jakarta Sans, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('KUPPAYAM 3.0 · WINTER INTENSIVE CAMP', canvas.width / 2, 160);
+      ctx.fillStyle = '#FDFDFD';
+      ctx.font = 'bold 64px Plus Jakarta Sans, sans-serif';
+      ctx.fillText('CERTIFICATE OF PARTICIPATION', canvas.width / 2, 260);
+      ctx.font = '28px Plus Jakarta Sans, sans-serif';
+      ctx.fillStyle = 'rgba(253,253,253,0.8)';
+      ctx.fillText('This is proudly presented to', canvas.width / 2, 370);
+      ctx.fillStyle = '#E7FE25';
+      ctx.font = 'bold 68px Plus Jakarta Sans, sans-serif';
+      ctx.fillText(s.name.toUpperCase(), canvas.width / 2, 470);
+      ctx.fillStyle = '#FDFDFD';
+      ctx.font = '28px Plus Jakarta Sans, sans-serif';
+      ctx.fillText((s.studentClass || '') + '  ·  ' + (s.place || '') + '  ·  Reg No: ' + (s.regNo || ''), canvas.width / 2, 550);
+      ctx.fillStyle = 'rgba(253,253,253,0.75)';
+      ctx.fillText('for active participation in Kuppayam 3.0 at WIRAS, Markaz Knowledge City (24–26 Dec 2026).', canvas.width / 2, 650);
+      ctx.fillStyle = '#E7FE25';
+      ctx.font = 'bold 26px Plus Jakarta Sans, sans-serif';
+      ctx.fillText('WIRAS • MARKAZ KNOWLEDGE CITY', canvas.width / 2, 830);
+
+      const link = document.createElement('a');
+      link.download = 'Kuppayam_ECertificate_' + (s.regNo || s.name) + '.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+      showToast('Downloading your E-Certificate...');
     }
 
     function renderAuth() {
-      document.body.classList.add('admin-mode');
+      renderStudentEventsSection();
       const container = document.getElementById('authContainer');
-      if (state.loggedInUser && state.loggedInUser.role === 'admin') {
-        const total = state.students.length;
-        const paidCount = state.students.filter(x => x.paymentCompleted).length;
-        const pendingCount = total - paidCount;
-        const regCount = state.students.filter(x => x.regNo).length;
-        const selectedStu = state.selectedRegId ? state.students.find(x => x.id === state.selectedRegId) : null;
+      if (state.loggedInUser && state.loggedInUser.role === 'student') {
+        const s = state.loggedInUser.data;
+        const existingOverall = s.overallFeedback || null;
+        const activeRating = state.overallDraftRating || (existingOverall ? existingOverall.rating : 0);
 
         container.innerHTML = `
-          <div class="portal-shell">
-            <aside class="portal-sidebar">
-              <div>
-                <div style="padding: 4px 8px 16px; border-bottom: 1px solid var(--charcoal-12); margin-bottom: 14px;">
-                  <div style="font-size:1.1rem; font-weight:800; color:var(--forest);">Kuppayam <span style="color:var(--charcoal);">Portal</span></div>
-                </div>
-                <button type="button" class="portal-nav-btn ${state.adminTab === 'students' ? 'active' : ''}" onclick="setAdminTab('students')">
-                  Registered Students (${total})
-                </button>
-                <button type="button" class="portal-nav-btn ${state.adminTab === 'attendance' ? 'active' : ''}" onclick="setAdminTab('attendance')">
-                  3-Day Attendance (${paidCount})
-                </button>
-                <button type="button" class="portal-nav-btn ${state.adminTab === 'reminder' ? 'active' : ''}" onclick="setAdminTab('reminder')">
-                  Reminder (${pendingCount})
-                </button>
-                <button type="button" class="portal-nav-btn ${state.adminTab === 'feedback' ? 'active' : ''}" onclick="setAdminTab('feedback')">
-                  Feedback
-                </button>
-                <button type="button" class="portal-nav-btn ${state.adminTab === 'certificate' ? 'active' : ''}" onclick="setAdminTab('certificate')">
-                  E-Certificate (${state.students.filter(x => x.certStatus === 'pending').length})
-                </button>
-              </div>
-
-              <div style="border-top: 1px solid var(--charcoal-12); padding-top: 14px;">
-                <button type="button" class="btn-submit-full" style="padding:10px 14px; font-size:0.86rem;" onclick="logoutUser()">Log Out</button>
-              </div>
-            </aside>
-
+          <div class="panel-card dark-card" style="margin-bottom:24px; display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:16px;">
             <div>
-              ${state.adminTab === 'students' ? `
-                <div class="panel-card" style="margin-bottom: 18px;">
-                  <div class="section-kicker" style="margin-bottom:4px;">REGISTRATIONS</div>
-                  <h2 style="font-size:1.8rem; font-weight:800; line-height:1.15;">Kuppayam 3.0 Students</h2>
-                  <p style="font-size:0.88rem; color:var(--charcoal-65); margin-top:4px;">Select any student to inspect their details, verify payment, and generate their Register Number (e.g. K3001).</p>
-                  ${window.location.protocol === 'file:' ? `
-                  ` : ''}
+              <span class="badge-pill badge-lime">STUDENT CAMP PASS · ${s.regNo}</span>
+              <h2 style="font-size:2rem; font-weight:800; margin-top:10px;">${s.name}</h2>
+              <p style="color:var(--white-85);">${s.studentClass} · ${s.place} · ${s.gender || 'Male'}</p>
+            </div>
+            <button type="button" class="btn-primary" onclick="logoutUser()">Log Out</button>
+          </div>
+
+          <div class="cards-grid-2" style="gap:24px; align-items:stretch;">
+            <div class="panel-card dark-card" style="border:1px solid rgba(231, 254, 37, 0.25);">
+            <div style="display:flex; justify-content:space-between; align-items:center; gap:10px; margin-bottom:10px;">
+              <span class="badge-pill badge-lime">FEEDBACK</span>
+              ${existingOverall ? `<span style="font-size:0.78rem; color:var(--lime); font-weight:700;">Submitted (${existingOverall.rating}/5 ★)</span>` : ''}
+            </div>
+            <h3 style="font-size:1.65rem; font-weight:800; line-height:1.15; margin-bottom:14px;">
+              MAKE YOUR <span style="color:var(--lime);">VOICE COUNT.</span>
+            </h3>
+
+            <div style="padding:12px 14px; border-radius:12px; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12); margin-bottom:16px;">
+              <div style="font-size:0.68rem; font-weight:800; letter-spacing:0.12em; color:rgba(253,253,253,0.65);">YOU'RE REVIEWING</div>
+              <div style="font-size:1rem; font-weight:800; margin-top:2px;">Overall Feedback</div>
+            </div>
+
+            <form onsubmit="submitOverallFeedback(event)">
+              <div style="margin-bottom:16px;">
+                <div style="font-size:0.88rem; font-weight:700; margin-bottom:6px;">How was it?</div>
+                <div class="star-rating-row" id="overallStarsRow">
+                  ${[1, 2, 3, 4, 5].map(n => `
+                    <button type="button" class="star-box ${n <= activeRating ? 'active' : ''}" onclick="setOverallDraftRating(${n})" aria-label="${n} stars">&#9733;</button>
+                  `).join('')}
+                </div>
+                <div id="overallStarCount" style="font-size:0.82rem; font-weight:700; color:rgba(253,253,253,0.75);">${activeRating} of 5 stars</div>
+              </div>
+
+              <div style="margin-bottom:16px;">
+                <label for="overallFeedbackText" style="display:block; font-size:0.88rem; font-weight:700; margin-bottom:8px;">Any other thoughts, ideas, or suggestions?</label>
+                <textarea id="overallFeedbackText" rows="4" required placeholder="Tell us what stood out or what could be better." style="width:100%; border-radius:12px; padding:12px 14px; background:rgba(0,0,0,0.22); border:1.5px solid rgba(253,253,253,0.25); color:#FDFDFD; font-family:inherit; font-size:0.92rem; resize:vertical;">${existingOverall ? existingOverall.text : ''}</textarea>
+              </div>
+
+              <button type="submit" class="btn-primary" style="width:100%; justify-content:center; padding:13px 20px; font-weight:800;">
+                SUBMIT FEEDBACK &rarr;
+              </button>
+            </form>
+            </div>
+
+            <div class="panel-card dark-card" style="border:1px solid rgba(231, 254, 37, 0.25); display:flex; flex-direction:column; justify-content:space-between;">
+              <div>
+                <div style="display:flex; justify-content:space-between; align-items:center; gap:10px; margin-bottom:10px;">
+                  <span class="badge-pill badge-lime">E-CERTIFICATE</span>
+                  ${s.certStatus === 'allowed'
+                    ? '<span style="font-size:0.78rem; color:var(--lime); font-weight:700;">Approved</span>'
+                    : (s.certStatus === 'pending' || s.certStatus === 'denied')
+                      ? '<span style="font-size:0.78rem; color:rgba(253,253,253,0.75); font-weight:700;">Pending Admin</span>'
+                      : ''
+                  }
+                </div>
+                <h3 style="font-size:1.65rem; font-weight:800; line-height:1.15; margin-bottom:14px;">
+                  OFFICIAL <span style="color:var(--lime);">E-CERTIFICATE.</span>
+                </h3>
+
+                <div style="padding:12px 14px; border-radius:12px; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12); margin-bottom:16px;">
+                  <div style="font-size:0.68rem; font-weight:800; letter-spacing:0.12em; color:rgba(253,253,253,0.65);">CANDIDATE</div>
+                  <div style="font-size:1rem; font-weight:800; margin-top:2px;">${s.name} · ${s.regNo}</div>
                 </div>
 
-                <div class="portal-stats-4">
-                  <div class="portal-stat-box">
-                    <div class="stat-label">STUDENTS</div>
-                    <div style="font-size:1.7rem; font-weight:800;">${total}</div>
-                  </div>
-                  <div class="portal-stat-box">
-                    <div class="stat-label">PAID</div>
-                    <div style="font-size:1.7rem; font-weight:800; color:var(--forest);">${paidCount}</div>
-                  </div>
-                  <div class="portal-stat-box">
-                    <div class="stat-label">PENDING</div>
-                    <div style="font-size:1.7rem; font-weight:800;">${pendingCount}</div>
-                  </div>
-                </div>
+                <p style="font-size:0.9rem; color:rgba(253,253,253,0.8); line-height:1.55; margin-bottom:20px;">
+                  ${s.certStatus === 'allowed'
+                    ? 'Your E-Certificate has been approved by the WIRAS Admin. Click below to download it.'
+                    : (s.certStatus === 'pending' || s.certStatus === 'denied')
+                      ? 'Your request has been received. Your certificate status will update here once approved by the admin.'
+                      : 'Apply for your Kuppayam 3.0 participation E-Certificate. Once approved by the admin, you can download it here.'
+                  }
+                </p>
+              </div>
 
-                ${selectedStu ? `
-                  <div class="panel-card" style="margin-bottom:18px; border:2px solid var(--forest);">
-                    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:16px;">
-                      <div>
-                        <span class="badge-pill badge-forest">STUDENT RECORD</span>
-                        <h3 style="font-size:1.5rem; font-weight:800; margin-top:6px;">${selectedStu.name}</h3>
-                      </div>
-                      <div style="display:flex; flex-wrap:wrap; gap:10px; align-items:center;">
-                        <button type="button" class="btn-primary" style="padding:8px 16px; font-size:0.84rem;" onclick="sendStudentWelcomeWhatsApp('${selectedStu.id}')">
-                          Send Welcome Message
-                        </button>
-                        <button type="button" class="btn-primary" style="padding:8px 16px; font-size:0.84rem;" onclick="sendStudentPaymentWhatsApp('${selectedStu.id}')">
-                          ${selectedStu.paymentMsgSent ? 'Resend Payment Message' : 'Send Payment Message'}
-                        </button>
-                        <button type="button" class="btn-secondary" style="padding:8px 16px; font-size:0.84rem;" onclick="previewStudentIdCard('${selectedStu.id}')">
-                          Preview ID Card
-                        </button>
-                        <button type="button" class="btn-secondary" style="padding:8px 16px; font-size:0.84rem;" onclick="selectAdminStudent(null)">&larr; All Students</button>
-                      </div>
-                    </div>
-
-                    <div class="tick-box-bar">
-                      <div style="display:flex; flex-wrap:wrap; gap:18px; align-items:center;">
-                        <label class="tick-label">
-                          <input type="checkbox" ${selectedStu.paymentCompleted ? 'checked' : ''} onchange="togglePaymentComplete('${selectedStu.id}', this.checked)" />
-                          <span>Complete Payment</span>
-                        </label>
-                        <label class="tick-label">
-                          <input type="checkbox" ${selectedStu.welcomeSent ? 'checked' : ''} onchange="toggleWelcomeSent('${selectedStu.id}', this.checked)" />
-                          <span>Send Welcome Message</span>
-                        </label>
-                        <label class="tick-label">
-                          <input type="checkbox" ${selectedStu.paymentMsgSent ? 'checked' : ''} onchange="togglePaymentMsgSent('${selectedStu.id}', this.checked)" />
-                          <span>Payment Message</span>
-                        </label>
-                      </div>
-                      <div>
-                        ${selectedStu.regNo
-                          ? `<span class="badge-pill badge-lime" style="font-size:0.9rem; padding:7px 16px;">REGISTER NO: ${selectedStu.regNo}</span>`
-                          : `<span style="font-size:0.82rem; font-weight:700; color:var(--charcoal-65);">Tick "Complete Payment" to generate Register No.</span>`
-                        }
-                      </div>
-                    </div>
-
-                    <div class="cards-grid-3" style="gap:14px;">
-                      <div class="panel-card" style="padding:14px;"><div class="stat-label">NAME</div><strong>${selectedStu.name}</strong></div>
-                      <div class="panel-card" style="padding:14px;"><div class="stat-label">DATE OF BIRTH</div><strong>${selectedStu.dob}</strong></div>
-                      <div class="panel-card" style="padding:14px;"><div class="stat-label">PLACE</div><strong>${selectedStu.place}</strong></div>
-                      <div class="panel-card" style="padding:14px;"><div class="stat-label">GENDER</div><strong>${selectedStu.gender}</strong></div>
-                      <div class="panel-card" style="padding:14px;"><div class="stat-label">CLASS</div><strong>${selectedStu.studentClass}</strong></div>
-                      <div class="panel-card" style="padding:14px;"><div class="stat-label">WHATSAPP NUMBER</div><strong>${selectedStu.whatsapp}</strong></div>
-                      <div class="panel-card" style="padding:14px;"><div class="stat-label">CONTACT NUMBER</div><strong>${selectedStu.contact}</strong></div>
-                      <div class="panel-card" style="padding:14px;"><div class="stat-label">REGISTER NUMBER</div><strong>${selectedStu.regNo || 'Pending Payment'}</strong></div>
-                    </div>
+              <div>
+                ${s.certStatus === 'allowed' ? `
+                  <button type="button" class="btn-primary" style="width:100%; justify-content:center; padding:13px 20px; font-weight:800;" onclick="downloadStudentCertificate()">
+                    Download Your E-Certificate &darr;
+                  </button>
+                ` : (s.certStatus === 'pending' || s.certStatus === 'denied') ? `
+                  <div style="width:100%; text-align:center; padding:13px 20px; border-radius:9999px; border:1.5px solid rgba(231, 254, 37, 0.45); background:rgba(231, 254, 37, 0.1); color:var(--lime); font-weight:800; font-size:0.92rem;">
+                    Waiting for Approval
                   </div>
                 ` : `
-                  <div class="portal-filter-bar">
-                    <input id="admSearch" class="form-input" style="flex:1; min-width:180px;" placeholder="Search name, place, WhatsApp, or Reg No..." oninput="renderAdminStudentsList()" />
-                    <select id="admClassFilter" class="form-select" style="width:auto;" onchange="renderAdminStudentsList()">
-                      <option value="All">All Classes</option>
-                      <option value="Class 8">Class 8</option>
-                      <option value="Class 9">Class 9</option>
-                      <option value="Class 10">Class 10</option>
-                    </select>
-                    <select id="admPayFilter" class="form-select" style="width:auto;" onchange="renderAdminStudentsList()">
-                      <option value="All">All Status</option>
-                      <option value="Completed">Payment Complete</option>
-                      <option value="Pending">Pending Payment</option>
-                    </select>
-                  </div>
-                  <div id="adminStudentsList" class="students-big-box"></div>
+                  <button type="button" class="btn-primary" style="width:100%; justify-content:center; padding:13px 20px; font-weight:800;" onclick="applyForECertificate()">
+                    Apply for E-certificate &rarr;
+                  </button>
                 `}
-              ` : state.adminTab === 'reminder' ? `
-                ${(() => {
-                  const pendingList = state.students.filter(x => !x.paymentCompleted);
-                  return `
-                    <div class="panel-card" style="margin-bottom: 18px; display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:14px;">
-                      <div>
-                        <div class="section-kicker" style="margin-bottom:4px;">PAYMENT REMINDER</div>
-                        <h2 style="font-size:1.8rem; font-weight:800; line-height:1.15;">Pending Payment Students (${pendingList.length})</h2>
-                        <p style="font-size:0.88rem; color:var(--charcoal-65); margin-top:4px;">Send a WhatsApp payment reminder individually or to all pending students in one click.</p>
-                      </div>
-
-                    </div>
-
-                    <div class="panel-card" style="margin-bottom: 18px;">
-                      <label for="reminderMsgTemplate" class="stat-label" style="display:block; margin-bottom:8px;">WHATSAPP REMINDER MESSAGE (SENT TO ALL PENDING STUDENTS)</label>
-                      <textarea id="reminderMsgTemplate" class="form-input" rows="4" style="width:100%; resize:vertical; font-family:inherit;" oninput="state.reminderMessage = this.value">${state.reminderMessage}</textarea>
-                    </div>
-
-                    <div style="display:flex; flex-direction:column; gap:10px;">
-                      ${pendingList.length ? pendingList.map(stu => `
-                        <div class="student-row-card" style="cursor:default;">
-                          <div>
-                            <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
-                              <strong style="font-size:1.05rem;">${stu.name}</strong>
-                              <span class="badge-pill badge-forest">Pending Payment</span>
-                              ${stu.reminderSent ? '<span class="badge-pill badge-lime">Reminder Sent</span>' : ''}
-                            </div>
-                            <p style="font-size:0.84rem; color:var(--charcoal-65); margin-top:4px;">
-                              ${stu.studentClass} · ${stu.place} · WhatsApp: ${stu.whatsapp}
-                            </p>
-                          </div>
-                          <button type="button" class="btn-primary" style="padding:9px 16px; font-size:0.84rem; white-space:nowrap;" onclick="sendStudentReminderWhatsApp('${stu.id}')">
-                            ${stu.reminderSent ? 'Resend Reminder' : 'Send Reminder'}
-                          </button>
-                        </div>
-                      `).join('') : '<div class="panel-card"><p style="color:var(--charcoal-65);">All registered students have completed their payment.</p></div>'}
-                    </div>
-                  `;
-                })()}
-              ` : state.adminTab === 'feedback' ? `
-                ${(() => {
-                  const cat = state.feedbackCategory || 'overall';
-                  const selStu = state.selectedFeedbackStuId ? state.students.find(x => x.id === state.selectedFeedbackStuId) : null;
-                  return `
-                    <div class="panel-card" style="margin-bottom: 18px;">
-                      <div class="section-kicker" style="margin-bottom:4px;">STUDENT FEEDBACK</div>
-                      <h2 style="font-size:1.8rem; font-weight:800; line-height:1.15;">Feedback Center</h2>
-                      <p style="font-size:0.88rem; color:var(--charcoal-65); margin-top:4px;">Choose a feedback category, then click any student name to read their rating and feedback.</p>
-                      <div class="chip-row" style="margin-top:14px; margin-bottom:0;">
-                        <button type="button" class="filter-chip ${cat === 'overall' ? 'active' : ''}" onclick="setFeedbackCategory('overall')">1. Overall Feedback</button>
-                        <button type="button" class="filter-chip ${cat === 'event' ? 'active' : ''}" onclick="setFeedbackCategory('event')">2. Each Event Feedback</button>
-                      </div>
-                    </div>
-
-                    ${selStu ? `
-                      <div class="panel-card" style="border:2px solid var(--forest);">
-                        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:16px;">
-                          <div>
-                            <span class="badge-pill badge-forest">${cat === 'overall' ? 'OVERALL FEEDBACK' : 'EVENT FEEDBACK'}</span>
-                            <h3 style="font-size:1.45rem; font-weight:800; margin-top:6px;">${selStu.name}</h3>
-                            <p style="font-size:0.84rem; color:var(--charcoal-65);">${selStu.regNo || 'Pending Payment'} · ${selStu.studentClass} · ${selStu.place}</p>
-                          </div>
-                          <button type="button" class="btn-secondary" style="padding:8px 16px; font-size:0.84rem;" onclick="selectFeedbackStudent(null)">&larr; All Students</button>
-                        </div>
-
-                        ${cat === 'overall' ? `
-                          ${selStu.overallFeedback ? `
-                            <div class="panel-card" style="background:#f8faf7;">
-                              <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:10px;">
-                                <span class="badge-pill badge-lime" style="font-size:0.9rem;">${'★'.repeat(selStu.overallFeedback.rating)}${'☆'.repeat(5 - selStu.overallFeedback.rating)} (${selStu.overallFeedback.rating}/5)</span>
-                                <span style="font-size:0.78rem; color:var(--charcoal-65);">${selStu.overallFeedback.updatedAt || ''}</span>
-                              </div>
-                              <p style="font-size:0.96rem; line-height:1.6; color:var(--charcoal); white-space:pre-wrap;">${selStu.overallFeedback.text}</p>
-                            </div>
-                          ` : '<p style="color:var(--charcoal-65);">This student has not submitted overall feedback yet.</p>'}
-                        ` : `
-                          ${(() => {
-                            const evMap = selStu.eventFeedbacks || {};
-                            const entries = Object.values(evMap);
-                            if (!entries.length) {
-                              return '<p style="color:var(--charcoal-65);">This student has not submitted any event feedback yet.</p>';
-                            }
-                            return `<div style="display:flex; flex-direction:column; gap:12px;">` + entries.map(ef => `
-                              <div class="panel-card" style="background:#f8faf7;">
-                                <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:8px;">
-                                  <strong style="font-size:1.05rem;">${ef.eventTitle}</strong>
-                                  <span class="badge-pill badge-lime">${'★'.repeat(ef.rating)}${'☆'.repeat(5 - ef.rating)} (${ef.rating}/5)</span>
-                                </div>
-                                <p style="font-size:0.94rem; line-height:1.6; color:var(--charcoal); white-space:pre-wrap;">${ef.text}</p>
-                                <div style="font-size:0.76rem; color:var(--charcoal-65); margin-top:6px;">${ef.updatedAt || ''}</div>
-                              </div>
-                            `).join('') + `</div>`;
-                          })()}
-                        `}
-                      </div>
-                    ` : `
-                      <div style="display:flex; flex-direction:column; gap:10px;">
-                        ${state.students.map(stu => {
-                          const hasOverall = !!stu.overallFeedback;
-                          const evCount = stu.eventFeedbacks ? Object.keys(stu.eventFeedbacks).length : 0;
-                          const statusBadge = cat === 'overall'
-                            ? (hasOverall ? `<span class="badge-pill badge-lime">★ ${stu.overallFeedback.rating}/5</span>` : `<span class="badge-pill badge-forest">No Feedback</span>`)
-                            : (evCount > 0 ? `<span class="badge-pill badge-lime">${evCount} Event${evCount > 1 ? 's' : ''} Rated</span>` : `<span class="badge-pill badge-forest">No Feedback</span>`);
-                          return `
-                            <div class="student-row-card" onclick="selectFeedbackStudent('${stu.id}')">
-                              <div>
-                                <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
-                                  <strong style="font-size:1.05rem;">${stu.name}</strong>
-                                  ${stu.regNo ? `<span class="badge-pill badge-lime">${stu.regNo}</span>` : ''}
-                                </div>
-                                <p style="font-size:0.84rem; color:var(--charcoal-65); margin-top:4px;">
-                                  ${stu.studentClass} · ${stu.place}
-                                </p>
-                              </div>
-                              ${statusBadge}
-                            </div>
-                          `;
-                        }).join('')}
-                      </div>
-                    `}
-                  `;
-                })()}
-              ` : state.adminTab === 'certificate' ? `
-                ${(() => {
-                  const cf = state.certFilter || 'All';
-                  const appliedCount = state.students.filter(x => x.certStatus && x.certStatus !== 'none').length;
-                  const notAppliedCount = state.students.length - appliedCount;
-                  const allowedCount = state.students.filter(x => x.certStatus === 'allowed').length;
-                  const list = state.students.filter(stu => {
-                    const st = stu.certStatus || 'none';
-                    if (cf === 'Applied') return st !== 'none';
-                    if (cf === 'Not Applied') return st === 'none';
-                    if (cf === 'Allowed') return st === 'allowed';
-                    return true;
-                  });
-                  return `
-                    <div class="panel-card" style="margin-bottom: 18px;">
-                      <div class="section-kicker" style="margin-bottom:4px;">CERTIFICATES</div>
-                      <h2 style="font-size:1.8rem; font-weight:800; line-height:1.15;">E-Certificate Requests</h2>
-                      <p style="font-size:0.88rem; color:var(--charcoal-65); margin-top:4px;">Review students who applied or have not applied yet, and Allow or Deny their E-Certificate.</p>
-                      <div class="chip-row" style="margin-top:14px; margin-bottom:0;">
-                        <button type="button" class="filter-chip ${cf === 'All' ? 'active' : ''}" onclick="setCertFilter('All')">All (${state.students.length})</button>
-                        <button type="button" class="filter-chip ${cf === 'Applied' ? 'active' : ''}" onclick="setCertFilter('Applied')">Applied (${appliedCount})</button>
-                        <button type="button" class="filter-chip ${cf === 'Not Applied' ? 'active' : ''}" onclick="setCertFilter('Not Applied')">Not Applied (${notAppliedCount})</button>
-                        <button type="button" class="filter-chip ${cf === 'Allowed' ? 'active' : ''}" onclick="setCertFilter('Allowed')">Allowed (${allowedCount})</button>
-                      </div>
-                    </div>
-
-                    <div style="display:flex; flex-direction:column; gap:10px;">
-                      ${list.length ? list.map(stu => {
-                        const st = stu.certStatus || 'none';
-                        const badgeHtml = st === 'allowed'
-                          ? '<span class="badge-pill badge-lime">Allowed</span>'
-                          : st === 'denied'
-                            ? '<span class="badge-pill badge-forest">Denied (Waiting)</span>'
-                            : st === 'pending'
-                              ? '<span class="badge-pill badge-lime">Applied · Pending</span>'
-                              : '<span class="badge-pill badge-forest">Not Applied</span>';
-                        return `
-                          <div class="student-row-card" style="cursor:default; gap:12px; flex-wrap:wrap;">
-                            <div>
-                              <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
-                                <strong style="font-size:1.05rem;">${stu.name}</strong>
-                                ${stu.regNo ? `<span class="badge-pill badge-lime">${stu.regNo}</span>` : ''}
-                                ${badgeHtml}
-                              </div>
-                              <p style="font-size:0.84rem; color:var(--charcoal-65); margin-top:4px;">
-                                ${stu.studentClass} · ${stu.place}${stu.certAppliedAt ? ' · Applied: ' + stu.certAppliedAt : ''}
-                              </p>
-                            </div>
-                            <div style="display:flex; gap:8px; flex-wrap:wrap;">
-                              <button type="button" class="${st === 'allowed' ? 'btn-primary' : 'btn-secondary'}" style="padding:8px 16px; font-size:0.82rem;" onclick="setStudentCertStatus('${stu.id}', 'allowed')">
-                                Allow
-                              </button>
-                              <button type="button" class="btn-secondary" style="padding:8px 16px; font-size:0.82rem; ${st === 'denied' ? 'border-color:#b91c1c; color:#b91c1c;' : ''}" onclick="setStudentCertStatus('${stu.id}', 'denied')">
-                                Deny
-                              </button>
-                            </div>
-                          </div>
-                        `;
-                      }).join('') : '<div class="panel-card"><p style="color:var(--charcoal-65);">No students match this filter.</p></div>'}
-                    </div>
-                  `;
-                })()}
-              ` : `
-                ${(() => {
-                  const paidList = state.students.filter(x => x.paymentCompleted);
-                  const d = state.attendanceDay;
-                  const presentCount = paidList.filter(x => x.attendance && x.attendance[d]).length;
-                  const absentCount = paidList.length - presentCount;
-                  const dayLabels = { 1: 'Day 1 · 24 Dec 2026', 2: 'Day 2 · 25 Dec 2026', 3: 'Day 3 · 26 Dec 2026' };
-                  return `
-                    <div class="panel-card" style="margin-bottom: 18px; display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:14px;">
-                      <div>
-                        <div class="section-kicker" style="margin-bottom:4px;">3-DAY CAMP ATTENDANCE</div>
-                        <h2 style="font-size:1.8rem; font-weight:800; line-height:1.15;">${dayLabels[d]}</h2>
-                        <p style="font-size:0.88rem; color:var(--charcoal-65); margin-top:4px;">Showing all payment-completed students. Tick the box to mark Present.</p>
-                      </div>
-                      <button type="button" class="btn-primary" style="padding:11px 20px; font-size:0.86rem;" onclick="exportAttendanceCSV()">
-                        Export Attendance CSV
-                      </button>
-                    </div>
-
-                    <div class="chip-row" style="margin-bottom:16px;">
-                      <button type="button" class="filter-chip ${d === 1 ? 'active' : ''}" onclick="setAttendanceDay(1)">Day 1 · 24 Dec</button>
-                      <button type="button" class="filter-chip ${d === 2 ? 'active' : ''}" onclick="setAttendanceDay(2)">Day 2 · 25 Dec</button>
-                      <button type="button" class="filter-chip ${d === 3 ? 'active' : ''}" onclick="setAttendanceDay(3)">Day 3 · 26 Dec</button>
-                    </div>
-
-                    <div class="portal-stats-4" style="grid-template-columns: repeat(3, 1fr);">
-                      <div class="portal-stat-box">
-                        <div class="stat-label">PAID STUDENTS</div>
-                        <div style="font-size:1.7rem; font-weight:800;">${paidList.length}</div>
-                      </div>
-                      <div class="portal-stat-box">
-                        <div class="stat-label">PRESENT (DAY ${d})</div>
-                        <div style="font-size:1.7rem; font-weight:800; color:var(--forest);">${presentCount}</div>
-                      </div>
-                      <div class="portal-stat-box">
-                        <div class="stat-label">ABSENT (DAY ${d})</div>
-                        <div style="font-size:1.7rem; font-weight:800;">${absentCount}</div>
-                      </div>
-                    </div>
-
-                    <div style="display:flex; flex-direction:column; gap:10px;">
-                      ${paidList.length ? paidList.map(stu => {
-                        const isPres = !!(stu.attendance && stu.attendance[d]);
-                        return `
-                          <div class="student-row-card" style="cursor:default;">
-                            <div>
-                              <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
-                                <span class="badge-pill badge-lime">${stu.regNo || 'NO ID'}</span>
-                                <strong style="font-size:1.05rem;">${stu.name}</strong>
-                              </div>
-                              <p style="font-size:0.84rem; color:var(--charcoal-65); margin-top:4px;">
-                                ${stu.studentClass} · ${stu.place}
-                              </p>
-                            </div>
-                            <label class="tick-label" style="padding:8px 14px; border-radius:9999px; border:1.5px solid var(--forest); background:${isPres ? 'var(--lime)' : 'var(--white)'}; color:var(--charcoal);">
-                              <input type="checkbox" ${isPres ? 'checked' : ''} onchange="toggleAttendance('${stu.id}', this.checked)" />
-                              <span>${isPres ? 'Present' : 'Mark Present'}</span>
-                            </label>
-                          </div>
-                        `;
-                      }).join('') : '<div class="panel-card"><p style="color:var(--charcoal-65);">No payment-completed students yet. Tick "Complete Payment" in Registered Students first.</p></div>'}
-                    </div>
-                  `;
-                })()}
-              `}
+              </div>
             </div>
           </div>
         `;
-        if (state.adminTab === 'students' && !selectedStu) {
-          renderAdminStudentsList();
-        }
         return;
       }
     }
 
+    function initScrollReveal() {
+      const els = document.querySelectorAll('.reveal-on-scroll:not(.is-visible)');
+      if (!els.length) return;
+      if (!('IntersectionObserver' in window)) {
+        els.forEach(el => el.classList.add('is-visible'));
+        return;
+      }
+      const obs = new IntersectionObserver((entries) => {
+        entries.forEach((entry, idx) => {
+          if (entry.isIntersecting) {
+            setTimeout(() => entry.target.classList.add('is-visible'), Math.min(idx * 60, 240));
+            obs.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1 });
+      els.forEach(el => obs.observe(el));
+    }
+
     renderAuth();
+    showStudentView(window.location.hash === '#home' ? 'home' : 'account', true);
+    initScrollReveal();
     showFlash();
   </script>
 </body>
