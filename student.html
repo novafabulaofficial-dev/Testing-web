@@ -2466,6 +2466,73 @@
       .sched-tl-range { font-size: 0.72rem; margin-bottom: 8px; }
       .sched-tl-tag { font-size: 0.62rem; padding: 2px 8px; }
     }
+    .sched-tl-bottom {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-top: 8px;
+    }
+    .sched-fb-btn {
+      flex-shrink: 0;
+      white-space: nowrap;
+      border-radius: 9999px;
+      padding: 5px 12px;
+      font-family: inherit;
+      font-size: 0.74rem;
+      font-weight: 800;
+      cursor: pointer;
+      background: var(--lime);
+      color: var(--charcoal);
+      border: 1px solid rgba(22, 22, 22, 0.16);
+      box-shadow: 0 4px 12px -6px rgba(22, 22, 22, 0.25);
+      transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease, color 0.18s ease;
+    }
+    .sched-fb-btn:hover {
+      transform: translateY(-1px);
+      background: var(--forest);
+      color: var(--lime);
+      border-color: var(--forest);
+    }
+    .sched-fb-btn.active {
+      background: var(--forest);
+      color: var(--lime);
+      border-color: var(--forest);
+    }
+    @media (max-width: 600px) {
+      #sec-events .section-kicker { font-size: 0.58rem; }
+      #sec-events .section-title { font-size: 1.18rem; }
+      #sec-events .section-header { margin-bottom: 10px; }
+      .sched-day-strip { gap: 7px; padding-bottom: 8px; }
+      .sched-day-pill { padding: 4px 9px 4px 4px; gap: 6px; }
+      .sched-day-circle { width: 28px; height: 28px; }
+      .sched-day-num { font-size: 0.72rem; }
+      .sched-day-mon { font-size: 0.44rem; }
+      .sched-day-name { font-size: 0.7rem; }
+      .sched-day-week { font-size: 0.58rem; }
+      .sched-venue-strip { gap: 6px; padding-bottom: 10px; }
+      .sched-venue-chip { font-size: 0.64rem; padding: 4px 9px; gap: 5px; }
+      .sched-venue-dot { width: 6px; height: 6px; }
+      .sched-timeline { gap: 10px; }
+      .sched-tl-row { gap: 6px; }
+      .sched-tl-time-col { width: 38px; padding-top: 10px; }
+      .sched-tl-hour { font-size: 0.72rem; }
+      .sched-tl-ampm { font-size: 0.52rem; }
+      .sched-tl-axis { width: 14px; }
+      .sched-tl-dot { width: 12px; height: 12px; margin-top: 12px; }
+      .sched-tl-dot::after { width: 5px; height: 5px; }
+      .sched-tl-card { padding: 10px 12px; border-radius: 14px; }
+      .sched-tl-card-top { margin-bottom: 5px; }
+      .sched-tl-card-top .badge-pill { font-size: 0.54rem; padding: 2px 7px; }
+      .sched-tl-title { font-size: 0.84rem; margin-bottom: 2px; }
+      .sched-tl-range { font-size: 0.66rem; margin-bottom: 0; }
+      .sched-tl-bottom { margin-top: 8px; gap: 6px; }
+      .sched-tl-tags { gap: 4px; }
+      .sched-tl-tag { font-size: 0.56rem; padding: 2px 7px; }
+      .sched-fb-btn { font-size: 0.64rem; padding: 4px 10px; }
+    }
   </style>
   <script>
     // Page file names. If you rename a file on GitHub, change it here (same line in all 3 files).
@@ -2932,13 +2999,15 @@
                 <div class="sched-tl-card">
                   <div class="sched-tl-card-top">
                     <span class="badge-pill ${rowIdx % 2 === 1 ? 'badge-lime' : 'badge-forest'}">${item.venue}</span>
-                    <button type="button" class="filter-chip ${savedFb ? 'active' : ''}" style="flex-shrink:0; white-space:nowrap;" onclick="openProgramFeedback(${d}, ${idx})">${savedFb ? ('&#9733; ' + savedFb.rating + '/5 · Edit Feedback') : 'Write Feedback'}</button>
                   </div>
                   <div class="sched-tl-title">${item.title}</div>
                   <div class="sched-tl-range">${item.time}</div>
-                  <div class="sched-tl-tags">
-                    <span class="sched-tl-tag">Day ${d}</span>
-                    <span class="sched-tl-tag">${isGirl ? 'Girls Wing' : 'Boys Wing'}</span>
+                  <div class="sched-tl-bottom">
+                    <div class="sched-tl-tags">
+                      <span class="sched-tl-tag">Day ${d}</span>
+                      <span class="sched-tl-tag">${isGirl ? 'Girls Wing' : 'Boys Wing'}</span>
+                    </div>
+                    <button type="button" class="sched-fb-btn ${savedFb ? 'active' : ''}" onclick="openProgramFeedback(${d}, ${idx})">${savedFb ? ('&#9733; ' + savedFb.rating + '/5 · Edit') : 'Write Feedback'}</button>
                   </div>
                 </div>
               </div>
