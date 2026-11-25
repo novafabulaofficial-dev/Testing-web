@@ -2264,21 +2264,268 @@
         margin-right: auto;
       }
     }
-    #studentEventsScheduleContainer .student-row-card {
-      border: none;
-      border-bottom: 1px solid rgba(22, 22, 22, 0.09);
-      border-radius: 0;
-      background: transparent;
-      padding: 14px 4px;
-      box-shadow: none;
+
+    /* Timeline Schedule Style (Kuppayam 3.0 Palette) */
+    .sched-day-strip {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      padding: 4px 2px 10px;
+      scrollbar-width: none;
     }
-    #studentEventsScheduleContainer .student-row-card:last-child {
-      border-bottom: none;
+    .sched-day-strip::-webkit-scrollbar { display: none; }
+    .sched-day-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 7px 14px 7px 7px;
+      border-radius: 9999px;
+      border: 1.5px solid var(--charcoal-12);
+      background: var(--white-78);
+      backdrop-filter: blur(12px);
+      cursor: pointer;
+      flex-shrink: 0;
+      font-family: inherit;
+      text-align: left;
+      transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
     }
-    #studentEventsScheduleContainer .student-row-card:hover {
-      transform: none;
-      box-shadow: none;
-      border-color: rgba(22, 22, 22, 0.09);
+    .sched-day-pill:hover {
+      border-color: var(--forest);
+      transform: translateY(-1px);
+    }
+    .sched-day-pill.active {
+      background: var(--white);
+      border-color: var(--forest);
+      box-shadow: 0 10px 24px -10px var(--forest-25);
+    }
+    .sched-day-circle {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: rgba(1, 63, 50, 0.08);
+      color: var(--forest);
+      font-weight: 800;
+      line-height: 1.05;
+      flex-shrink: 0;
+    }
+    .sched-day-pill.active .sched-day-circle {
+      background: var(--forest);
+      color: var(--lime);
+    }
+    .sched-day-num { font-size: 0.88rem; }
+    .sched-day-mon { font-size: 0.54rem; letter-spacing: 0.06em; opacity: 0.88; }
+    .sched-day-meta { line-height: 1.2; }
+    .sched-day-name { font-size: 0.84rem; font-weight: 800; color: var(--charcoal); }
+    .sched-day-week { font-size: 0.7rem; font-weight: 600; color: var(--charcoal-65); }
+    .sched-day-pill.active .sched-day-week { color: var(--forest); font-weight: 700; }
+
+    .sched-venue-strip {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding: 2px 2px 14px;
+      scrollbar-width: none;
+    }
+    .sched-venue-strip::-webkit-scrollbar { display: none; }
+    .sched-venue-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 13px;
+      border-radius: 9999px;
+      border: 1px solid var(--charcoal-12);
+      background: var(--white-78);
+      color: var(--charcoal);
+      font-family: inherit;
+      font-size: 0.76rem;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+      flex-shrink: 0;
+      transition: all 0.2s ease;
+    }
+    .sched-venue-chip.active {
+      background: var(--forest);
+      color: var(--lime);
+      border-color: var(--forest);
+      box-shadow: 0 6px 16px -6px var(--forest-25);
+    }
+    .sched-venue-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--forest);
+      flex-shrink: 0;
+    }
+    .sched-venue-chip.active .sched-venue-dot {
+      background: var(--lime);
+    }
+
+    .sched-timeline {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      padding-top: 4px;
+    }
+    .sched-tl-row {
+      display: flex;
+      align-items: stretch;
+      gap: 12px;
+    }
+    .sched-tl-time-col {
+      width: 58px;
+      flex-shrink: 0;
+      text-align: right;
+      padding-top: 14px;
+      line-height: 1.1;
+    }
+    .sched-tl-hour {
+      font-size: 0.92rem;
+      font-weight: 800;
+      color: var(--charcoal);
+    }
+    .sched-tl-ampm {
+      font-size: 0.66rem;
+      font-weight: 700;
+      color: var(--charcoal-65);
+      margin-top: 2px;
+    }
+    .sched-tl-axis {
+      position: relative;
+      width: 20px;
+      flex-shrink: 0;
+      display: flex;
+      justify-content: center;
+    }
+    .sched-tl-axis::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: -14px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-left: 1.5px dashed rgba(1, 63, 50, 0.22);
+    }
+    .sched-tl-row:last-child .sched-tl-axis::before {
+      bottom: 50%;
+    }
+    .sched-tl-dot {
+      position: relative;
+      z-index: 2;
+      margin-top: 17px;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--white);
+      border: 2px solid rgba(1, 63, 50, 0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 6px rgba(1, 63, 50, 0.12);
+    }
+    .sched-tl-dot::after {
+      content: '';
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--forest);
+    }
+    .sched-tl-row.alt .sched-tl-dot::after {
+      background: #7ab800;
+    }
+    .sched-tl-card {
+      position: relative;
+      flex: 1;
+      min-width: 0;
+      background: var(--white);
+      border: 1.5px solid var(--charcoal-12);
+      border-radius: 20px;
+      padding: 14px 18px;
+      overflow: hidden;
+      box-shadow: 0 10px 26px -14px rgba(1, 63, 50, 0.16);
+    }
+    .sched-tl-card::after {
+      content: '';
+      position: absolute;
+      top: -28px;
+      right: -28px;
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(231, 254, 37, 0.34) 0%, transparent 72%);
+      pointer-events: none;
+    }
+    .sched-tl-row.alt .sched-tl-card::after {
+      background: radial-gradient(circle, rgba(1, 63, 50, 0.14) 0%, transparent 72%);
+    }
+    .sched-tl-card-top {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 8px;
+    }
+    .sched-tl-title {
+      position: relative;
+      z-index: 1;
+      font-size: 1.04rem;
+      font-weight: 800;
+      color: var(--charcoal);
+      line-height: 1.25;
+      margin-bottom: 4px;
+    }
+    .sched-tl-range {
+      position: relative;
+      z-index: 1;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--forest);
+      margin-bottom: 10px;
+    }
+    .sched-tl-tags {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .sched-tl-tag {
+      font-size: 0.68rem;
+      font-weight: 700;
+      color: var(--charcoal-65);
+      background: rgba(22, 22, 22, 0.04);
+      border: 1px solid var(--charcoal-12);
+      border-radius: 9999px;
+      padding: 3px 10px;
+    }
+    @media (max-width: 600px) {
+      .sched-day-pill { padding: 5px 11px 5px 5px; gap: 8px; }
+      .sched-day-circle { width: 32px; height: 32px; }
+      .sched-day-num { font-size: 0.78rem; }
+      .sched-day-mon { font-size: 0.48rem; }
+      .sched-day-name { font-size: 0.76rem; }
+      .sched-day-week { font-size: 0.64rem; }
+      .sched-venue-chip { font-size: 0.7rem; padding: 5px 10px; }
+      .sched-tl-row { gap: 8px; }
+      .sched-tl-time-col { width: 44px; padding-top: 12px; }
+      .sched-tl-hour { font-size: 0.78rem; }
+      .sched-tl-ampm { font-size: 0.58rem; }
+      .sched-tl-axis { width: 16px; }
+      .sched-tl-dot { width: 14px; height: 14px; margin-top: 14px; }
+      .sched-tl-dot::after { width: 6px; height: 6px; }
+      .sched-tl-card { padding: 12px 13px; border-radius: 16px; }
+      .sched-tl-title { font-size: 0.92rem; }
+      .sched-tl-range { font-size: 0.72rem; margin-bottom: 8px; }
+      .sched-tl-tag { font-size: 0.62rem; padding: 2px 8px; }
     }
   </style>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
@@ -2676,6 +2923,7 @@
       storyTimer: null,
       loggedInUser: null,
       studentScheduleDay: 1,
+      studentScheduleVenue: 'All',
       eventFeedbackModalEvId: null,
       eventFeedbackModalTitle: '',
       eventFeedbackDraftRating: 0,
@@ -3130,6 +3378,12 @@
 
     function setStudentScheduleDay(day) {
       state.studentScheduleDay = day;
+      state.studentScheduleVenue = 'All';
+      renderStudentEventsSection();
+    }
+
+    function setStudentScheduleVenue(venue) {
+      state.studentScheduleVenue = venue;
       renderStudentEventsSection();
     }
 
@@ -3149,46 +3403,81 @@
       const isGirl = (s.gender || '').toLowerCase() === 'female';
       const schedMap = isGirl ? state.girlsSchedule : state.boysSchedule;
       const d = state.studentScheduleDay || 1;
-      const dayItems = schedMap[d] || [];
-      const dayLabels = { 1: 'Day 1 · 24 Dec 2026', 2: 'Day 2 · 25 Dec 2026', 3: 'Day 3 · 26 Dec 2026' };
+      const allDayItems = schedMap[d] || [];
+      const activeVenue = state.studentScheduleVenue || 'All';
+      const venues = Array.from(new Set(allDayItems.map(x => x.venue)));
+      const dayMeta = [
+        { day: 1, num: '24', mon: 'DEC', label: 'Day 1', week: 'Thursday' },
+        { day: 2, num: '25', mon: 'DEC', label: 'Day 2', week: 'Friday' },
+        { day: 3, num: '26', mon: 'DEC', label: 'Day 3', week: 'Saturday' }
+      ];
+      const filteredItems = allDayItems
+        .map((item, idx) => ({ item, idx }))
+        .filter(entry => activeVenue === 'All' || entry.item.venue === activeVenue);
 
       container.innerHTML = `
         <div class="section-header">
-          <div class="section-kicker">KUPPAYAM 3.0</div>
-          <h2 class="section-title">Events &amp; Programme Schedule</h2>
+          <div class="section-kicker">LIVE TIMETABLE</div>
+          <h2 class="section-title">Schedule</h2>
         </div>
 
-        <div class="panel-card">
-          <div style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:12px; margin-bottom:18px;">
-            <div>
-              <h3 style="font-size:1.45rem; font-weight:800;">Programme Schedule</h3>
-              <p style="font-size:0.86rem; color:var(--charcoal-65); margin-top:2px;">${dayLabels[d]}</p>
-            </div>
-            <div class="chip-row" style="margin-bottom:0;">
-              <button type="button" class="filter-chip ${d === 1 ? 'active' : ''}" onclick="setStudentScheduleDay(1)">Day 1 · 24 Dec</button>
-              <button type="button" class="filter-chip ${d === 2 ? 'active' : ''}" onclick="setStudentScheduleDay(2)">Day 2 · 25 Dec</button>
-              <button type="button" class="filter-chip ${d === 3 ? 'active' : ''}" onclick="setStudentScheduleDay(3)">Day 3 · 26 Dec</button>
-            </div>
-          </div>
+        <div class="sched-day-strip" role="tablist" aria-label="Camp Days">
+          ${dayMeta.map(m => `
+            <button type="button" class="sched-day-pill ${d === m.day ? 'active' : ''}" onclick="setStudentScheduleDay(${m.day})">
+              <div class="sched-day-circle">
+                <span class="sched-day-num">${m.num}</span>
+                <span class="sched-day-mon">${m.mon}</span>
+              </div>
+              <div class="sched-day-meta">
+                <div class="sched-day-name">${m.label}</div>
+                <div class="sched-day-week">${m.week}</div>
+              </div>
+            </button>
+          `).join('')}
+        </div>
 
-          <div style="display:flex; flex-direction:column; gap:12px;">
-            ${dayItems.map((item, idx) => {
-              const evKey = 'prog_d' + d + '_' + idx;
-              const savedFb = s.eventFeedbacks && s.eventFeedbacks[evKey];
-              return `
-                <div class="student-row-card" style="cursor:default; gap:12px; flex-wrap:wrap; align-items:center; justify-content:space-between;">
-                  <div style="flex:1; min-width:200px;">
-                    <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:6px;">
-                      <span class="badge-pill badge-forest">${item.time}</span>
-                      <span class="badge-pill badge-lime">${item.venue}</span>
-                    </div>
-                    <h4 style="font-size:1.05rem; font-weight:800;">${item.title}</h4>
-                  </div>
-                  <button type="button" class="filter-chip ${savedFb ? 'active' : ''}" style="flex-shrink:0; white-space:nowrap;" onclick="openProgramFeedback(${d}, ${idx})">${savedFb ? ('&#9733; ' + savedFb.rating + '/5 · Edit Feedback') : 'Write Feedback'}</button>
+        <div class="sched-venue-strip" aria-label="Filter by Venue">
+          <button type="button" class="sched-venue-chip ${activeVenue === 'All' ? 'active' : ''}" onclick="setStudentScheduleVenue('All')">All venues</button>
+          ${venues.map(v => `
+            <button type="button" class="sched-venue-chip ${activeVenue === v ? 'active' : ''}" onclick="setStudentScheduleVenue('${v.replace(/'/g, "\\'")}')">
+              <span class="sched-venue-dot"></span>
+              <span>${v}</span>
+            </button>
+          `).join('')}
+        </div>
+
+        <div class="sched-timeline">
+          ${filteredItems.map(({ item, idx }, rowIdx) => {
+            const evKey = 'prog_d' + d + '_' + idx;
+            const savedFb = s.eventFeedbacks && s.eventFeedbacks[evKey];
+            const startPart = (item.time || '').split('–')[0].trim();
+            const m = startPart.match(/^(\d{1,2}:\d{2})\s*(AM|PM)$/i);
+            const hourStr = m ? m[1] : startPart;
+            const ampmStr = m ? m[2].toUpperCase() : '';
+            return `
+              <div class="sched-tl-row ${rowIdx % 2 === 1 ? 'alt' : ''}">
+                <div class="sched-tl-time-col">
+                  <div class="sched-tl-hour">${hourStr}</div>
+                  <div class="sched-tl-ampm">${ampmStr}</div>
                 </div>
-              `;
-            }).join('')}
-          </div>
+                <div class="sched-tl-axis" aria-hidden="true">
+                  <div class="sched-tl-dot"></div>
+                </div>
+                <div class="sched-tl-card">
+                  <div class="sched-tl-card-top">
+                    <span class="badge-pill ${rowIdx % 2 === 1 ? 'badge-lime' : 'badge-forest'}">${item.venue}</span>
+                    <button type="button" class="filter-chip ${savedFb ? 'active' : ''}" style="flex-shrink:0; white-space:nowrap;" onclick="openProgramFeedback(${d}, ${idx})">${savedFb ? ('&#9733; ' + savedFb.rating + '/5 · Edit Feedback') : 'Write Feedback'}</button>
+                  </div>
+                  <div class="sched-tl-title">${item.title}</div>
+                  <div class="sched-tl-range">${item.time}</div>
+                  <div class="sched-tl-tags">
+                    <span class="sched-tl-tag">Day ${d}</span>
+                    <span class="sched-tl-tag">${isGirl ? 'Girls Wing' : 'Boys Wing'}</span>
+                  </div>
+                </div>
+              </div>
+            `;
+          }).join('')}
         </div>
       `;
     }
