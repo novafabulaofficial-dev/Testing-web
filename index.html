@@ -2963,12 +2963,17 @@
       }
     }
 
-    /* About Section Boxes: Distinct Single-Color Animated Background on Hover */
+    /* About Section Boxes: Soft Faded Color Gradient at Rest, Full Solid Color on Hover */
     #pillarsGrid .gradient-card,
     #pillarsGrid .gradient-card:nth-child(even) {
-      background: var(--white) !important;
-      transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease !important;
+      transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1), background 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease !important;
     }
+    #pillarsGrid .gradient-card:nth-child(1) { background: linear-gradient(135deg, #ffffff 0%, rgba(1, 63, 50, 0.13) 100%) !important; }
+    #pillarsGrid .gradient-card:nth-child(2) { background: linear-gradient(135deg, #ffffff 0%, rgba(30, 58, 138, 0.13) 100%) !important; }
+    #pillarsGrid .gradient-card:nth-child(3) { background: linear-gradient(135deg, #ffffff 0%, rgba(15, 118, 110, 0.13) 100%) !important; }
+    #pillarsGrid .gradient-card:nth-child(4) { background: linear-gradient(135deg, #ffffff 0%, rgba(76, 29, 149, 0.13) 100%) !important; }
+    #pillarsGrid .gradient-card:nth-child(5) { background: linear-gradient(135deg, #ffffff 0%, rgba(6, 95, 70, 0.13) 100%) !important; }
+    #pillarsGrid .gradient-card:nth-child(6) { background: linear-gradient(135deg, #ffffff 0%, rgba(31, 41, 55, 0.13) 100%) !important; }
     #pillarsGrid .gradient-card::after,
     #pillarsGrid .gradient-card::before {
       display: none !important;
