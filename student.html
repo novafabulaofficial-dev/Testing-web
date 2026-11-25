@@ -2557,6 +2557,34 @@
         justify-content: center;
       }
     }
+    .sched-tl-card {
+      transition: transform 0.22s ease, background-color 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease;
+    }
+    .sched-tl-card:hover {
+      background: #013F32 !important;
+      border-color: #E7FE25 !important;
+      transform: translateY(-3px);
+      box-shadow: 0 16px 32px -12px rgba(1, 63, 50, 0.45) !important;
+    }
+    .sched-tl-card:hover::after {
+      opacity: 0 !important;
+    }
+    .sched-tl-card:hover .sched-tl-title {
+      color: #FDFDFD !important;
+    }
+    .sched-tl-card:hover .sched-tl-range {
+      color: #E7FE25 !important;
+    }
+    .sched-tl-card:hover .sched-tl-tag {
+      color: #FDFDFD !important;
+      background: rgba(253, 253, 253, 0.14) !important;
+      border-color: rgba(253, 253, 253, 0.28) !important;
+    }
+    .sched-tl-card:hover .sched-fb-btn {
+      background: #E7FE25 !important;
+      color: #161616 !important;
+      border-color: #E7FE25 !important;
+    }
   </style>
   <script>
     // Page file names. If you rename a file on GitHub, change it here (same line in all 3 files).
