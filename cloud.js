@@ -13,6 +13,15 @@ window.Cloud = (function () {
   let db = null;
   const seen = {}; // id -> JSON last known in cloud
 
+  const reported = {};
+  function report(what, e) {
+    console.error(what, e);
+    const code = (e && e.code) || 'error';
+    if (reported[code]) return;
+    reported[code] = 1;
+    if (window.showToast) window.showToast('Cloud sync problem: ' + code);
+  }
+
   try {
     firebase.initializeApp(FIREBASE_CONFIG);
     db = firebase.firestore();
@@ -38,7 +47,7 @@ window.Cloud = (function () {
         if (!ids[id]) { batch.delete(db.collection('students').doc(id)); delete seen[id]; n++; }
       });
     }
-    if (n) batch.commit().catch(e => console.error('Cloud sync failed:', e));
+    if (n) batch.commit().catch(e => report('Cloud sync failed:', e));
   }
 
   // Live listener. cb(list, isEmpty)
@@ -50,7 +59,7 @@ window.Cloud = (function () {
       list.sort((a, b) => (parseInt(String(b.id).replace(/\D/g, ''), 10) || 0) -
                           (parseInt(String(a.id).replace(/\D/g, ''), 10) || 0));
       cb(list, snap.empty);
-    }, err => console.error('Cloud listen failed:', err));
+    }, err => report('Cloud listen failed:', err));
   }
 
   // Write ONE student (merge). Used by index/student pages so they never overwrite other students.
@@ -59,7 +68,7 @@ window.Cloud = (function () {
     const j = JSON.stringify(stu);
     seen[stu.id] = j;
     db.collection('students').doc(stu.id).set(JSON.parse(j), { merge: true })
-      .catch(e => console.error('Cloud upsert failed:', e));
+      .catch(e => report('Cloud upsert failed:', e));
   }
 
   // Find a student by Register Number (for QR login). Resolves null if none. Rejects after 8s.
