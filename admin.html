@@ -2208,6 +2208,49 @@
       86% { transform: rotateY(180deg); }
       100% { transform: rotateY(360deg); }
     }
+
+    /* Animated Water-Wave Footer Only (Transparent BG, Waves Above Footer Text) */
+    .site-footer {
+      position: relative;
+      overflow: hidden;
+      background: transparent !important;
+      border-radius: 0 !important;
+      box-shadow: none !important;
+      padding-top: 156px !important;
+    }
+    .site-footer::after {
+      display: none !important;
+    }
+    .footer-wave-bg {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    .footer-wave-bg svg {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      transform: scaleY(3.75) scaleX(2.25);
+      transform-origin: bottom;
+      display: block;
+      pointer-events: none;
+    }
+    .site-footer .footer-inner {
+      position: relative;
+      z-index: 2;
+    }
+    @media (max-width: 600px) {
+      .site-footer {
+        padding-top: 132px !important;
+      }
+      .footer-wave-bg svg {
+        transform: scaleY(3.95) scaleX(2.4);
+      }
+    }
   </style>
   <script>
     // Page file names. If you rename a file on GitHub, change it here (same line in all 3 files).
@@ -2344,6 +2387,68 @@
       </div>
     </div>
   </div>
+
+  <footer class="site-footer">
+    <div class="footer-wave-bg" aria-hidden="true">
+      <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="100%" height="100%" viewBox="0 0 1600 900" preserveAspectRatio="none">
+        <defs>
+          <linearGradient id="footerWaveBg_adm" x2="0%" y2="100%">
+            <stop offset="0%" style="stop-color: rgba(62, 120, 214, 0.88)"></stop>
+            <stop offset="100%" style="stop-color: rgba(24, 66, 152, 0.98)"></stop>
+          </linearGradient>
+          <path id="footerWavePath_adm" fill="url(#footerWaveBg_adm)" d="M-363.852,502.589c0,0,236.988-41.997,505.475,0s371.981,38.998,575.971,0s293.985-39.278,505.474,5.859s493.475,48.368,716.963-4.995v560.106H-363.852V502.589z"></path>
+        </defs>
+        <g>
+          <use xlink:href="#footerWavePath_adm" opacity=".3">
+            <animateTransform attributeName="transform" attributeType="XML" type="translate" dur="8s" calcMode="spline" values="270 230; -334 180; 270 230" keyTimes="0; .5; 1" keySplines="0.42, 0, 0.58, 1.0;0.42, 0, 0.58, 1.0" repeatCount="indefinite"></animateTransform>
+          </use>
+          <use xlink:href="#footerWavePath_adm" opacity=".6">
+            <animateTransform attributeName="transform" attributeType="XML" type="translate" dur="6s" calcMode="spline" values="-270 230;243 220;-270 230" keyTimes="0; .6; 1" keySplines="0.42, 0, 0.58, 1.0;0.42, 0, 0.58, 1.0" repeatCount="indefinite"></animateTransform>
+          </use>
+          <use xlink:href="#footerWavePath_adm" opacity=".9">
+            <animateTransform attributeName="transform" attributeType="XML" type="translate" dur="4s" calcMode="spline" values="0 230;-140 200;0 230" keyTimes="0; .4; 1" keySplines="0.42, 0, 0.58, 1.0;0.42, 0, 0.58, 1.0" repeatCount="indefinite"></animateTransform>
+          </use>
+        </g>
+      </svg>
+    </div>
+    <div class="footer-inner">
+      <div class="footer-grid">
+        <div>
+          <div class="footer-brand">Kuppayam<span>'3.0</span></div>
+          <p style="font-size:0.78rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--white-85); margin-bottom:8px;">
+            WINTER INTENSIVE CAMP · NEW SKIES, NEW WINGS
+          </p>
+          <p style="font-size:0.88rem; color:var(--white-85);">
+            24, 25, 26 Dec 2026 · WIRAS / Markaz Knowledge City
+          </p>
+        </div>
+
+        <div>
+          <div class="footer-col-title">QUICK LINKS</div>
+          <ul class="footer-links">
+            <li><button type="button" class="footer-link-btn" onclick="window.location.href='index.html#sec-home'">Home</button></li>
+            <li><button type="button" class="footer-link-btn" onclick="window.location.href='index.html#sec-theme'">About</button></li>
+            <li><button type="button" class="footer-link-btn" onclick="window.location.href='index.html#sec-stories'">Festival Stories</button></li>
+            <li><button type="button" class="footer-link-btn" onclick="logoutUser()">Log Out</button></li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="footer-col-title">CONTACT</div>
+          <ul class="footer-links">
+            <li style="font-size:0.92rem; font-weight:700;">www.wiras.in</li>
+            <li style="font-size:0.92rem; font-weight:700;">+91 8086881019</li>
+            <li style="font-size:0.84rem; color:var(--white-85);">WIRAS, Markaz Knowledge City</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <span>&copy; 2026 Kuppayam 3.0 · WIRAS, Markaz Knowledge City. All rights reserved.</span>
+        <span>Kuppayam 3.0 · Winter Intensive Camp</span>
+      </div>
+    </div>
+  </footer>
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
