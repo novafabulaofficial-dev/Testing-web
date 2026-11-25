@@ -2612,7 +2612,10 @@
       100% { transform: rotateY(360deg); }
     }
 
-    /* Distinct Colors & New Hover Style for Counting Boxes + Exact Black Numbers */
+    /* Distinct Colors & New Hover Style for Counting Boxes (No Yellow Glow) + Exact Black Numbers */
+    .stats-grid .stat-card::after {
+      display: none !important;
+    }
     .hero-layout .stat-value,
     .stat-value {
       color: #000000 !important;
@@ -2622,30 +2625,36 @@
       color: #013F32 !important;
     }
     .stats-grid .stat-card:nth-child(1) {
-      background: linear-gradient(135deg, #f7ffe5 0%, #e7fe25 100%) !important;
+      background: linear-gradient(135deg, #f5ffdb 0%, #e7fe25 100%) !important;
       border-color: rgba(1, 63, 50, 0.22) !important;
     }
     .stats-grid .stat-card:nth-child(2) {
-      background: linear-gradient(135deg, #eafaf5 0%, #bfead9 100%) !important;
-      border-color: rgba(1, 63, 50, 0.22) !important;
+      background: linear-gradient(135deg, #eff6ff 0%, #bfdbfe 100%) !important;
+      border-color: rgba(30, 64, 175, 0.24) !important;
+    }
+    .stats-grid .stat-card:nth-child(2) .stat-label {
+      color: #1e3a8a !important;
     }
     .stats-grid .stat-card:nth-child(3) {
-      background: linear-gradient(135deg, #ffffff 0%, #e9f2cf 100%) !important;
-      border-color: rgba(22, 22, 22, 0.18) !important;
+      background: linear-gradient(135deg, #fff4ed 0%, #fed7aa 100%) !important;
+      border-color: rgba(154, 52, 18, 0.24) !important;
+    }
+    .stats-grid .stat-card:nth-child(3) .stat-label {
+      color: #7c2d12 !important;
     }
     .stats-grid .stat-card:hover {
       transform: translateY(-4px) scale(1.02) !important;
-      border-color: #013F32 !important;
-      box-shadow: 0 18px 34px -12px rgba(1, 63, 50, 0.28), 0 0 0 3px rgba(231, 254, 37, 0.65) !important;
+      border-color: #161616 !important;
+      box-shadow: 0 18px 34px -12px rgba(22, 22, 22, 0.26) !important;
     }
     .stats-grid .stat-card:nth-child(1):hover {
       background: linear-gradient(135deg, #e7fe25 0%, #d4f500 100%) !important;
     }
     .stats-grid .stat-card:nth-child(2):hover {
-      background: linear-gradient(135deg, #c9f2e4 0%, #96dec7 100%) !important;
+      background: linear-gradient(135deg, #dbeafe 0%, #93c5fd 100%) !important;
     }
     .stats-grid .stat-card:nth-child(3):hover {
-      background: linear-gradient(135deg, #f6fbe6 0%, #dceba8 100%) !important;
+      background: linear-gradient(135deg, #ffedd5 0%, #fdba74 100%) !important;
     }
     .stats-grid .stat-card:hover .stat-label {
       color: #013F32 !important;
@@ -2688,6 +2697,34 @@
       #registerPageContainer .login-card .form-select {
         text-align: center;
       }
+    }
+    .sched-tl-card {
+      transition: transform 0.22s ease, background-color 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease;
+    }
+    .sched-tl-card:hover {
+      background: #013F32 !important;
+      border-color: #E7FE25 !important;
+      transform: translateY(-3px);
+      box-shadow: 0 16px 32px -12px rgba(1, 63, 50, 0.45) !important;
+    }
+    .sched-tl-card:hover::after {
+      opacity: 0 !important;
+    }
+    .sched-tl-card:hover .sched-tl-title {
+      color: #FDFDFD !important;
+    }
+    .sched-tl-card:hover .sched-tl-range {
+      color: #E7FE25 !important;
+    }
+    .sched-tl-card:hover .sched-tl-tag {
+      color: #FDFDFD !important;
+      background: rgba(253, 253, 253, 0.14) !important;
+      border-color: rgba(253, 253, 253, 0.28) !important;
+    }
+    .sched-tl-card:hover .sched-fb-btn {
+      background: #E7FE25 !important;
+      color: #161616 !important;
+      border-color: #E7FE25 !important;
     }
   </style>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
