@@ -2421,9 +2421,22 @@
           localStorage.setItem('kuppayam_students_v1', JSON.stringify({
             students: state.students, nextRegSeq: state.nextRegSeq }));
         } catch (err) {}
-        // do not redraw while someone is typing
+        // preserve search input if focused; skip full redraw only while typing in forms/textareas
         const a = document.activeElement;
-        if (a && /^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName)) return;
+        if (a && a.id === 'admSearch') {
+          const q = a.value;
+          const pos = a.selectionStart;
+          if (typeof renderAuth === 'function' && state.loggedInUser) renderAuth();
+          const newInput = document.getElementById('admSearch');
+          if (newInput) {
+            newInput.value = q;
+            newInput.focus();
+            try { newInput.setSelectionRange(pos, pos); } catch (err) {}
+            if (typeof renderAdminStudentsList === 'function') renderAdminStudentsList();
+          }
+          return;
+        }
+        if (a && /^(TEXTAREA|SELECT)$/.test(a.tagName)) return;
         if (typeof renderAuth === 'function' && state.loggedInUser) renderAuth();
         if (typeof updateStats === 'function') try { updateStats(false); } catch (err) {}
       });
