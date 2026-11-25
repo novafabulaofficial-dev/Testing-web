@@ -2998,6 +2998,22 @@
       background: #E7FE25 !important;
       color: #161616 !important;
     }
+
+    /* Camp Stories: Clean Image-Only Slides with Ultra-Thin Border */
+    .story-slide-card,
+    .story-slide-card:nth-child(even) {
+      padding: 0 !important;
+      background: var(--white) !important;
+      border: 1px solid rgba(22, 22, 22, 0.16) !important;
+      box-shadow: 0 8px 22px -14px rgba(1, 63, 50, 0.18) !important;
+      cursor: default !important;
+    }
+    .story-slide-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
   </style>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
@@ -3097,7 +3113,7 @@
           <div class="hero-ctas">
             <button type="button" class="btn-primary" id="heroRegisterBtn" onclick="openRegisterPage()">Register Now</button>
             <button type="button" class="btn-secondary" onclick="scrollToSection('sec-theme')">About</button>
-            <button type="button" class="btn-secondary" onclick="scrollToSection('sec-stories')">Festival Stories</button>
+            <button type="button" class="btn-secondary" onclick="scrollToSection('sec-stories')">Camp Stories</button>
           </div>
         </div>
 
@@ -3166,7 +3182,7 @@
       <section id="sec-stories" class="home-section reveal-on-scroll">
         <div class="section-header">
           <div class="section-kicker">RECENT HIGHLIGHTS</div>
-          <h2 class="section-title">Festival Stories</h2>
+          <h2 class="section-title">Camp Stories</h2>
         </div>
 
         <div class="stories-showcase">
@@ -3331,7 +3347,7 @@
           <ul class="footer-links">
             <li><button type="button" class="footer-link-btn" onclick="scrollToSection('sec-home')">Home</button></li>
             <li><button type="button" class="footer-link-btn" onclick="scrollToSection('sec-theme')">About</button></li>
-            <li><button type="button" class="footer-link-btn" onclick="scrollToSection('sec-stories')">Festival Stories</button></li>
+            <li><button type="button" class="footer-link-btn" onclick="scrollToSection('sec-stories')">Camp Stories</button></li>
             <li><button type="button" class="footer-link-btn" onclick="openRegisterPage()">Student Registration</button></li>
             <li><button type="button" class="footer-link-btn" onclick="handleNavAuthClick()">Student &amp; Admin Login</button></li>
           </ul>
@@ -3398,6 +3414,20 @@
     // Leave empty '' to play the built-in background video.
     // ============================================================
     const HERO_VIDEO_URL = 'https://www.image2url.com/r2/default/videos/1795513550329-0c2e4a56-732c-4762-a064-ebb02f980dc9.mp4';
+
+    // ============================================================
+    // PASTE YOUR 8 CAMP STORIES DIRECT IMAGE LINKS BELOW
+    // ============================================================
+    const CAMP_STORY_IMAGES = [
+      'https://iili.io/ofAwHNV.png',
+      'https://iili.io/ofAwHNV.png',
+      'https://iili.io/ofAwHNV.png',
+      'https://iili.io/ofAwHNV.png',
+      'https://iili.io/ofAwHNV.png',
+      'https://iili.io/ofAwHNV.png',
+      'https://iili.io/ofAwHNV.png',
+      'https://iili.io/ofAwHNV.png'
+    ];
 
     const state = {
       students: [],
@@ -3726,25 +3756,15 @@
       }
     }
 
-    // Auto-Sliding Stories Carousel (Edit #5)
+    // Auto-Sliding Camp Stories Carousel (8 Image Slides)
     function renderStories() {
       const track = document.getElementById('storiesTrack');
-      const allSlides = [...state.stories, ...state.stories.slice(0, 2)];
-      track.innerHTML = allSlides.map((s, idx) => `
-        <article class="story-slide-card" onclick="openStoryModal(${idx % state.stories.length})">
-          <svg style="position:absolute; inset:0; width:100%; height:100%; opacity:0.22; pointer-events:none;" viewBox="0 0 200 320" preserveAspectRatio="none" fill="none" aria-hidden="true">
-            <path d="M20 260 L20 120 Q100 40 180 120 L180 260" stroke="#E7FE25" stroke-width="3" />
-            <path d="M48 260 L48 150 Q100 95 152 150 L152 260" stroke="#FDFDFD" stroke-width="2" />
-            <circle cx="100" cy="115" r="24" stroke="#E7FE25" stroke-width="2.5" stroke-dasharray="5 5" />
-            <rect x="0" y="210" width="200" height="110" fill="#161616" opacity="0.65" />
-          </svg>
-          <div style="position:relative; z-index:2;">
-            <div class="story-slide-date">${s.date}</div>
-            <div class="story-slide-num">${s.num}</div>
-          </div>
-          <div style="position:relative; z-index:2;">
-            <h3 class="story-slide-title">${s.title}</h3>
-          </div>
+      if (!track) return;
+      const imgs = (typeof CAMP_STORY_IMAGES !== 'undefined' && CAMP_STORY_IMAGES.length) ? CAMP_STORY_IMAGES : [];
+      const allSlides = [...imgs, ...imgs.slice(0, 2)];
+      track.innerHTML = allSlides.map((url, idx) => `
+        <article class="story-slide-card">
+          <img src="${url}" alt="Camp Story ${(idx % imgs.length) + 1}" loading="lazy" />
         </article>
       `).join('');
       applyStoryTransform();
@@ -3759,7 +3779,7 @@
     }
 
     function moveStorySlide(dir) {
-      const total = state.stories.length;
+      const total = (typeof CAMP_STORY_IMAGES !== 'undefined' && CAMP_STORY_IMAGES.length) ? CAMP_STORY_IMAGES.length : 8;
       state.storyIndex = (state.storyIndex + dir + total) % total;
       applyStoryTransform();
     }
