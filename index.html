@@ -657,38 +657,91 @@
       transform: translateX(0);
     }
 
-    /* 3-Card Stats Row with Count-Up, '+', and Rich Color Hover (Edit #2) */
-    .stats-grid {
+    /* Hero 2-column layout: content left, stats stacked right */
+    .hero-layout {
+      position: relative;
+      z-index: 2;
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 18px;
-      margin: 18px 0 12px;
+      grid-template-columns: minmax(0, 1fr) 250px;
+      align-items: center;
+      gap: 28px;
     }
 
-    @media (max-width: 720px) {
-      .stats-grid {
-        grid-template-columns: repeat(3, 1fr);
-        gap: 8px;
-        margin: 14px 0 8px;
+    /* 3-Card Stats Column on Desktop Right / Row on Mobile */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      margin: 0;
+    }
+
+    .hero-layout .stat-card {
+      padding: 16px 20px 14px;
+      border-radius: 20px;
+    }
+
+    .hero-layout .stat-value {
+      font-size: clamp(1.65rem, 2.8vw, 2.25rem);
+    }
+
+    @media (max-width: 768px) {
+      .hero-layout {
+        grid-template-columns: 1fr;
+        gap: 14px;
       }
+      .stats-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 8px;
+        margin: 4px 0 0;
+      }
+      .hero-layout .stat-card,
       .stat-card {
-        padding: 14px 10px;
-        border-radius: 18px;
+        padding: 12px 8px;
+        border-radius: 16px;
+        min-width: 0;
       }
       .stat-card::after {
-        width: 56px;
-        height: 56px;
-        top: -14px;
-        right: -14px;
+        width: 48px;
+        height: 48px;
+        top: -12px;
+        right: -12px;
       }
       .stat-label {
-        font-size: 0.62rem;
-        letter-spacing: 0.08em;
-        margin-bottom: 4px;
+        font-size: 0.56rem;
+        letter-spacing: 0.05em;
+        margin-bottom: 3px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
+      .hero-layout .stat-value,
       .stat-value {
-        font-size: 1.45rem;
+        font-size: 1.2rem;
       }
+    }
+
+    /* Compact Mobile Ratio Scaling (<= 600px) */
+    @media (max-width: 600px) {
+      main { padding-top: 76px; padding-bottom: 84px; }
+      #sec-home { padding: 16px 14px; border-radius: 22px; }
+      .hero-single { padding: 4px 0 8px; }
+      .kicker { font-size: 0.64rem; letter-spacing: 0.1em; margin-bottom: 8px; }
+      .hero-logo-3d-wrap { max-width: 185px; margin: 2px 0 10px; }
+      .hero-meta-pills { gap: 6px; margin-bottom: 12px; }
+      .meta-pill { font-size: 0.7rem; padding: 5px 10px; }
+      .hero-ctas { gap: 7px; }
+      .btn-primary, .btn-secondary { font-size: 0.74rem; padding: 8px 13px; }
+      .section-header { margin-bottom: 14px; }
+      .section-kicker { font-size: 0.65rem; }
+      .section-title { font-size: 1.35rem; }
+      .panel-card { padding: 15px; border-radius: 18px; }
+      .student-row-card { padding: 11px 12px; border-radius: 14px; gap: 8px; }
+      .student-row-card h4 { font-size: 0.9rem !important; }
+      .badge-pill { font-size: 0.58rem; padding: 3px 8px; }
+      .filter-chip { font-size: 0.72rem; padding: 6px 11px; }
+      .mobile-bottom-nav { padding: 5px 8px; bottom: 10px; }
+      .mobile-nav-item { font-size: 0.62rem; padding: 5px 4px; gap: 2px; }
+      .mobile-nav-item svg { width: 16px; height: 16px; }
     }
 
     .stat-card {
@@ -2262,9 +2315,10 @@
         <video id="heroBgVideo" class="hero-bg-video" autoplay muted loop playsinline preload="metadata" aria-hidden="true"></video>
         <div class="hero-bg-overlay" aria-hidden="true"></div>
         <div class="hero-bg-grid" aria-hidden="true"></div>
+        <div class="hero-layout">
         <div class="hero-single">
           <div class="kicker">
-            <span>WINTER INTENSIVE CAMP · GRADES 8, 9 &amp; 10</span>
+            <span>WINTER INTENSIVE CAMP</span>
             <span class="brand-dots" aria-hidden="true">
             </span>
           </div>
@@ -2309,6 +2363,7 @@
             <div class="stat-value" id="statStudents" data-target="240">0+</div>
           </div>
         </div>
+        </div>
 
        </section>
 
@@ -2345,7 +2400,7 @@
             പുതിയ ആകാശങ്ങൾ · പുതിയ ചിറകുകൾ
           </div>
           <p style="font-size:1rem; line-height:1.7; color:var(--white-92);">
-            This festive season, Markaz Knowledge City welcomes students of <strong>Grades 8, 9 and 10</strong> to
+            This festive season, Markaz Knowledge City welcomes students to
             <strong>Winter Intensive Camp 2026 (Kuppayam 3.0)</strong> at <strong>WIRAS (World Institute for Research in Advanced Sciences)</strong>.
             More than just a holiday camp, this three-day journey of learning, exploration, and inspiration is designed for young minds to discover their potential, broaden their perspectives, develop meaningful values, and build confidence for the future.
           </p>
@@ -2380,7 +2435,7 @@
 
           <div class="stories-copy-col">
             <p>
-              Markaz Knowledge City welcomes Grades 8, 9 &amp; 10 students to a vibrant three-day camp experience at WIRAS—combining Value-Based Living, Technology, Tilawat, Career Exploration, Mindscape Activities, and Educational Excursions.
+              Markaz Knowledge City welcomes students to a vibrant three-day camp experience at WIRAS—combining Value-Based Living, Technology, Tilawat, Career Exploration, Mindscape Activities, and Educational Excursions.
             </p>
           </div>
         </div>
@@ -2520,7 +2575,7 @@
 
       <div class="footer-bottom">
         <span>&copy; 2026 Kuppayam 3.0 · WIRAS, Markaz Knowledge City. All rights reserved.</span>
-        <span>Grades 8, 9 &amp; 10 · Winter Intensive Camp</span>
+        <span>Kuppayam 3.0 · Winter Intensive Camp</span>
       </div>
     </div>
   </footer>
@@ -2632,14 +2687,14 @@
       ],
       nextRegSeq: 3001,
       stories: [
-        { num: '01', date: '24 DEC 2026', title: 'Grand Inauguration', desc: 'Opening assembly at WIRAS, Markaz Knowledge City welcoming Grades 8, 9 & 10 campers.' },
+        { num: '01', date: '24 DEC 2026', title: 'Grand Inauguration', desc: 'Opening assembly at WIRAS, Markaz Knowledge City welcoming camp participants.' },
         { num: '02', date: '25 DEC 2026', title: 'Tech & Mindscape Lab', desc: 'Hands-on AI, coding, and creative problem-solving workshops empowering young innovators.' },
         { num: '03', date: '26 DEC 2026', title: 'Knowledge City Excursion', desc: 'Guided campus exploration across Knowledge City landmarks and research centers.' },
         { num: '04', date: '26 DEC 2026', title: 'Parenting & Finale', desc: 'Dedicated parenting session followed by the Kuppayam 3.0 Valedictory & Awards.' }
       ],
       pillars: [
         { title: 'Value-Based Living', desc: 'Grounding young learners in timeless ethics, self-discipline, and community service.' },
-        { title: 'Career Exploration', desc: 'Mentoring Grades 8, 9 & 10 students to map strengths to meaningful future careers.' },
+        { title: 'Career Exploration', desc: 'Mentoring students to map strengths to meaningful future careers.' },
         { title: 'Tilawat & Reflection', desc: 'Nurturing spiritual poise and soulful recitation throughout the three-day camp.' },
         { title: 'Technology & Innovation', desc: 'Hands-on digital literacy and future-tech discovery workshops.' },
         { title: 'Language Enrichment', desc: 'Sharpening articulation, confidence, and multilingual communication.' },
@@ -2950,7 +3005,7 @@
       if (!s) return;
       document.getElementById('modalStoryDate').textContent = s.date;
       document.getElementById('modalStoryTitle').textContent = s.title;
-      document.getElementById('modalStoryBody').textContent = s.desc + ' Held at WIRAS, Markaz Knowledge City during Kuppayam 3.0 Winter Intensive Camp (24–26 Dec 2026) for Grades 8, 9 and 10.';
+      document.getElementById('modalStoryBody').textContent = s.desc + ' Held at WIRAS, Markaz Knowledge City during Kuppayam 3.0 Winter Intensive Camp (24–26 Dec 2026) at WIRAS, Markaz Knowledge City.';
       document.getElementById('storyModal').classList.add('open');
     }
 
