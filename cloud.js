@@ -64,11 +64,12 @@ window.Cloud = (function () {
 
   // Write ONE student (merge). Used by index/student pages so they never overwrite other students.
   function upsert(stu) {
-    if (!db || !stu || !stu.id) return;
+    if (!db || !stu || !stu.id) return Promise.resolve(false);
     const j = JSON.stringify(stu);
     seen[stu.id] = j;
-    db.collection('students').doc(stu.id).set(JSON.parse(j), { merge: true })
-      .catch(e => report('Cloud upsert failed:', e));
+    return db.collection('students').doc(stu.id).set(JSON.parse(j), { merge: true })
+      .then(() => true)
+      .catch(e => { report('Cloud upsert failed:', e); throw e; });
   }
 
   // Find a student by Register Number (for QR login). Resolves null if none. Rejects after 8s.
