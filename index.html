@@ -2963,17 +2963,57 @@
       }
     }
 
-    /* About Section Boxes: Soft Faded Color Gradient at Rest, Full Solid Color on Hover */
+    /* Remove leading line before section kickers */
+    .section-kicker::before {
+      display: none !important;
+      content: none !important;
+    }
+
+    /* About Section Malayalam Intro Card: Clean Light Base -> Animated Purple Fade Gradient on Hover */
+    #sec-theme > .panel-card.dark-card {
+      background: #ffffff !important;
+      border: 1.5px solid rgba(91, 33, 182, 0.25) !important;
+      box-shadow: 0 12px 28px -14px rgba(91, 33, 182, 0.18) !important;
+      transition: background 0.4s ease, transform 0.3s ease, box-shadow 0.35s ease, border-color 0.35s ease !important;
+    }
+    #sec-theme > .panel-card.dark-card .ml-font {
+      color: #5b21b6 !important;
+      transition: color 0.3s ease;
+    }
+    #sec-theme > .panel-card.dark-card p {
+      color: #1f2937 !important;
+      transition: color 0.3s ease;
+    }
+    #sec-theme > .panel-card.dark-card:hover {
+      background: linear-gradient(135deg, #3b0764 0%, #6d28d9 52%, #9333ea 100%) !important;
+      border-color: #7c3aed !important;
+      transform: translateY(-3px);
+      box-shadow: 0 22px 44px -14px rgba(109, 40, 217, 0.45) !important;
+    }
+    #sec-theme > .panel-card.dark-card:hover .ml-font {
+      color: #fde047 !important;
+    }
+    #sec-theme > .panel-card.dark-card:hover p {
+      color: #ffffff !important;
+    }
+
+    /* About Section Boxes: High-Contrast Faded Color Gradient at Rest, Full Solid Color on Hover */
     #pillarsGrid .gradient-card,
     #pillarsGrid .gradient-card:nth-child(even) {
       transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1), background 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease !important;
     }
-    #pillarsGrid .gradient-card:nth-child(1) { background: linear-gradient(135deg, #ffffff 0%, rgba(1, 63, 50, 0.13) 100%) !important; }
-    #pillarsGrid .gradient-card:nth-child(2) { background: linear-gradient(135deg, #ffffff 0%, rgba(30, 58, 138, 0.13) 100%) !important; }
-    #pillarsGrid .gradient-card:nth-child(3) { background: linear-gradient(135deg, #ffffff 0%, rgba(15, 118, 110, 0.13) 100%) !important; }
-    #pillarsGrid .gradient-card:nth-child(4) { background: linear-gradient(135deg, #ffffff 0%, rgba(76, 29, 149, 0.13) 100%) !important; }
-    #pillarsGrid .gradient-card:nth-child(5) { background: linear-gradient(135deg, #ffffff 0%, rgba(6, 95, 70, 0.13) 100%) !important; }
-    #pillarsGrid .gradient-card:nth-child(6) { background: linear-gradient(135deg, #ffffff 0%, rgba(31, 41, 55, 0.13) 100%) !important; }
+    #pillarsGrid .gradient-card h3 {
+      color: #111827 !important;
+    }
+    #pillarsGrid .gradient-card p {
+      color: #1f2937 !important;
+    }
+    #pillarsGrid .gradient-card:nth-child(1) { background: linear-gradient(135deg, #f0fdf4 0%, rgba(1, 63, 50, 0.26) 100%) !important; border-color: rgba(1, 63, 50, 0.34) !important; }
+    #pillarsGrid .gradient-card:nth-child(2) { background: linear-gradient(135deg, #eff6ff 0%, rgba(30, 58, 138, 0.26) 100%) !important; border-color: rgba(30, 58, 138, 0.34) !important; }
+    #pillarsGrid .gradient-card:nth-child(3) { background: linear-gradient(135deg, #f0fdfa 0%, rgba(15, 118, 110, 0.26) 100%) !important; border-color: rgba(15, 118, 110, 0.34) !important; }
+    #pillarsGrid .gradient-card:nth-child(4) { background: linear-gradient(135deg, #f5f3ff 0%, rgba(76, 29, 149, 0.26) 100%) !important; border-color: rgba(76, 29, 149, 0.34) !important; }
+    #pillarsGrid .gradient-card:nth-child(5) { background: linear-gradient(135deg, #ecfdf5 0%, rgba(6, 95, 70, 0.26) 100%) !important; border-color: rgba(6, 95, 70, 0.34) !important; }
+    #pillarsGrid .gradient-card:nth-child(6) { background: linear-gradient(135deg, #f8fafc 0%, rgba(31, 41, 55, 0.26) 100%) !important; border-color: rgba(31, 41, 55, 0.34) !important; }
     #pillarsGrid .gradient-card::after,
     #pillarsGrid .gradient-card::before {
       display: none !important;
