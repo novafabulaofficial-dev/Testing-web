@@ -2189,7 +2189,7 @@
   </style>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-<script src="cloud.js"></script>
+<script src="cloud.js?v=3"></script>
 </head>
 <body>
   <div class="ambient-bg" aria-hidden="true">
@@ -2720,6 +2720,13 @@
       });
     })();
 
+    function cloudUpsert(stu) {
+      try {
+        if (!window.Cloud || !stu) return;
+        if (Cloud.upsert) Cloud.upsert(stu); else Cloud.sync([stu], false);
+      } catch (err) { console.error('cloudUpsert failed', err); }
+    }
+
     function handleStudentRegister(e) {
       e.preventDefault();
       const name = document.getElementById('regName').value.trim();
@@ -2747,7 +2754,7 @@
       };
       state.students.unshift(newStudent);
       saveStudentsToStorage();
-      if (window.Cloud) Cloud.upsert(newStudent);
+      cloudUpsert(newStudent);
       updateStats(false);
 
       document.getElementById('registerForm').reset();
