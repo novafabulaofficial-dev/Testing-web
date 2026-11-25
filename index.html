@@ -2594,6 +2594,23 @@
       .sched-tl-tag { font-size: 0.56rem; padding: 2px 7px; }
       .sched-fb-btn { font-size: 0.64rem; padding: 4px 10px; }
     }
+    .brand-link { perspective: 500px; }
+    .nav-brand-logo {
+      height: 30px;
+      width: auto;
+      display: block;
+      object-fit: contain;
+      transform-style: preserve-3d;
+      animation: navLogoFlip 4s ease-in-out infinite;
+    }
+    @media (max-width: 520px) {
+      .nav-brand-logo { height: 24px; }
+    }
+    @keyframes navLogoFlip {
+      0%, 72% { transform: rotateY(0deg); }
+      86% { transform: rotateY(180deg); }
+      100% { transform: rotateY(360deg); }
+    }
   </style>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
@@ -2609,14 +2626,7 @@
   <header class="nav-wrapper">
     <nav class="navbar-pill" aria-label="Primary Navigation">
       <button type="button" class="brand-link" onclick="if (!(state.loggedInUser && state.loggedInUser.role === 'admin')) scrollToSection('sec-home')">
-        <span class="brand-accent">Kuppayam</span>
-        <span>Fest</span>
-        <span class="brand-sup">3.0</span>
-        <span class="brand-dots" aria-hidden="true">
-          <span class="dot dot-charcoal"></span>
-          <span class="dot dot-forest"></span>
-          <span class="dot dot-lime"></span>
-        </span>
+        <img src="https://iili.io/ofAwHNV.png" alt="Kuppayam Fest 3.0" class="nav-brand-logo" />
       </button>
 
       <div class="nav-track" role="tablist">
@@ -2698,7 +2708,7 @@
           </div>
 
           <div class="hero-ctas">
-            <button type="button" class="btn-primary" onclick="openRegisterPage()">Register Now</button>
+            <button type="button" class="btn-primary" id="heroRegisterBtn" onclick="openRegisterPage()">Register Now</button>
             <button type="button" class="btn-secondary" onclick="scrollToSection('sec-theme')">About</button>
             <button type="button" class="btn-secondary" onclick="scrollToSection('sec-stories')">Festival Stories</button>
           </div>
@@ -3638,8 +3648,11 @@
       if (!sess) return;
       const lbl = document.getElementById('navAuthLabel');
       const regBtn = document.getElementById('navRegisterBtn');
+      const heroRegBtn = document.getElementById('heroRegisterBtn');
+      const isStu = sess.role === 'student';
       if (lbl) lbl.textContent = sess.role === 'admin' ? 'Admin' : (sess.regNo || 'Student');
-      if (regBtn) regBtn.style.display = '';
+      if (regBtn) regBtn.style.display = isStu ? 'none' : '';
+      if (heroRegBtn) heroRegBtn.style.display = isStu ? 'none' : '';
     }
 
     function renderAuth() {
