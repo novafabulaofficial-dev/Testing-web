@@ -2326,6 +2326,158 @@
       box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;
       transform: translateY(-1px);
     }
+
+    /* Admin Dashboard V2: Oceanic Liquid Glass Style (Styling Only) */
+    body {
+      background: linear-gradient(135deg, #0b242e 0%, #134657 40%, #1a6374 75%, #0c2e3c 100%) !important;
+      color: #f8fafc !important;
+      min-height: 100vh;
+    }
+    .ambient-bg {
+      background:
+        radial-gradient(circle at 18% 18%, rgba(56, 189, 248, 0.24) 0%, transparent 45%),
+        radial-gradient(circle at 82% 24%, rgba(45, 212, 191, 0.22) 0%, transparent 48%),
+        radial-gradient(circle at 55% 82%, rgba(14, 165, 233, 0.2) 0%, transparent 50%) !important;
+    }
+    .ambient-grid {
+      opacity: 0.16 !important;
+    }
+    #authContainer {
+      --charcoal: #f8fafc;
+      --charcoal-65: rgba(226, 244, 250, 0.74);
+      --charcoal-12: rgba(255, 255, 255, 0.18);
+      --forest: #67e8f9;
+      --forest-10: rgba(103, 232, 249, 0.12);
+      --forest-25: rgba(103, 232, 249, 0.28);
+      --white: rgba(255, 255, 255, 0.1);
+    }
+    .portal-sidebar {
+      background: rgba(8, 28, 38, 0.56) !important;
+      backdrop-filter: blur(26px) saturate(170%) !important;
+      -webkit-backdrop-filter: blur(26px) saturate(170%) !important;
+      border: 1px solid rgba(255, 255, 255, 0.18) !important;
+      border-radius: 24px !important;
+      box-shadow:
+        0 20px 44px -14px rgba(0, 0, 0, 0.45),
+        inset 0 1px 0 rgba(255, 255, 255, 0.24) !important;
+    }
+    .portal-nav-btn {
+      color: rgba(240, 249, 255, 0.78) !important;
+      background: transparent !important;
+      border: 1px solid transparent !important;
+      border-radius: 14px !important;
+      transition: background 0.22s ease, border-color 0.22s ease, transform 0.22s ease, color 0.22s ease !important;
+    }
+    .portal-nav-btn:hover {
+      background: rgba(255, 255, 255, 0.1) !important;
+      border-color: rgba(255, 255, 255, 0.16) !important;
+      color: #ffffff !important;
+    }
+    .portal-nav-btn.active {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.22) 0%, rgba(103, 232, 249, 0.16) 100%) !important;
+      border: 1px solid rgba(255, 255, 255, 0.32) !important;
+      color: #ffffff !important;
+      box-shadow: 0 8px 20px -8px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.35) !important;
+    }
+    .panel-card,
+    .portal-stat-box,
+    .students-big-box,
+    .modal-box {
+      background: rgba(255, 255, 255, 0.1) !important;
+      backdrop-filter: blur(24px) saturate(170%) !important;
+      -webkit-backdrop-filter: blur(24px) saturate(170%) !important;
+      border: 1px solid rgba(255, 255, 255, 0.22) !important;
+      box-shadow:
+        0 16px 36px -14px rgba(0, 0, 0, 0.38),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3) !important;
+      color: #f8fafc !important;
+    }
+    .portal-stat-box {
+      transition: transform 0.24s ease, border-color 0.24s ease, background 0.24s ease !important;
+    }
+    .portal-stat-box:hover {
+      transform: translateY(-3px);
+      background: rgba(255, 255, 255, 0.15) !important;
+      border-color: rgba(255, 255, 255, 0.36) !important;
+    }
+    .students-big-box {
+      padding: 12px !important;
+      border-radius: 22px !important;
+    }
+    .student-row-card,
+    .students-big-box .student-row-card {
+      background: rgba(255, 255, 255, 0.08) !important;
+      backdrop-filter: blur(16px) !important;
+      border: 1px solid rgba(255, 255, 255, 0.16) !important;
+      border-radius: 16px !important;
+      margin-bottom: 8px !important;
+      color: #f8fafc !important;
+      transition: transform 0.22s ease, background 0.22s ease, border-color 0.22s ease !important;
+    }
+    .student-row-card:last-child,
+    .students-big-box .student-row-card:last-child {
+      margin-bottom: 0 !important;
+    }
+    .student-row-card:hover,
+    .students-big-box .student-row-card:hover {
+      background: rgba(255, 255, 255, 0.16) !important;
+      border-color: rgba(103, 232, 249, 0.55) !important;
+      transform: translateY(-2px);
+      box-shadow: 0 12px 26px -12px rgba(0, 0, 0, 0.4) !important;
+    }
+    .form-input,
+    .form-select {
+      background: rgba(255, 255, 255, 0.11) !important;
+      border: 1px solid rgba(255, 255, 255, 0.24) !important;
+      color: #ffffff !important;
+      backdrop-filter: blur(12px) !important;
+    }
+    .form-input::placeholder {
+      color: rgba(226, 244, 250, 0.6) !important;
+    }
+    .form-select option {
+      background: #0f2d38;
+      color: #ffffff;
+    }
+    .tick-box-bar {
+      background: rgba(103, 232, 249, 0.1) !important;
+      border-color: rgba(103, 232, 249, 0.35) !important;
+    }
+    .tick-label {
+      color: #e0f2fe !important;
+    }
+    .badge-forest {
+      background: rgba(103, 232, 249, 0.18) !important;
+      color: #e0f2fe !important;
+      border: 1px solid rgba(103, 232, 249, 0.36) !important;
+    }
+    .badge-lime {
+      background: rgba(231, 254, 37, 0.92) !important;
+      color: #0b242e !important;
+    }
+    .row-dropdown {
+      background: rgba(10, 32, 42, 0.94) !important;
+      backdrop-filter: blur(18px) !important;
+      border-color: rgba(255, 255, 255, 0.24) !important;
+    }
+    .row-dropdown-item {
+      color: #f8fafc !important;
+    }
+    .dots-btn {
+      background: rgba(255, 255, 255, 0.12) !important;
+      border-color: rgba(255, 255, 255, 0.24) !important;
+      color: #ffffff !important;
+    }
+    .filter-chip {
+      background: rgba(255, 255, 255, 0.12) !important;
+      border-color: rgba(255, 255, 255, 0.24) !important;
+      color: #f8fafc !important;
+    }
+    .filter-chip.active {
+      background: rgba(103, 232, 249, 0.24) !important;
+      border-color: #67e8f9 !important;
+      color: #ffffff !important;
+    }
   </style>
   <script>
     // Page file names. If you rename a file on GitHub, change it here (same line in all 3 files).
