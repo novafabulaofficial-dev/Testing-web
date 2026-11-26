@@ -3418,13 +3418,20 @@
       renderAuth();
     }
 
-    function toggleAttendance(id, isPresent) {
+    function setStudentAttendance(id, status) {
       const stu = state.students.find(item => item.id === id);
       if (!stu) return;
-      if (!stu.attendance) stu.attendance = { 1: false, 2: false, 3: false };
-      stu.attendance[state.attendanceDay] = isPresent;
+      if (!stu.attendance) stu.attendance = { 1: null, 2: null, 3: null };
+      const raw = stu.attendance[state.attendanceDay];
+      const curr = (raw === true || raw === 'attended') ? 'attended' : (raw === 'absent' ? 'absent' : null);
+      const nextStatus = (curr === status) ? null : status;
+      stu.attendance[state.attendanceDay] = nextStatus;
       saveStudentsToStorage();
-      showToast(stu.name + ' (' + (stu.regNo || 'No ID') + ') marked ' + (isPresent ? 'Present' : 'Absent') + ' for Day ' + state.attendanceDay);
+      if (nextStatus === null) {
+        showToast(stu.name + ' (' + (stu.regNo || 'No ID') + ') attendance cleared for Day ' + state.attendanceDay);
+      } else {
+        showToast(stu.name + ' (' + (stu.regNo || 'No ID') + ') marked ' + (nextStatus === 'attended' ? 'Attended' : 'Absent') + ' for Day ' + state.attendanceDay);
+      }
       renderAuth();
     }
 
@@ -3434,14 +3441,16 @@
         showToast('No payment-completed students to export yet.');
         return;
       }
-      const headers = ['Chest / Register No', 'Name', 'Class', 'Place', 'Gender', 'WhatsApp Number', 'Contact Number', 'Day 1 (24 Dec)', 'Day 2 (25 Dec)', 'Day 3 (26 Dec)', 'Total Days Present'];
+      const headers = ['Chest / Register No', 'Name', 'Class', 'Place', 'Gender', 'WhatsApp Number', 'Contact Number', 'Day 1 (24 Dec)', 'Day 2 (25 Dec)', 'Day 3 (26 Dec)', 'Total Days Attended'];
       const esc = (v) => '"' + String(v ?? '').replace(/"/g, '""') + '"';
+      const fmtAtt = (v) => (v === true || v === 'attended') ? 'Attended' : (v === 'absent' ? 'Absent' : 'Not Marked');
+      const isAttNum = (v) => (v === true || v === 'attended') ? 1 : 0;
       const rows = paidStudents.map(stu => {
-        const att = stu.attendance || { 1: false, 2: false, 3: false };
-        const d1 = att[1] ? 'Present' : 'Absent';
-        const d2 = att[2] ? 'Present' : 'Absent';
-        const d3 = att[3] ? 'Present' : 'Absent';
-        const total = (att[1] ? 1 : 0) + (att[2] ? 1 : 0) + (att[3] ? 1 : 0);
+        const att = stu.attendance || { 1: null, 2: null, 3: null };
+        const d1 = fmtAtt(att[1]);
+        const d2 = fmtAtt(att[2]);
+        const d3 = fmtAtt(att[3]);
+        const total = isAttNum(att[1]) + isAttNum(att[2]) + isAttNum(att[3]);
         return [
           stu.regNo || '',
           stu.name,
@@ -3943,15 +3952,17 @@
                 ${(() => {
                   const paidList = state.students.filter(x => x.paymentCompleted);
                   const d = state.attendanceDay;
-                  const presentCount = paidList.filter(x => x.attendance && x.attendance[d]).length;
-                  const absentCount = paidList.length - presentCount;
+                  const isAtt = (v) => v === true || v === 'attended';
+                  const isAbs = (v) => v === 'absent';
+                  const presentCount = paidList.filter(x => x.attendance && isAtt(x.attendance[d])).length;
+                  const absentCount = paidList.filter(x => x.attendance && isAbs(x.attendance[d])).length;
                   const dayLabels = { 1: 'Day 1 · 24 Dec 2026', 2: 'Day 2 · 25 Dec 2026', 3: 'Day 3 · 26 Dec 2026' };
                   return `
                     <div class="panel-card" style="margin-bottom: 18px; display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:14px;">
                       <div>
                         <div class="section-kicker" style="margin-bottom:4px;">3-DAY CAMP ATTENDANCE</div>
                         <h2 style="font-size:1.8rem; font-weight:800; line-height:1.15;">${dayLabels[d]}</h2>
-                        <p style="font-size:0.88rem; color:var(--charcoal-65); margin-top:4px;">Showing all payment-completed students. Tick the box to mark Present.</p>
+                        <p style="font-size:0.88rem; color:var(--charcoal-65); margin-top:4px;">Showing all payment-completed students. Click Attended or Absent for each student.</p>
                       </div>
                       <button type="button" class="btn-primary" style="padding:11px 20px; font-size:0.86rem;" onclick="exportAttendanceCSV()">
                         Export Attendance CSV
@@ -3970,18 +3981,19 @@
                         <div style="font-size:1.7rem; font-weight:800;">${paidList.length}</div>
                       </div>
                       <div class="portal-stat-box">
-                        <div class="stat-label">PRESENT (DAY ${d})</div>
-                        <div style="font-size:1.7rem; font-weight:800; color:var(--forest);">${presentCount}</div>
+                        <div class="stat-label">ATTENDED (DAY ${d})</div>
+                        <div style="font-size:1.7rem; font-weight:800; color:#4680ff;">${presentCount}</div>
                       </div>
                       <div class="portal-stat-box">
                         <div class="stat-label">ABSENT (DAY ${d})</div>
-                        <div style="font-size:1.7rem; font-weight:800;">${absentCount}</div>
+                        <div style="font-size:1.7rem; font-weight:800; color:#dc2626;">${absentCount}</div>
                       </div>
                     </div>
 
                     <div style="display:flex; flex-direction:column; gap:10px;">
                       ${paidList.length ? paidList.map(stu => {
-                        const isPres = !!(stu.attendance && stu.attendance[d]);
+                        const rawAtt = stu.attendance ? stu.attendance[d] : null;
+                        const attStatus = isAtt(rawAtt) ? 'attended' : (isAbs(rawAtt) ? 'absent' : null);
                         return `
                           <div class="student-row-card" style="cursor:default;">
                             <div>
@@ -3993,10 +4005,14 @@
                                 ${stu.studentClass} · ${stu.place}
                               </p>
                             </div>
-                            <label class="tick-label" style="padding:8px 14px; border-radius:9999px; border:1.5px solid ${isPres ? '#4680ff' : '#cbd5e1'}; background:${isPres ? '#4680ff' : '#ffffff'}; color:${isPres ? '#ffffff' : '#1d2630'};">
-                              <input type="checkbox" ${isPres ? 'checked' : ''} onchange="toggleAttendance('${stu.id}', this.checked)" />
-                              <span>${isPres ? 'Present' : 'Mark Present'}</span>
-                            </label>
+                            <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+                              <button type="button" onclick="setStudentAttendance('${stu.id}', 'attended')" style="display:inline-flex; align-items:center; gap:6px; padding:8px 15px; border-radius:9999px; font-weight:700; font-size:0.82rem; cursor:pointer; transition:all 0.16s ease; border:1.5px solid ${attStatus === 'attended' ? '#4680ff' : '#cbd5e1'}; background:${attStatus === 'attended' ? '#4680ff' : '#ffffff'}; color:${attStatus === 'attended' ? '#ffffff' : '#1d2630'};">
+                                Attended
+                              </button>
+                              <button type="button" onclick="setStudentAttendance('${stu.id}', 'absent')" style="display:inline-flex; align-items:center; gap:6px; padding:8px 15px; border-radius:9999px; font-weight:700; font-size:0.82rem; cursor:pointer; transition:all 0.16s ease; border:1.5px solid ${attStatus === 'absent' ? '#dc2626' : '#fca5a5'}; background:${attStatus === 'absent' ? '#dc2626' : '#ffffff'}; color:${attStatus === 'absent' ? '#ffffff' : '#dc2626'};">
+                                Absent
+                              </button>
+                            </div>
                           </div>
                         `;
                       }).join('') : '<div class="panel-card"><p style="color:var(--charcoal-65);">No payment-completed students yet. Tick "Complete Payment" in Registered Students first.</p></div>'}
