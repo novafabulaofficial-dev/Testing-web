@@ -6,7 +6,7 @@
   <title>Kuppayam 3.0 — Winter Intensive Camp | WIRAS, Markaz Knowledge City</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Malayalam:wght@500;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Malayalam:wght@500;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet" />
   <style>
     :root {
       --forest: #013F32;
@@ -2978,62 +2978,53 @@
       content: none !important;
     }
 
-    /* About Section Intro Card: Stylish English Title + Two Animated Gradients (Blue & Yellow) */
+    /* About Section Intro Card: Poppins Title + Single High-Contrast Animated Gradient */
     #sec-theme > .panel-card.dark-card {
       position: relative;
       isolation: isolate;
       overflow: hidden;
       background: #ffffff !important;
-      border: 1.5px solid rgba(22, 22, 22, 0.14) !important;
-      box-shadow: 0 12px 28px -14px rgba(15, 23, 42, 0.14) !important;
+      border: 1.5px solid rgba(124, 58, 237, 0.24) !important;
+      box-shadow: 0 12px 28px -14px rgba(124, 58, 237, 0.18) !important;
       transition: transform 0.28s ease, box-shadow 0.28s ease, border-color 0.28s ease !important;
     }
     #sec-theme > .panel-card.dark-card > * {
       position: relative;
       z-index: 2;
     }
-    #sec-theme > .panel-card.dark-card::before,
+    #sec-theme > .panel-card.dark-card::before {
+      display: none !important;
+    }
     #sec-theme > .panel-card.dark-card::after {
       content: '';
       position: absolute;
       top: 50%;
-      width: 280px;
-      height: 280px;
+      right: -40px;
+      width: 340px;
+      height: 340px;
       border-radius: 50%;
       z-index: 0;
       pointer-events: none;
-      opacity: 0.72;
+      transform: translate(0, -50%);
+      opacity: 0.85;
+      background: radial-gradient(circle, rgba(124, 58, 237, 0.56) 0%, rgba(124, 58, 237, 0.2) 48%, transparent 72%);
       transition: transform 0.65s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.35s ease;
-    }
-    #sec-theme > .panel-card.dark-card::before {
-      right: -30px;
-      transform: translate(0, -50%);
-      background: radial-gradient(circle, rgba(37, 99, 235, 0.42) 0%, rgba(37, 99, 235, 0.14) 48%, transparent 72%);
-    }
-    #sec-theme > .panel-card.dark-card::after {
-      right: 120px;
-      transform: translate(0, -50%);
-      background: radial-gradient(circle, rgba(234, 179, 8, 0.48) 0%, rgba(231, 254, 37, 0.18) 48%, transparent 72%);
     }
     #sec-theme > .panel-card.dark-card:hover {
       background: #ffffff !important;
-      border-color: rgba(22, 22, 22, 0.26) !important;
+      border-color: rgba(124, 58, 237, 0.48) !important;
       transform: translateY(-2px);
-      box-shadow: 0 16px 34px -12px rgba(15, 23, 42, 0.18) !important;
-    }
-    #sec-theme > .panel-card.dark-card:hover::before {
-      opacity: 0.9;
-      transform: translate(-360px, -50%) scale(1.15);
+      box-shadow: 0 18px 36px -12px rgba(124, 58, 237, 0.26) !important;
     }
     #sec-theme > .panel-card.dark-card:hover::after {
-      opacity: 0.9;
-      transform: translate(-240px, -50%) scale(1.1);
+      opacity: 1;
+      transform: translate(-420px, -50%) scale(1.18);
     }
     .about-display-title {
-      font-family: 'Syne', 'Plus Jakarta Sans', sans-serif;
-      font-size: clamp(1.35rem, 2.5vw, 1.8rem);
-      font-weight: 800;
-      letter-spacing: -0.02em;
+      font-family: 'Poppins', 'Plus Jakarta Sans', sans-serif;
+      font-size: clamp(1.3rem, 2.3vw, 1.65rem);
+      font-weight: 700;
+      letter-spacing: -0.01em;
       color: #0f172a;
       margin-bottom: 10px;
     }
