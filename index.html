@@ -3862,7 +3862,7 @@
         regNo: '',
         paymentCompleted: false,
         verified: false,
-        attendance: { 1: false, 2: false, 3: false },
+        attendance: { 1: null, 2: null, 3: null },
         name,
         dob,
         place,
@@ -4115,7 +4115,12 @@
           ${allDayItems.map((item, idx) => {
             const evKey = 'prog_d' + d + '_' + idx;
             const savedFb = s.eventFeedbacks && s.eventFeedbacks[evKey];
-            const isAttended = !!(s.attendance && s.attendance[d]);
+            const rawAtt = s.attendance ? s.attendance[d] : null;
+            const attBadgeHtml = (rawAtt === true || rawAtt === 'attended')
+              ? '<span class="sched-att-badge attended">Attended</span>'
+              : (rawAtt === 'absent'
+                ? '<span class="sched-att-badge absent">Absent</span>'
+                : '');
             const startPart = (item.time || '').split('–')[0].trim();
             const m = startPart.match(/^(\d{1,2}:\d{2})\s*(AM|PM)$/i);
             const hourStr = m ? m[1] : startPart;
@@ -4135,7 +4140,7 @@
                   <div class="sched-tl-bottom">
                     <div class="sched-tl-tags">
                       <span class="sched-tl-tag">Day ${d}</span>
-                      <span class="sched-att-badge ${isAttended ? 'attended' : 'absent'}">${isAttended ? 'Attended' : 'Absent'}</span>
+                      ${attBadgeHtml}
                     </div>
                     <button type="button" class="sched-fb-btn ${savedFb ? 'active' : ''}" onclick="openProgramFeedback(${d}, ${idx})">${savedFb ? ('&#9733; ' + savedFb.rating + '/5 · Edit') : 'Write Feedback'}</button>
                   </div>
@@ -4339,7 +4344,7 @@
         } else {
           qrFinish({
             id: 'qr_' + autoReg, regNo: autoReg, paymentCompleted: true, verified: true,
-            attendance: { 1: false, 2: false, 3: false }, dob: autoDob,
+            attendance: { 1: null, 2: null, 3: null }, dob: autoDob,
             name: (urlParams.get('n') || 'Student').trim(), studentClass: (urlParams.get('c') || '').trim(),
             place: (urlParams.get('p') || '').trim(), gender: (urlParams.get('g') || 'Male').trim(),
             whatsapp: '', contact: '', registeredEvents: []
