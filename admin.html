@@ -3033,7 +3033,7 @@
       // 3. Draw QR Code inside the white rounded square
       const loginUrl = getStudentAutoLoginUrl(stu);
       const qrBoxCenterY = H * 0.2561;
-      const qrMaxSize = Math.round(H * 0.175);
+      const qrMaxSize = Math.round(H * 0.142);
       if (typeof qrcode !== 'undefined') {
         const qr = qrcode(0, 'L');
         qr.addData(loginUrl);
@@ -3111,11 +3111,11 @@
       }
       const waNumber = digits.length === 10 ? '91' + digits : digits;
       const paymentMsg = [
+        'Chest No :: ' + (stu.regNo || 'Pending'),
         'Gender :: ' + (stu.gender || '-'),
         'Class :: ' + (stu.studentClass || '-'),
         'WhatsApp Number :: ' + (stu.whatsapp || '-'),
-        'Contact Number :: ' + (stu.contact || '-'),
-        'Paymant Status :: ' + (stu.paymentCompleted ? '\u2705' : 'Pending'),
+        'Paymant Status :: ' + (stu.paymentCompleted ? 'Successfully completed' : 'Pending'),
         '',
         'WIRAS • Markaz Knowledge City'
       ].join('\n');
