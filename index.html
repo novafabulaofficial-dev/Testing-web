@@ -3180,6 +3180,92 @@
         padding: 2px 7px;
       }
     }
+  
+    /* Modern Login Card & 1-Row Mobile Fields */
+    #loginPageContainer .login-card {
+      background: linear-gradient(165deg, #f8fbff 0%, #ffffff 42%, #fbfff2 100%) !important;
+      border: 1.5px solid rgba(30, 64, 175, 0.16) !important;
+      border-radius: 24px !important;
+      box-shadow: 0 20px 44px -22px rgba(15, 23, 42, 0.18) !important;
+    }
+    #loginPageContainer .auth-tabs {
+      background: #eff6ff !important;
+      border: 1px solid #bfdbfe !important;
+      border-radius: 9999px !important;
+      padding: 4px !important;
+    }
+    #loginPageContainer .auth-tab {
+      color: #475569 !important;
+      font-weight: 700 !important;
+      border-radius: 9999px !important;
+    }
+    #loginPageContainer .auth-tab.active {
+      background: #1e3a8a !important;
+      color: #ffffff !important;
+      box-shadow: 0 6px 14px -6px rgba(30, 58, 138, 0.45) !important;
+    }
+    #loginPageContainer .form-label {
+      text-align: left !important;
+      color: #475569 !important;
+      font-weight: 800 !important;
+      letter-spacing: 0.08em !important;
+    }
+    #loginPageContainer .form-input {
+      background: #f8fafc !important;
+      border: 1.5px solid #cbd5e1 !important;
+      border-radius: 13px !important;
+      color: #0f172a !important;
+      text-align: left !important;
+      transition: border-color 0.16s ease, box-shadow 0.16s ease, background 0.16s ease !important;
+    }
+    #loginPageContainer .form-input:focus {
+      background: #ffffff !important;
+      border-color: #3b82f6 !important;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15) !important;
+    }
+    #loginPageContainer .btn-submit-full {
+      background: rgba(59, 130, 246, 0.22) !important;
+      border: 1.5px solid rgba(37, 99, 235, 0.34) !important;
+      color: #1e3a8a !important;
+      font-weight: 800 !important;
+      border-radius: 9999px !important;
+      box-shadow: none !important;
+    }
+    #loginPageContainer .btn-submit-full:hover {
+      background: rgba(59, 130, 246, 0.32) !important;
+      transform: translateY(-1px);
+    }
+    #loginPageContainer .demo-hint {
+      background: #f8fafc !important;
+      border: 1px solid #e2e8f0 !important;
+      border-radius: 14px !important;
+    }
+    .login-fields-row {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+    .login-fields-row .form-group {
+      margin-bottom: 0 !important;
+    }
+    @media (max-width: 600px) {
+      .login-fields-row {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 10px !important;
+        margin-bottom: 12px !important;
+      }
+      #loginPageContainer .form-label {
+        font-size: 0.64rem !important;
+        margin-bottom: 4px !important;
+      }
+      #loginPageContainer .form-input {
+        padding: 10px 10px !important;
+        font-size: 0.82rem !important;
+        border-radius: 12px !important;
+      }
+    }
+
   </style>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
@@ -3703,8 +3789,8 @@
         { title: 'Value-Based Living', desc: 'Grounding young learners in timeless ethics, self-discipline, and community service.' },
         { title: 'Career Exploration', desc: 'Mentoring students to map strengths to meaningful future careers.' },
         { title: 'Tilawat & Reflection', desc: 'Nurturing spiritual poise and soulful recitation throughout the three-day camp.' },
-        { title: 'Turf Football Kick-Off', desc: 'Energetic turf football matches paired with teamwork and sportsmanship.' },
-        { title: 'Campus & Heritage Travel', desc: 'A guided short journey exploring inspiring sites and learning beyond the classroom.' },
+        { title: 'Kick-Off', desc: 'Energetic turf football matches paired with teamwork and sportsmanship.' },
+        { title: 'Heritage Walk', desc: 'A guided short journey exploring inspiring sites and learning beyond the classroom.' },
         { title: 'Mindscape & Excursions', desc: 'Experiential learning games, Knowledge City excursions, and Parenting Insights.' }
       ]
     };
@@ -4316,13 +4402,15 @@
               <h3 style="font-size:1.55rem; font-weight:800; margin-bottom:4px;">Hello, student</h3>
               <p style="font-size:0.86rem; color:var(--charcoal-65); margin-bottom:20px;">Sign in with your register number and date of birth.</p>
               <form onsubmit="handleStudentLogin(event)">
-                <div class="form-group">
-                  <label class="form-label" for="stuChest">REGISTER NUMBER</label>
-                  <input id="stuChest" class="form-input" placeholder="e.g. K3001" required />
-                </div>
-                <div class="form-group">
-                  <label class="form-label" for="stuDob">DATE OF BIRTH</label>
-                  <input id="stuDob" type="date" class="form-input" required />
+                <div class="login-fields-row">
+                  <div class="form-group">
+                    <label class="form-label" for="stuChest">REGISTER NUMBER</label>
+                    <input id="stuChest" class="form-input" placeholder="e.g. K3001" required />
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="stuDob">DATE OF BIRTH</label>
+                    <input id="stuDob" type="date" class="form-input" required />
+                  </div>
                 </div>
                 <button type="submit" class="btn-submit-full">Sign in</button>
               </form>
@@ -4334,13 +4422,15 @@
               <h3 style="font-size:1.55rem; font-weight:800; margin-bottom:4px;">Admin access</h3>
               <p style="font-size:0.86rem; color:var(--charcoal-65); margin-bottom:20px;">Sign in to manage student registrations and payments.</p>
               <form onsubmit="handleAdminLogin(event)">
-                <div class="form-group">
-                  <label class="form-label" for="adminId">ADMIN ID</label>
-                  <input id="adminId" class="form-input" placeholder="e.g. admin" required />
-                </div>
-                <div class="form-group">
-                  <label class="form-label" for="adminPass">PASSCODE</label>
-                  <input id="adminPass" type="password" class="form-input" placeholder="Enter passcode" required />
+                <div class="login-fields-row">
+                  <div class="form-group">
+                    <label class="form-label" for="adminId">ADMIN ID</label>
+                    <input id="adminId" class="form-input" placeholder="e.g. admin" required />
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="adminPass">PASSCODE</label>
+                    <input id="adminPass" type="password" class="form-input" placeholder="Enter passcode" required />
+                  </div>
                 </div>
                 <button type="submit" class="btn-submit-full">Sign in as Admin</button>
               </form>
