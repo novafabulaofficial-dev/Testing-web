@@ -3032,9 +3032,9 @@
 
       // 3. Draw QR Code in exact center of the yellow square (center x=0.4995*W, y=0.2616*H)
       const loginUrl = getStudentAutoLoginUrl(stu);
-      const qrBoxCenterX = W * 0.4995;
-      const qrBoxCenterY = H * 0.2616;
-      const qrMaxSize = Math.round(H * 0.168);
+      const qrBoxCenterX = W * 0.5000;
+      const qrBoxCenterY = H * 0.2331;
+      const qrMaxSize = Math.round(H * 0.140);
       if (typeof qrcode !== 'undefined') {
         const qr = qrcode(0, 'L');
         qr.addData(loginUrl);
@@ -3116,7 +3116,7 @@
         'Gender : ' + (stu.gender || '-'),
         'Class : ' + (stu.studentClass || '-'),
         'Number : ' + (stu.whatsapp || '-'),
-        'Paymant : ' + (stu.paymentCompleted ? 'Completed' : 'Pending')
+        'Payment : ' + (stu.paymentCompleted ? 'Completed' : 'Pending')
       ].join('\n');
 
       const idCardDataUrl = await generateStudentIdCardDataUrl(stu);
