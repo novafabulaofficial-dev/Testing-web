@@ -3147,6 +3147,32 @@
         height: 13px;
       }
     }
+
+    .sched-att-badge {
+      font-size: 0.68rem;
+      font-weight: 800;
+      border-radius: 9999px;
+      padding: 3px 10px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .sched-att-badge.attended {
+      background: rgba(22, 163, 74, 0.14);
+      color: #15803d;
+      border: 1px solid rgba(22, 163, 74, 0.36);
+    }
+    .sched-att-badge.absent {
+      background: rgba(220, 38, 38, 0.12);
+      color: #dc2626;
+      border: 1px solid rgba(220, 38, 38, 0.34);
+    }
+    @media (max-width: 600px) {
+      .sched-att-badge {
+        font-size: 0.56rem;
+        padding: 2px 7px;
+      }
+    }
   </style>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
@@ -3256,12 +3282,12 @@
             <div class="stat-value" id="statTeams" data-target="4">0</div>
           </div>
           <div class="stat-card glow-forest">
-            <div class="stat-label">PROGRAMMES</div>
-            <div class="stat-value" id="statProgrammes" data-target="28">0</div>
+            <div class="stat-label">EVENTS</div>
+            <div class="stat-value" id="statProgrammes" data-target="35">0+</div>
           </div>
           <div class="stat-card glow-lime">
-            <div class="stat-label">STUDENTS</div>
-            <div class="stat-value" id="statStudents" data-target="240">0</div>
+            <div class="stat-label">DELIGATES</div>
+            <div class="stat-value" id="statStudents" data-target="60">0+</div>
           </div>
         </div>
         </div>
@@ -3868,17 +3894,17 @@
     }
 
     // Count-Up Animation with '+' suffix (Edit #2)
-    function animateCountUp(el, target, duration = 1100) {
+    function animateCountUp(el, target, duration = 1100, suffix = '') {
       const startTime = performance.now();
       function frame(now) {
         const progress = Math.min((now - startTime) / duration, 1);
         const eased = 1 - Math.pow(1 - progress, 3);
         const val = Math.floor(eased * target);
-        el.textContent = String(val);
+        el.textContent = String(val) + suffix;
         if (progress < 1) {
           requestAnimationFrame(frame);
         } else {
-          el.textContent = String(target);
+          el.textContent = String(target) + suffix;
         }
       }
       requestAnimationFrame(frame);
@@ -3888,15 +3914,14 @@
       const sTeams = document.getElementById('statTeams');
       const sProg = document.getElementById('statProgrammes');
       const sStu = document.getElementById('statStudents');
-      const stuCount = 237 + state.students.length;
       if (animate) {
-        animateCountUp(sTeams, 4, 900);
-        animateCountUp(sProg, 28, 1100);
-        animateCountUp(sStu, stuCount, 1300);
+        animateCountUp(sTeams, 4, 900, '');
+        animateCountUp(sProg, 35, 1100, '+');
+        animateCountUp(sStu, 60, 1300, '+');
       } else {
         sTeams.textContent = '4';
-        sProg.textContent = '28';
-        sStu.textContent = String(stuCount);
+        sProg.textContent = '35+';
+        sStu.textContent = '60+';
       }
     }
 
@@ -3988,7 +4013,7 @@
       }
       setSession({ role: 'student', regNo: found.regNo });
       showToast('Welcome back, ' + found.name + '!');
-      setTimeout(() => { window.location.href = PAGES.student; }, 350);
+      setTimeout(() => { applySessionToNav(); scrollToSection('sec-home'); }, 250);
     }
 
     function handleAdminLogin(e) {
@@ -4086,26 +4111,17 @@
           `).join('')}
         </div>
 
-        <div class="sched-venue-strip" aria-label="Filter by Venue">
-          <button type="button" class="sched-venue-chip ${activeVenue === 'All' ? 'active' : ''}" onclick="setStudentScheduleVenue('All')">All venues</button>
-          ${venues.map(v => `
-            <button type="button" class="sched-venue-chip ${activeVenue === v ? 'active' : ''}" onclick="setStudentScheduleVenue('${v.replace(/'/g, "\\'")}')">
-              <span class="sched-venue-dot"></span>
-              <span>${v}</span>
-            </button>
-          `).join('')}
-        </div>
-
         <div class="sched-timeline">
-          ${filteredItems.map(({ item, idx }, rowIdx) => {
+          ${allDayItems.map((item, idx) => {
             const evKey = 'prog_d' + d + '_' + idx;
             const savedFb = s.eventFeedbacks && s.eventFeedbacks[evKey];
+            const isAttended = !!(s.attendance && s.attendance[d]);
             const startPart = (item.time || '').split('–')[0].trim();
             const m = startPart.match(/^(\d{1,2}:\d{2})\s*(AM|PM)$/i);
             const hourStr = m ? m[1] : startPart;
             const ampmStr = m ? m[2].toUpperCase() : '';
             return `
-              <div class="sched-tl-row ${rowIdx % 2 === 1 ? 'alt' : ''}">
+              <div class="sched-tl-row ${idx % 2 === 1 ? 'alt' : ''}">
                 <div class="sched-tl-time-col">
                   <div class="sched-tl-hour">${hourStr}</div>
                   <div class="sched-tl-ampm">${ampmStr}</div>
@@ -4114,15 +4130,12 @@
                   <div class="sched-tl-dot"></div>
                 </div>
                 <div class="sched-tl-card">
-                  <div class="sched-tl-card-top">
-                    <span class="badge-pill ${rowIdx % 2 === 1 ? 'badge-lime' : 'badge-forest'}">${item.venue}</span>
-                  </div>
                   <div class="sched-tl-title">${item.title}</div>
                   <div class="sched-tl-range">${item.time}</div>
                   <div class="sched-tl-bottom">
                     <div class="sched-tl-tags">
                       <span class="sched-tl-tag">Day ${d}</span>
-                      <span class="sched-tl-tag">${isGirl ? 'Girls Wing' : 'Boys Wing'}</span>
+                      <span class="sched-att-badge ${isAttended ? 'attended' : 'absent'}">${isAttended ? 'Attended' : 'Absent'}</span>
                     </div>
                     <button type="button" class="sched-fb-btn ${savedFb ? 'active' : ''}" onclick="openProgramFeedback(${d}, ${idx})">${savedFb ? ('&#9733; ' + savedFb.rating + '/5 · Edit') : 'Write Feedback'}</button>
                   </div>
@@ -4313,7 +4326,7 @@
           try { localStorage.setItem('kuppayam_students_v1', JSON.stringify({ students: state.students, nextRegSeq: state.nextRegSeq })); } catch (err) {}
           setSession({ role: 'student', regNo: matched.regNo });
           setFlash('QR Verified! Welcome, ' + matched.name + '!');
-          window.location.replace(PAGES.student);
+          window.location.replace(PAGES.home + '#sec-home');
         };
         const dobOk = function (s) { return !autoDob || s.dob === autoDob; };
         const local = state.students.find(function (s) { return s.regNo && s.regNo.toUpperCase() === autoReg && dobOk(s); });
@@ -4367,9 +4380,9 @@
 
     document.getElementById('statTeams').textContent = '0';
 
-    document.getElementById('statProgrammes').textContent = '0';
+    document.getElementById('statProgrammes').textContent = '0+';
 
-    document.getElementById('statStudents').textContent = '0';
+    document.getElementById('statStudents').textContent = '0+';
 
     let statsAnimated = false;
 
