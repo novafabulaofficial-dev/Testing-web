@@ -3091,6 +3091,62 @@
       opacity: 0.9 !important;
       transform: translate(calc(-100% - 60px), -50%) scale(1.12) !important;
     }
+
+    .footer-brand-logo {
+      height: 46px;
+      width: auto;
+      display: block;
+      object-fit: contain;
+      margin-bottom: 10px;
+      filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.18));
+    }
+    .footer-social-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .footer-social-link {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 255, 255, 0.16);
+      border: 1px solid rgba(255, 255, 255, 0.32);
+      color: #ffffff;
+      text-decoration: none;
+      transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+    }
+    .footer-social-link:hover {
+      transform: translateY(-2px);
+      background: #ffffff;
+      color: #1d4ed8;
+      border-color: #ffffff;
+    }
+    .footer-social-link svg {
+      width: 16px;
+      height: 16px;
+    }
+    @media (max-width: 600px) {
+      .footer-brand-logo {
+        height: 34px;
+        margin-bottom: 6px;
+      }
+      .footer-social-row {
+        gap: 7px;
+        margin-top: 7px;
+      }
+      .footer-social-link {
+        width: 28px;
+        height: 28px;
+      }
+      .footer-social-link svg {
+        width: 13px;
+        height: 13px;
+      }
+    }
   </style>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
@@ -3410,7 +3466,7 @@
     <div class="footer-inner">
       <div class="footer-grid">
         <div>
-          <div class="footer-brand">Kuppayam<span>'3.0</span></div>
+          <img src="https://iili.io/ofAwHNV.png" alt="Kuppayam Fest 3.0" class="footer-brand-logo" />
           <p style="font-size:0.78rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--white-85); margin-bottom:8px;">
             WINTER INTENSIVE CAMP · NEW SKIES, NEW WINGS
           </p>
@@ -3437,6 +3493,17 @@
             <li style="font-size:0.92rem; font-weight:700;">+91 8086881019</li>
             <li style="font-size:0.84rem; color:var(--white-85);">WIRAS, Markaz Knowledge City</li>
           </ul>
+          <div class="footer-social-row">
+            <a class="footer-social-link" href="https://www.instagram.com/wirasofficial?utm_source=ig_web_button_share_sheet&amp;evlk=ZDNlZDc0MzIxNw==" target="_blank" rel="noopener" aria-label="Instagram">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+            </a>
+            <a class="footer-social-link" href="https://www.wiras.in/" target="_blank" rel="noopener" aria-label="Website">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+            </a>
+            <a class="footer-social-link" href="https://youtube.com/@wirasofficial?si=w1UhFet8TurNv-kr" target="_blank" rel="noopener" aria-label="YouTube">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"></path><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon></svg>
+            </a>
+          </div>
         </div>
       </div>
 
