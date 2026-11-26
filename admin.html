@@ -2807,6 +2807,18 @@
         height: 13px;
       }
     }
+  
+    @media (max-width: 768px) {
+      .stu-row-meta,
+      .stu-row-pay-badge {
+        display: none !important;
+      }
+      .student-row-card {
+        padding: 12px 14px !important;
+        gap: 10px !important;
+      }
+    }
+
   </style>
   <script>
     // Page file names. If you rename a file on GitHub, change it here (same line in all 3 files).
@@ -3517,12 +3529,12 @@
               <strong style="font-size:1.05rem;">${stu.name}</strong>
               ${stu.regNo ? `<span class="badge-pill badge-lime">${stu.regNo}</span>` : ''}
             </div>
-            <p style="font-size:0.84rem; color:var(--charcoal-65); margin-top:4px; word-break:break-word;">
+            <p class="stu-row-meta" style="font-size:0.84rem; color:var(--charcoal-65); margin-top:4px; word-break:break-word;">
               ${stu.studentClass} · ${stu.place} · WhatsApp: ${stu.whatsapp}
             </p>
           </div>
           <div style="display:flex; align-items:center; gap:8px; flex-shrink:0; flex-wrap:nowrap;">
-            <span class="badge-pill ${stu.paymentCompleted ? 'badge-lime' : 'badge-forest'}" style="white-space:nowrap;">
+            <span class="badge-pill stu-row-pay-badge ${stu.paymentCompleted ? 'badge-lime' : 'badge-forest'}" style="white-space:nowrap;">
               ${stu.paymentCompleted ? 'Payment Complete' : 'Pending Payment'}
             </span>
             <button type="button" class="btn-secondary" style="padding:7px 14px; font-size:0.8rem; white-space:nowrap;">View Details</button>
