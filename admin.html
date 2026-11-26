@@ -3706,9 +3706,11 @@
                         <button type="button" class="btn-primary" style="padding:8px 16px; font-size:0.84rem;" onclick="sendStudentWelcomeWhatsApp('${selectedStu.id}')">
                           Send Welcome Message
                         </button>
-                        <button type="button" class="btn-primary" style="padding:8px 16px; font-size:0.84rem;" onclick="sendStudentPaymentWhatsApp('${selectedStu.id}')">
-                          ${selectedStu.paymentMsgSent ? 'Resend Payment Message' : 'Send Payment Message'}
-                        </button>
+                        ${selectedStu.paymentCompleted ? `
+                          <button type="button" class="btn-primary" style="padding:8px 16px; font-size:0.84rem;" onclick="sendStudentPaymentWhatsApp('${selectedStu.id}')">
+                            ${selectedStu.paymentMsgSent ? 'Resend ID Card' : 'Send ID Card'}
+                          </button>
+                        ` : ''}
                         <button type="button" class="btn-secondary" style="padding:8px 16px; font-size:0.84rem;" onclick="selectAdminStudent(null)">&larr; All Students</button>
                       </div>
                     </div>
@@ -3717,21 +3719,13 @@
                       <div style="display:flex; flex-wrap:wrap; gap:18px; align-items:center;">
                         <label class="tick-label">
                           <input type="checkbox" ${selectedStu.paymentCompleted ? 'checked' : ''} onchange="togglePaymentComplete('${selectedStu.id}', this.checked)" />
-                          <span>Complete Payment</span>
-                        </label>
-                        <label class="tick-label">
-                          <input type="checkbox" ${selectedStu.welcomeSent ? 'checked' : ''} onchange="toggleWelcomeSent('${selectedStu.id}', this.checked)" />
-                          <span>Send Welcome Message</span>
-                        </label>
-                        <label class="tick-label">
-                          <input type="checkbox" ${selectedStu.paymentMsgSent ? 'checked' : ''} onchange="togglePaymentMsgSent('${selectedStu.id}', this.checked)" />
-                          <span>Payment Message</span>
+                          <span>Payment</span>
                         </label>
                       </div>
                       <div>
                         ${selectedStu.regNo
                           ? `<span class="badge-pill badge-lime" style="font-size:0.9rem; padding:7px 16px;">REGISTER NO: ${selectedStu.regNo}</span>`
-                          : `<span style="font-size:0.82rem; font-weight:700; color:var(--charcoal-65);">Tick "Complete Payment" to generate Register No.</span>`
+                          : `<span style="font-size:0.82rem; font-weight:700; color:var(--charcoal-65);">Tick "Payment" to generate Register No.</span>`
                         }
                       </div>
                     </div>
@@ -3878,7 +3872,10 @@
                                   ${stu.studentClass} · ${stu.place}
                                 </p>
                               </div>
-                              ${statusBadge}
+                              <div style="display:flex; align-items:center; gap:10px; flex-shrink:0;">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                                ${statusBadge}
+                              </div>
                             </div>
                           `;
                         }).join('')}
@@ -4015,7 +4012,7 @@
                             </div>
                           </div>
                         `;
-                      }).join('') : '<div class="panel-card"><p style="color:var(--charcoal-65);">No payment-completed students yet. Tick "Complete Payment" in Registered Students first.</p></div>'}
+                      }).join('') : '<div class="panel-card"><p style="color:var(--charcoal-65);">No payment-completed students yet. Tick "Payment" in Registered Students first.</p></div>'}
                     </div>
                   `;
                 })()}
