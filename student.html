@@ -2827,7 +2827,7 @@
       font-size: clamp(1.45rem, 3vw, 2.05rem);
       font-weight: 800;
       color: #0f172a;
-      margin-top: 10px;
+      margin-top: 0;
       line-height: 1.15;
     }
     .stu-pass-meta {
@@ -2979,17 +2979,18 @@
       gap: 8px;
       padding: 13px 20px;
       border-radius: 9999px;
-      border: 1.5px solid rgba(1, 63, 50, 0.24);
-      background: linear-gradient(135deg, #f5ffdb 0%, #e7fe25 100%);
-      color: #013f32;
+      border: 1.5px solid rgba(161, 98, 7, 0.34);
+      background: rgba(250, 204, 21, 0.38);
+      color: #713f12;
       font-weight: 800;
       font-size: 0.92rem;
       cursor: pointer;
-      transition: transform 0.16s ease, box-shadow 0.16s ease;
+      transition: transform 0.16s ease, background 0.16s ease, box-shadow 0.16s ease;
     }
     .stu-btn-lime:hover {
+      background: rgba(250, 204, 21, 0.52);
       transform: translateY(-1px);
-      box-shadow: 0 10px 20px -10px rgba(1, 63, 50, 0.35);
+      box-shadow: 0 10px 20px -10px rgba(161, 98, 7, 0.28);
     }
     .stu-btn-sky {
       width: 100%;
@@ -2999,17 +3000,18 @@
       gap: 8px;
       padding: 13px 20px;
       border-radius: 9999px;
-      border: 1.5px solid rgba(30, 64, 175, 0.28);
-      background: linear-gradient(135deg, #eff6ff 0%, #bfdbfe 100%);
+      border: 1.5px solid rgba(37, 99, 235, 0.34);
+      background: rgba(59, 130, 246, 0.22);
       color: #1e3a8a;
       font-weight: 800;
       font-size: 0.92rem;
       cursor: pointer;
-      transition: transform 0.16s ease, box-shadow 0.16s ease;
+      transition: transform 0.16s ease, background 0.16s ease, box-shadow 0.16s ease;
     }
     .stu-btn-sky:hover {
+      background: rgba(59, 130, 246, 0.32);
       transform: translateY(-1px);
-      box-shadow: 0 10px 20px -10px rgba(30, 64, 175, 0.35);
+      box-shadow: 0 10px 20px -10px rgba(30, 64, 175, 0.28);
     }
     .stu-btn-peach {
       width: 100%;
@@ -3019,13 +3021,13 @@
       gap: 8px;
       padding: 13px 20px;
       border-radius: 9999px;
-      border: 1.5px solid rgba(154, 52, 18, 0.24);
-      background: linear-gradient(135deg, #fff4ed 0%, #fed7aa 100%);
-      color: #7c2d12;
+      border: 1.5px solid rgba(37, 99, 235, 0.34);
+      background: rgba(59, 130, 246, 0.22);
+      color: #1e3a8a;
       font-weight: 800;
       font-size: 0.92rem;
       cursor: pointer;
-      transition: transform 0.16s ease, box-shadow 0.16s ease;
+      transition: transform 0.16s ease, background 0.16s ease, box-shadow 0.16s ease;
     }
     .stu-btn-peach:hover {
       transform: translateY(-1px);
@@ -3056,6 +3058,9 @@
         padding: 18px 16px;
         border-radius: 18px;
         margin-bottom: 16px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
       }
       .stu-theme-card {
         padding: 18px 16px;
@@ -3739,13 +3744,11 @@
         container.innerHTML = `
           <div class="stu-pass-card">
             <div>
-              <span class="stu-pass-badge">STUDENT CAMP PASS · ${s.regNo}</span>
               <h2 class="stu-pass-name">${s.name}</h2>
               <p class="stu-pass-meta">${s.studentClass} · ${s.place} · ${s.gender || 'Male'}</p>
             </div>
             <div class="stu-pass-chips">
-              <span class="stu-meta-chip lime">Reg No: ${s.regNo}</span>
-              <span class="stu-meta-chip peach">${s.certStatus === 'allowed' ? 'Certificate Ready' : (s.certStatus === 'pending' || s.certStatus === 'denied') ? 'Certificate Pending' : 'Kuppayam 3.0'}</span>
+              <span class="stu-meta-chip lime" style="font-size:0.84rem; padding:8px 16px;">Reg No : ${s.regNo}</span>
             </div>
           </div>
 
