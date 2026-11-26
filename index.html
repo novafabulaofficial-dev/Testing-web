@@ -3445,7 +3445,6 @@
                   <option value="">Select gender</option>
                   <option value="Male">Male</option>
                   <option value="Female">Female</option>
-                  <option value="Other">Other</option>
                 </select>
               </div>
               <div class="form-group">
@@ -3920,7 +3919,8 @@
       const box = document.getElementById('registerSuccessBox');
       const boxText = document.getElementById('registerSuccessText');
       if (box && boxText) {
-        boxText.textContent = 'Thank you, ' + name + '! Your Kuppayam 3.0 registration has been submitted. Our coordinator will message your WhatsApp (' + whatsapp + ') shortly.';
+        boxText.style.whiteSpace = 'pre-line';
+        boxText.textContent = 'Thank you, ' + name + '!\n\nYour registration form has been successfully submitted. We\u2019ll contact you via WhatsApp shortly with further details and instructions.\n\nWe look forward to having you at the camp!';
         box.classList.remove('page-hidden');
       }
       showToast('Registration submitted successfully!');
@@ -3948,11 +3948,11 @@
       const sProg = document.getElementById('statProgrammes');
       const sStu = document.getElementById('statStudents');
       if (animate) {
-        animateCountUp(sTeams, 4, 900, '');
+        animateCountUp(sTeams, 3, 900, '');
         animateCountUp(sProg, 35, 1100, '+');
         animateCountUp(sStu, 60, 1300, '+');
       } else {
-        sTeams.textContent = '4';
+        sTeams.textContent = '3';
         sProg.textContent = '35+';
         sStu.textContent = '60+';
       }
