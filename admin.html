@@ -2574,6 +2574,12 @@
     .row-dropdown-item {
       color: #1d2630 !important;
     }
+    .toast {
+      background: #1e293b !important;
+      color: #ffffff !important;
+      border: 1.5px solid #4680ff !important;
+      box-shadow: 0 12px 28px -8px rgba(70, 128, 255, 0.35) !important;
+    }
   </style>
   <script>
     // Page file names. If you rename a file on GitHub, change it here (same line in all 3 files).
@@ -2698,18 +2704,7 @@
   </div>
 
   <!-- Student ID Card Poster Modal -->
-  <div class="modal-backdrop" id="idCardModal" role="dialog" aria-modal="true">
-    <div class="modal-box" style="max-width:460px; text-align:center;">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
-        <span class="badge-pill badge-lime">STUDENT ID CARD POSTER</span>
-        <button type="button" class="filter-chip" onclick="closeIdCardModal()">Close</button>
-      </div>
-      <img id="idCardPreviewImg" alt="Student ID Card Poster" style="width:100%; border-radius:14px; border:1px solid var(--charcoal-12); margin-bottom:14px;" />
-      <div style="display:flex; gap:10px; flex-wrap:wrap;">
-        <button type="button" class="btn-primary" style="flex:1; justify-content:center;" onclick="downloadCurrentIdCard()">Download ID Card PNG</button>
-      </div>
-    </div>
-  </div>
+</div>
 
   <footer class="site-footer">
     <div class="footer-wave-bg" aria-hidden="true">
@@ -3074,31 +3069,6 @@
       ctx.restore();
 
       return canvas.toDataURL('image/png');
-    }
-
-    let _currentIdCardDataUrl = '';
-    let _currentIdCardFilename = 'Kuppayam_ID_Card.png';
-
-    async function previewStudentIdCard(id) {
-      const stu = state.students.find(item => item.id === id);
-      if (!stu) return;
-      _currentIdCardDataUrl = await generateStudentIdCardDataUrl(stu);
-      _currentIdCardFilename = 'Kuppayam_ID_Card_' + (stu.regNo || stu.name) + '.png';
-      document.getElementById('idCardPreviewImg').src = _currentIdCardDataUrl;
-      document.getElementById('idCardModal').classList.add('open');
-    }
-
-    function closeIdCardModal() {
-      document.getElementById('idCardModal').classList.remove('open');
-    }
-
-    function downloadCurrentIdCard() {
-      if (!_currentIdCardDataUrl) return;
-      const link = document.createElement('a');
-      link.download = _currentIdCardFilename;
-      link.href = _currentIdCardDataUrl;
-      link.click();
-      showToast('ID Card poster downloaded!');
     }
 
     async function sendStudentPaymentWhatsApp(id) {
@@ -3497,9 +3467,6 @@
                         <button type="button" class="btn-primary" style="padding:8px 16px; font-size:0.84rem;" onclick="sendStudentPaymentWhatsApp('${selectedStu.id}')">
                           ${selectedStu.paymentMsgSent ? 'Resend Payment Message' : 'Send Payment Message'}
                         </button>
-                        <button type="button" class="btn-secondary" style="padding:8px 16px; font-size:0.84rem;" onclick="previewStudentIdCard('${selectedStu.id}')">
-                          Preview ID Card
-                        </button>
                         <button type="button" class="btn-secondary" style="padding:8px 16px; font-size:0.84rem;" onclick="selectAdminStudent(null)">&larr; All Students</button>
                       </div>
                     </div>
@@ -3793,7 +3760,7 @@
                                 ${stu.studentClass} · ${stu.place}
                               </p>
                             </div>
-                            <label class="tick-label" style="padding:8px 14px; border-radius:9999px; border:1.5px solid var(--forest); background:${isPres ? 'var(--lime)' : 'var(--white)'}; color:var(--charcoal);">
+                            <label class="tick-label" style="padding:8px 14px; border-radius:9999px; border:1.5px solid ${isPres ? '#4680ff' : '#cbd5e1'}; background:${isPres ? '#4680ff' : '#ffffff'}; color:${isPres ? '#ffffff' : '#1d2630'};">
                               <input type="checkbox" ${isPres ? 'checked' : ''} onchange="toggleAttendance('${stu.id}', this.checked)" />
                               <span>${isPres ? 'Present' : 'Mark Present'}</span>
                             </label>
