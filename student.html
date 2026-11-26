@@ -2558,32 +2558,41 @@
       }
     }
     .sched-tl-card {
-      transition: transform 0.22s ease, background-color 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease;
+      background: #ffffff !important;
+      transition: transform 0.24s ease, border-color 0.24s ease, box-shadow 0.24s ease;
+    }
+    .sched-tl-card::after {
+      content: '' !important;
+      position: absolute !important;
+      top: 50% !important;
+      right: -30px !important;
+      left: auto !important;
+      width: 240px !important;
+      height: 240px !important;
+      border-radius: 50% !important;
+      transform: translate(0, -50%) !important;
+      opacity: 0.72 !important;
+      transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.35s ease !important;
+      pointer-events: none !important;
+    }
+    .sched-tl-row:nth-child(3n+1) .sched-tl-card::after {
+      background: radial-gradient(circle, rgba(37, 99, 235, 0.42) 0%, rgba(37, 99, 235, 0.14) 48%, transparent 72%) !important;
+    }
+    .sched-tl-row:nth-child(3n+2) .sched-tl-card::after {
+      background: radial-gradient(circle, rgba(234, 179, 8, 0.48) 0%, rgba(231, 254, 37, 0.18) 48%, transparent 72%) !important;
+    }
+    .sched-tl-row:nth-child(3n) .sched-tl-card::after {
+      background: radial-gradient(circle, rgba(22, 163, 74, 0.42) 0%, rgba(22, 163, 74, 0.14) 48%, transparent 72%) !important;
     }
     .sched-tl-card:hover {
-      background: #013F32 !important;
-      border-color: #E7FE25 !important;
-      transform: translateY(-3px);
-      box-shadow: 0 16px 32px -12px rgba(1, 63, 50, 0.45) !important;
+      background: #ffffff !important;
+      border-color: rgba(22, 22, 22, 0.26) !important;
+      transform: translateY(-2px);
+      box-shadow: 0 14px 30px -12px rgba(15, 23, 42, 0.16) !important;
     }
     .sched-tl-card:hover::after {
-      opacity: 0 !important;
-    }
-    .sched-tl-card:hover .sched-tl-title {
-      color: #FDFDFD !important;
-    }
-    .sched-tl-card:hover .sched-tl-range {
-      color: #E7FE25 !important;
-    }
-    .sched-tl-card:hover .sched-tl-tag {
-      color: #FDFDFD !important;
-      background: rgba(253, 253, 253, 0.14) !important;
-      border-color: rgba(253, 253, 253, 0.28) !important;
-    }
-    .sched-tl-card:hover .sched-fb-btn {
-      background: #E7FE25 !important;
-      color: #161616 !important;
-      border-color: #E7FE25 !important;
+      opacity: 0.9 !important;
+      transform: translate(calc(-100% - 140px), -50%) scale(1.12) !important;
     }
 
     /* Animated Water-Wave Footer Only (Transparent BG, Waves Above Footer Text) */
