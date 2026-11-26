@@ -2855,6 +2855,12 @@
       box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;
       transform: translateY(-1px);
     }
+    .nav-btn.active,
+    .mobile-nav-item.active {
+      background: var(--forest) !important;
+      color: var(--lime) !important;
+      box-shadow: 0 8px 18px -4px var(--forest-25) !important;
+    }
 
     /* Mobile Centering for Counting Boxes & Compact Login/Register Forms */
     @media (max-width: 768px) {
@@ -4388,7 +4394,7 @@
 
     window.addEventListener('scroll', () => {
       if (state.isLoginView) return;
-      const sections = ['sec-home', 'sec-theme', 'sec-events', 'sec-stories'];
+      const sections = ['sec-home', 'sec-theme', 'sec-stories'];
       let current = 'sec-home';
       for (const id of sections) {
         const el = document.getElementById(id);
