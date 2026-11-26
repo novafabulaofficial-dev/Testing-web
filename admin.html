@@ -3023,7 +3023,7 @@
       feedbackCategory: 'overall',
       selectedFeedbackStuId: null,
       certFilter: 'All',
-      reminderMessage: 'السلام عليكم ورحمة الله\nYour camp registration payment is still pending. Please complete your payment at the earliest to confirm your seat and receive your Register Number.\n\n Payable Amount :  ₹2500 \n GPay No : +91 8943423485 \n\nWIRAS • Markaz Knowledge City',
+      reminderMessage: 'Friendly Reminder!\n\nYour registration payment for the Kuppayam Residential Camp is still pending. Kindly complete the payment at the earliest to confirm your seat.\n\n Amount: ₹2,500\nGPay: +91 8943423485\n\nWIRAS • Markaz Knowledge City',
       attendanceDay: 1,
       selectedRegId: null,
       nextRegSeq: 3001
@@ -3180,7 +3180,7 @@
         return;
       }
       const waNumber = digits.length === 10 ? '91' + digits : digits;
-      const welcomeMsg = 'السلام عليكم ورحمة الله\nYour camp registration payment is still pending. Please complete your payment at the earliest to confirm your seat and receive your Register Number.\n\n Payable Amount :  ₹2500 \n GPay No : +91 8943423485 \n\nWIRAS • Markaz Knowledge City';
+      const welcomeMsg = 'السلام عليكم ورحمة الله\n\nThank you for registering for the Kuppayam 3.0 Camp. We appreciate your interest and support.\n\nYour camp registration payment is still pending. Please complete your payment at the earliest to confirm your seat and receive your Register Number.\n\n Payable Amount :  ₹2500 \n GPay No : +91 8943423485 \n\nWIRAS • Markaz Knowledge City';
       const waUrl = 'https://wa.me/' + waNumber + '?text=' + encodeURIComponent(welcomeMsg);
       stu.welcomeSent = true;
       saveStudentsToStorage();
